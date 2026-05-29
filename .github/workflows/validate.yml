@@ -1,0 +1,158 @@
+name: Validate YAML Schema
+
+on:
+  pull_request:
+    paths:
+      - 'projects/**/*.yaml'
+      - 'images/logos/**'
+
+permissions: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema
+
+      - name: Download schema
+        run: curl -sL https://raw.githubusercontent.com/qrllabs/qrl-ecosystem/main/schema/project.schema.json -o schema/project.schema.json || true
+
+      - name: Validate YAML files
+        run: |
+          python << 'EOF'
+          import yaml
+          import json
+          import sys
+          from pathlib import Path
+          import jsonschema
+
+          schema_path = Path('schema/project.schema.json')
+          schema = json.loads(schema_path.read_text()) if schema_path.exists() else None
+
+          def validate_file(yaml_path):
+              errors = []
+              with open(yaml_path) as f:
+                  data = yaml.safe_load(f)
+
+              if not data:
+                  return ["Empty file"]
+
+              # Check filename matches id
+              expected_filename = f"{data.get('id', 'MISSING')}.yaml"
+              if yaml_path.name != expected_filename:
+                  errors.append(f"Filename '{yaml_path.name}' does not match id '{data.get('id')}.yaml'")
+
+              # Check status matches directory
+              status = data.get('status', 'MISSING')
+              parent_dir = yaml_path.parent.name
+              if status == 'archived' and parent_dir != 'archived':
+                  errors.append(f"Status is 'archived' but file is in '{parent_dir}/'")
+              elif status in ('active', 'testnet') and parent_dir != 'active':
+                  errors.append(f"Status is '{status}' but file is in '{parent_dir}/' (should be 'active/')")
+
+              # Validate against schema
+              if schema:
+                  try:
+                      jsonschema.validate(instance=data, schema=schema)
+                  except jsonschema.ValidationError as e:
+                      errors.append(f"Schema validation: {e.message}")
+
+              return errors
+
+          def validate_logo_paths(yaml_path, data):
+              errors = []
+              logos_dir = Path('images/logos')
+              project_id = data.get('id', '')
+
+              # Check single logo shorthand
+              if 'logo' in data:
+                  logo_path = data['logo']
+                  if logo_path:
+                      # Must not be a URL
+                      if logo_path.startswith(('http://', 'https://', '//')):
+                          errors.append(f"Logo must be a local path, not a URL: {logo_path}")
+                      else:
+                          full_path = logos_dir / logo_path
+                          if not full_path.exists():
+                              errors.append(f"Logo file not found: {logo_path} (expected at {full_path})")
+
+              # Check logos array
+              if 'logos' in data and data['logos']:
+                  for i, logo_entry in enumerate(data['logos']):
+                      if isinstance(logo_entry, dict) and 'path' in logo_entry:
+                          logo_path = logo_entry['path']
+                          # Must not be a URL
+                          if logo_path.startswith(('http://', 'https://', '//')):
+                              errors.append(f"Logos[{i}] path must be local, not a URL: {logo_path}")
+                          else:
+                              full_path = logos_dir / logo_path
+                              if not full_path.exists():
+                                  errors.append(f"Logos[{i}] file not found: {logo_path} (expected at {full_path})")
+                      elif isinstance(logo_entry, str):
+                          # Direct path string
+                          if logo_entry.startswith(('http://', 'https://', '//')):
+                              errors.append(f"Logos[{i}] must be local path, not a URL: {logo_entry}")
+                          else:
+                              full_path = logos_dir / logo_entry
+                              if not full_path.exists():
+                                  errors.append(f"Logos[{i}] file not found: {logo_entry} (expected at {full_path})")
+
+              return errors
+
+          all_errors = []
+          for yaml_file in Path('projects').rglob('*.yaml'):
+              with open(yaml_file) as f:
+                  data = yaml.safe_load(f)
+              file_errors = validate_file(yaml_file)
+              # Also validate logo paths exist locally
+              logo_errors = validate_logo_paths(yaml_file, data or {})
+              if file_errors or logo_errors:
+                  all_errors.append(f"\n{yaml_file}:")
+                  if file_errors:
+                      all_errors.extend(f"  - {e}" for e in file_errors)
+                  if logo_errors:
+                      all_errors.extend(f"  - {e}" for e in logo_errors)
+
+          if all_errors:
+              print("VALIDATION ERRORS:")
+              print('\n'.join(all_errors))
+              sys.exit(1)
+          else:
+              print("All YAML files are valid!")
+          EOF
+
+      - name: Check for duplicate IDs
+        run: |
+          python << 'EOF'
+          import yaml
+          from pathlib import Path
+          from collections import Counter
+
+          ids = []
+          for yaml_file in Path('projects').rglob('*.yaml'):
+              if yaml_file.name == 'template.yaml':
+                  continue
+              with open(yaml_file) as f:
+                  data = yaml.safe_load(f)
+              if data and 'id' in data:
+                  ids.append(data['id'])
+
+          duplicates = [id for id, count in Counter(ids).items() if count > 1]
+          if duplicates:
+              print(f"DUPLICATE IDS FOUND: {duplicates}")
+              exit(1)
+          else:
+              print("No duplicate IDs found.")
+          EOF

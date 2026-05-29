@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if and .Title (ne .Title .Site.Title) }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
+    <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+    {{ $styles := resources.Get "scss/main.scss" | css.Sass (dict "targetPath" "assets/css/main.css") }}
+    <link rel="stylesheet" href="{{ $styles.RelPermalink }}">
+    {{ range .AlternativeOutputFormats -}}
+    <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}">
+    {{ end -}}
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="site-title" aria-label="{{ .Site.Title }}">
+                <span class="brand-mark">Q</span>
+                <span>{{ .Site.Title }}</span>
+            </a>
+            <ul>
+                <li><a href="/projects/">Projects</a></li>
+                <li><a href="/categories/">Categories</a></li>
+                <li><a href="/project-types/">Project Types</a></li>
+                <li><a href="/about/">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {{ block "main" . }}{{ end }}
+    </main>
+
+    <footer>
+        <p>A community project. Submit your project via <a href="https://github.com/theqrl-community/qrl-ecosystem-index">GitHub</a>.</p>
+    </footer>
+</body>
+</html>

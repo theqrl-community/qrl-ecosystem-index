@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Liquidity on QRL Ecosystem Index</title>
+		<link>https://qrlecosystem.io/tags/liquidity/</link>
+		<description>Recent content in Liquidity on QRL Ecosystem Index</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<atom:link href="https://qrlecosystem.io/tags/liquidity/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>QuantaSwap</title>
+				<link>https://qrlecosystem.io/projects/active/quanta-swap/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>https://qrlecosystem.io/projects/active/quanta-swap/</guid>
+				<description>&lt;p&gt;QuantaSwap is a decentralized exchange (DEX) built on QRL 2.0 smart contracts. It provides an automated market maker (AMM) system allowing users to swap tokens, provide liquidity, and earn yields.&lt;/p&gt;&#xA;&lt;p&gt;The protocol uses a constant product formula for price discovery, ensuring liquidity in all market conditions. Users can earn QSWAP tokens by providing liquidity to pool pairs.&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

@@ -1,0 +1,85 @@
+{{ define "main" }}
+<h1>
+{{- if and .Data.Term (eq .Data.Plural "project-types") -}}
+{{ partial "project-type-label.html" .Data.Term }}
+{{- else -}}
+{{ .Title }}
+{{- end -}}
+</h1>
+{{ .Content }}
+
+{{ if and (eq .Data.Plural "project-types") (not .Data.Term) }}
+{{ $taxonomy := index site.Taxonomies "project-types" }}
+{{ $types := slice
+    (dict "slug" "dapps" "description" "Decentralized, smart-contract based applications with on-chain logic.")
+    (dict "slug" "applications" "description" "User-facing client applications such as wallets and explorers.")
+    (dict "slug" "infrastructure" "description" "Services that support or extend the QRL network.")
+    (dict "slug" "tooling" "description" "Development tools, libraries, and SDKs.")
+    (dict "slug" "community" "description" "Unofficial community groups, spaces, informational websites, and educational content.")
+}}
+<ul class="project-list project-type-index">
+{{ range $types }}
+    {{ $entry := index $taxonomy .slug }}
+    <li>
+        <a href="{{ printf "/project-types/%s/" .slug | relURL }}">{{ partial "project-type-label.html" .slug }}</a>
+        <span>{{ .description }}</span>
+        <span class="count">{{ with $entry }}{{ .Count }}{{ else }}0{{ end }}</span>
+    </li>
+{{ end }}
+</ul>
+{{ else if .Data.Terms }}
+<ul class="project-list">
+{{ range .Data.Terms.Alphabetical }}
+    <li>
+        <a href="{{ .Page.RelPermalink }}">
+            {{ if eq .Page.Data.Plural "project-types" }}
+                {{ partial "project-type-label.html" .Name }}
+            {{ else }}
+                {{ .Page.Title }}
+            {{ end }}
+        </a>
+        <span class="count">{{ .Count }}</span>
+    </li>
+{{ end }}
+</ul>
+{{ else }}
+{{ if .Data.Term }}
+<p>
+    {{ if eq .Data.Plural "categories" }}
+    Projects in category:
+    {{ else if eq .Data.Plural "project-types" }}
+    Projects of type:
+    {{ else }}
+    Projects tagged with:
+    {{ end }}
+    <strong>
+        {{ if eq .Data.Plural "project-types" }}
+            {{ partial "project-type-label.html" .Data.Term }}
+        {{ else }}
+            {{ .Data.Term }}
+        {{ end }}
+    </strong>
+</p>
+{{ end }}
+
+{{ if gt (len .Pages) 0 }}
+<ul class="project-list">
+{{ range .Pages }}
+    <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <span class="project-list-meta">
+            {{ with .Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
+            {{ with .Params.category }}<span class="category">{{ . }}</span>{{ end }}
+            {{ with .Params.project_type }}<span class="project-type">{{ partial "project-type-label.html" . }}</span>{{ end }}
+            {{ with .Params.project_url }}
+            <a class="external-link" href="{{ . }}" target="_blank" rel="noopener">Visit site</a>
+            {{ end }}
+        </span>
+    </li>
+{{ end }}
+</ul>
+{{ else }}
+<p>No projects found.</p>
+{{ end }}
+{{ end }}
+{{ end }}

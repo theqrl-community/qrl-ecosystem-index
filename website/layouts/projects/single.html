@@ -1,0 +1,64 @@
+{{ define "main" }}
+<article class="project">
+    <header>
+        <h1>{{ .Title }}</h1>
+        <div class="meta">
+            <span class="status status-{{ .Params.status }}">{{ .Params.status }}</span>
+            {{ with .Params.category }}
+            <a class="category" href="{{ printf "/categories/%s/" (. | urlize) | relURL }}">{{ . }}</a>
+            {{ end }}
+            {{ with (index .Params "project-types") }}
+            {{ range first 1 . }}
+            <a class="project-type" href="{{ printf "/project-types/%s/" (. | urlize) | relURL }}">{{ partial "project-type-label.html" . }}</a>
+            {{ end }}
+            {{ end }}
+        </div>
+    </header>
+
+    <div class="description">
+        {{ .Params.description }}
+    </div>
+
+    <section class="details">
+        <h2>Project Details</h2>
+        <dl>
+            <dt>Type</dt><dd>{{ partial "project-type-label.html" .Params.project_type }}</dd>
+            <dt>Author</dt><dd>{{ .Params.author }}</dd>
+            <dt>License</dt><dd>{{ .Params.license }}</dd>
+            {{ if .Params.project_url }}
+            <dt>Website</dt><dd><a href="{{ .Params.project_url }}">{{ .Params.project_url }}</a></dd>
+            {{ end }}
+            {{ if .Params.github }}
+            <dt>GitHub</dt><dd><a href="{{ .Params.github }}">{{ .Params.github }}</a></dd>
+            {{ end }}
+            {{ if .Params.open_source }}
+            <dt>Open Source</dt><dd>Yes</dd>
+            {{ end }}
+            {{ if .Params.audited }}
+            <dt>Audited</dt><dd><a href="{{ .Params.audit_url }}">Yes</a></dd>
+            {{ end }}
+        </dl>
+    </section>
+
+    {{ with .Params.features }}
+    <section class="features">
+        <h2>Features</h2>
+        <ul>
+        {{ range . }}
+            <li>{{ . }}</li>
+        {{ end }}
+        </ul>
+    </section>
+    {{ end }}
+
+    {{ if .RawContent }}
+    <section class="long-description">
+        {{ .RawContent | markdownify }}
+    </section>
+    {{ end }}
+
+    <footer>
+        <p>Created: {{ .Params.created }} | Updated: {{ .Params.updated }}</p>
+    </footer>
+</article>
+{{ end }}

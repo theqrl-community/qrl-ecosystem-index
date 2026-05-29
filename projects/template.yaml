@@ -1,0 +1,77 @@
+# Template for QRL Ecosystem Project Submission
+# Copy this file to projects/active/<your-project-id>.yaml
+# (or projects/archived/ for inactive projects)
+# and fill out all required fields.
+
+id: your-project-id
+name: Your Project Name
+project_type: dapp  # Options: dapp, application, infrastructure, tooling, community
+status: testnet  # Options: testnet, active, archived
+description: >
+  A brief description of your project (max 280 characters).
+category: defi  # Options: defi, nft, wallet, explorer, infrastructure, tooling, dao, gaming, identity, oracle, bridge, social, educational, news
+tags:
+  - tag1
+  - tag2
+author: Your Name or Organization
+license: MIT  # SPDX license identifier
+created: YYYY-MM-DD  # ISO 8601 date
+updated: YYYY-MM-DD  # ISO 8601 date
+
+# Optional fields
+url: https://your-project.example.com
+github: https://github.com/your-org/your-repo
+docs: https://docs.your-project.example.com
+discord: https://discord.gg/your-invite
+twitter: https://twitter.com/your-handle
+
+open_source: true
+audited: false
+audit_url: https://security.example.com/audit
+
+# Logo (local files only - no external URLs for security)
+# Place logo files in images/logos/<project-id>/ and reference them here
+#logo: your-project/icon.png
+
+# Logos (full format for multiple variants)
+#logos:
+#  - path: your-project/icon.png
+#    description: Project icon (recommended: 128x128 or 256x256)
+#  - path: your-project/logo-full.svg
+#    description: Full-width logo variant
+
+features:
+  - Feature 1
+  - Feature 2
+  - Feature 3
+
+long_description: |
+  Provide a more detailed description of your project here.
+  This can include markdown formatting.
+
+# Type-specific block (only include ONE matching your project_type)
+dapp:
+  network: testnet  # Options: mainnet, testnet
+  contract_address: "Q0000..."
+  token: "TOKEN"
+
+application:
+  platforms:  # e.g., linux, windows, macos, android, ios, web, hardware
+    - web
+  supported_networks:  # e.g., mainnet, testnet
+    - testnet
+
+infrastructure:
+  supported_networks:  # e.g., mainnet, testnet
+    - testnet
+  endpoints:
+    - https://api.example.com
+
+tooling:
+  languages:  # e.g., python, javascript, go, rust
+    - python
+
+community:
+  platforms:  # e.g., discord, telegram, forum
+    - discord
+  language: English

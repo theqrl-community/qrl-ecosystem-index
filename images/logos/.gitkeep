@@ -1,0 +1,24 @@
+# Logo Storage
+
+This directory stores logo images for QRL ecosystem projects.
+
+## Structure
+
+Logos are organized by project ID:
+```
+images/logos/<project-id>/<logo-file>
+```
+
+## Requirements
+
+- **Format**: PNG, SVG, or WebP recommended
+- **Size**: 128x128 or 256x256 pixels for icons; arbitrary for full logos
+- **Naming**: Use descriptive names (e.g., `icon.png`, `logo-light.svg`, `logo-dark.png`)
+- **No external URLs**: All logos must be local files (no hotlinking)
+
+## Submission
+
+1. Create a subdirectory named after your project's `id`
+2. Add your logo files
+3. Reference them in your YAML using the `logos` field or single `logo` shorthand
+4. Open a PR with both the YAML and logo files

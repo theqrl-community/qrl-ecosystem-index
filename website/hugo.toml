@@ -1,0 +1,21 @@
+baseURL = "https://qrlecosystem.io/"
+locale = "en-us"
+title = "QRL Ecosystem Index"
+theme = []
+
+[params]
+description = "A community-contributed index of projects building on QRL 2.0"
+
+[taxonomies]
+category = "categories"
+project_type = "project-types"
+tag = "tags"
+
+[build]
+publishDir = "public"
+
+[menu]
+[[menu.main]]
+name = "Projects"
+url = "/projects/"
+weight = 1

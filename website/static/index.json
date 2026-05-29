@@ -1,0 +1,15 @@
+{
+  "count": 1,
+  "generated": "2026-05-29T19:15:47Z",
+  "projects": [
+    {
+      "id": "qrl-hub",
+      "name": "QRL Hub",
+      "status": "active",
+      "category": "educational",
+      "description": "A community-maintained educational website covering QRL, quantum computing threats, blockchain security, quantum news, and QRL 2.0 updates.",
+      "url": "https://qrlhub.com/",
+      "github": ""
+    }
+  ]
+}

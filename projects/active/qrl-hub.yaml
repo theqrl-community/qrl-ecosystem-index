@@ -1,0 +1,42 @@
+id: qrl-hub
+name: QRL Hub
+project_type: community
+status: active
+description: >
+  A community-maintained educational website covering QRL, quantum computing
+  threats, blockchain security, quantum news, and QRL 2.0 updates.
+category: educational
+tags:
+  - education
+  - news
+  - quantum-security
+  - qrl-2
+author: QRL Hub
+license: none
+created: 2026-05-29
+updated: 2026-05-29
+
+url: https://qrlhub.com/
+
+open_source: false
+audited: false
+
+features:
+  - Educational QRL and quantum-security resources
+  - Quantum computing and blockchain security news
+  - QRL 2.0 updates and builder-oriented information
+  - Multilingual website content
+
+long_description: |
+  QRL Hub is a community-maintained resource website for learning about QRL,
+  quantum computing threats, blockchain security, and the quantum-resistant
+  future of cryptocurrency. The site includes educational pages, FAQs, quantum
+  news, QRL 2.0 information, and links to the official QRL website.
+
+  QRL Hub states that it is not associated with the QRL Foundation and provides
+  educational content only.
+
+community:
+  platforms:
+    - web
+  language: English

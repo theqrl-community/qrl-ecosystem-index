@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QRL Ecosystem Project",
+  "version": 1,
+  "description": "Schema for QRL ecosystem project submissions",
+  "type": "object",
+  "required": ["id", "name", "project_type", "status", "description", "category", "tags", "author", "license", "created", "updated"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Unique slug identifier, lowercase, hyphenated"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable project name"
+    },
+    "project_type": {
+      "type": "string",
+      "enum": ["dapp", "application", "infrastructure", "tooling", "community"],
+      "description": "Project type: dapp, application, infrastructure, tooling, or community"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["testnet", "active", "archived"],
+      "description": "Project status"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 280,
+      "description": "Short description, max 280 characters"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["defi", "nft", "wallet", "explorer", "infrastructure", "tooling", "dao", "gaming", "identity", "oracle", "bridge", "social", "educational", "news"],
+      "description": "Project category: defi, nft, wallet, explorer, infrastructure, tooling, dao, gaming, identity, oracle, bridge, social, educational, or news"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Freeform tags for filtering/search"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author name or organization"
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier"
+    },
+    "created": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date of initial submission"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date of last meaningful update"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Primary project URL"
+    },
+    "github": {
+      "type": "string",
+      "format": "uri",
+      "description": "GitHub repository URL"
+    },
+    "discord": {
+      "type": "string",
+      "description": "Discord invite or channel link"
+    },
+    "twitter": {
+      "type": "string",
+      "description": "Twitter/X handle or URL"
+    },
+    "docs": {
+      "type": "string",
+      "format": "uri",
+      "description": "Documentation URL"
+    },
+    "logo": {
+      "type": "string",
+      "description": "Single logo path (shorthand for logos[0].path)"
+    },
+    "logos": {
+      "type": "array",
+      "description": "Local logo files (no external URLs allowed for security)",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Local path relative to images/logos/ (e.g., 'my-project/icon.png')"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of this logo variant (e.g., 'Light mode icon', 'Full logo')"
+          }
+        }
+      }
+    },
+    "long_description": {
+      "type": "string",
+      "description": "Extended markdown description"
+    },
+    "features": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Key features or capabilities"
+    },
+    "open_source": {
+      "type": "boolean",
+      "description": "True if the source code is public"
+    },
+    "audited": {
+      "type": "boolean",
+      "description": "True if professionally audited"
+    },
+    "audit_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Link to security audit report"
+    },
+    "dapp": {
+      "type": "object",
+      "description": "For smart-contract based decentralized applications",
+      "properties": {
+        "network": {
+          "type": "string",
+          "enum": ["mainnet", "testnet"],
+          "description": "Network deployment"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "On-chain contract address"
+        },
+        "token": {
+          "type": "string",
+          "description": "Token symbol if applicable"
+        }
+      },
+      "required": ["network", "contract_address", "token"]
+    },
+    "application": {
+      "type": "object",
+      "description": "For user-facing client applications such as wallets and explorers",
+      "properties": {
+        "platforms": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Supported platforms (e.g., linux, windows, macos, android, ios)"
+        },
+        "supported_networks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Supported networks (e.g., mainnet, testnet)"
+        }
+      }
+    },
+    "infrastructure": {
+      "type": "object",
+      "description": "For network services, nodes, indexers, and APIs",
+      "properties": {
+        "supported_networks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Supported networks (e.g., mainnet, testnet)"
+        },
+        "endpoints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "API endpoints"
+        }
+      }
+    },
+    "tooling": {
+      "type": "object",
+      "description": "For development tools, libraries, and SDKs",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Programming languages (e.g., python, javascript, go)"
+        }
+      }
+    },
+    "community": {
+      "type": "object",
+      "description": "For community groups, social spaces, informational websites, and educational resources",
+      "properties": {
+        "platforms": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Platforms (e.g., discord, telegram, forum)"
+        },
+        "language": {
+          "type": "string",
+          "description": "Primary language"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

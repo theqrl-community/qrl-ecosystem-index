@@ -1,0 +1,10 @@
+{{- $labels := dict
+    "dapp" "dApps"
+    "dapps" "dApps"
+    "application" "Applications"
+    "applications" "Applications"
+    "infrastructure" "Infrastructure"
+    "tooling" "Tooling"
+    "community" "Community"
+-}}
+{{- index $labels . | default (. | humanize | title) -}}

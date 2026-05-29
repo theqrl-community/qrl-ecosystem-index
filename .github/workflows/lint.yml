@@ -1,0 +1,125 @@
+name: Lint YAML
+
+on:
+  pull_request:
+    paths:
+      - 'projects/**/*.yaml'
+      - 'images/logos/**'
+
+permissions: {}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Lint YAML files
+        run: |
+          python << 'EOF'
+          import yaml
+          import re
+          from pathlib import Path
+          from urllib.parse import urlparse
+
+          VALID_CATEGORIES = {'defi', 'nft', 'wallet', 'explorer', 'infrastructure', 'tooling', 'dao', 'gaming', 'identity', 'oracle', 'bridge', 'social', 'educational', 'news'}
+          VALID_STATUSES = {'testnet', 'active', 'archived'}
+          VALID_NETWORKS = {'mainnet', 'testnet'}
+
+          DATE_PATTERN = re.compile(r'^\d{4}-\d{2}-\d{2}$')
+
+          def is_valid_url(s):
+              if not s:
+                  return True
+              try:
+                  result = urlparse(s)
+                  return bool(result.scheme and result.netloc)
+              except:
+                  return False
+
+          def lint_file(yaml_path):
+              errors = []
+              with open(yaml_path) as f:
+                  data = yaml.safe_load(f)
+
+              if not data:
+                  return ["Empty file"]
+
+              # Check dates are valid ISO 8601
+              for date_field in ['created', 'updated']:
+                  if date_field in data:
+                      if not DATE_PATTERN.match(str(data[date_field])):
+                          errors.append(f"Invalid date format for '{date_field}': {data[date_field]} (expected YYYY-MM-DD)")
+
+              # Check description length
+              if 'description' in data and len(data['description']) > 280:
+                  errors.append(f"Description exceeds 280 characters ({len(data['description'])})")
+
+              # Check category is valid
+              if 'category' in data and data['category'] not in VALID_CATEGORIES:
+                  errors.append(f"Invalid category '{data['category']}' (valid: {VALID_CATEGORIES})")
+
+              # Check status is valid
+              if 'status' in data and data['status'] not in VALID_STATUSES:
+                  errors.append(f"Invalid status '{data['status']}' (valid: {VALID_STATUSES})")
+
+              # Check network is valid
+              if 'network' in data and data['network'] not in VALID_NETWORKS:
+                  errors.append(f"Invalid network '{data['network']}' (valid: {VALID_NETWORKS})")
+
+              # Check URLs are well-formed
+              for url_field in ['url', 'github', 'docs']:
+                  if url_field in data and data[url_field] and not is_valid_url(data[url_field]):
+                      errors.append(f"Invalid URL for '{url_field}': {data[url_field]}")
+
+              # Check logo field does not contain external URLs
+              if 'logo' in data and data['logo']:
+                  if data['logo'].startswith(('http://', 'https://', '//')):
+                      errors.append(f"Logo must be a local path, not a URL: {data['logo']}")
+
+              # Check logos array for external URLs
+              if 'logos' in data and data['logos']:
+                  for i, logo_entry in enumerate(data['logos']):
+                      if isinstance(logo_entry, dict) and logo_entry.get('path'):
+                          if logo_entry['path'].startswith(('http://', 'https://', '//')):
+                              errors.append(f"Logos[{i}] path must be local, not a URL: {logo_entry['path']}")
+                      elif isinstance(logo_entry, str):
+                          if logo_entry.startswith(('http://', 'https://', '//')):
+                              errors.append(f"Logos[{i}] must be a local path, not a URL: {logo_entry}")
+
+              # Check tags is a list
+              if 'tags' in data and not isinstance(data['tags'], list):
+                  errors.append(f"Tags must be a list, got {type(data['tags'])}")
+
+              # Check features is a list
+              if 'features' in data and not isinstance(data['features'], list):
+                  errors.append(f"Features must be a list, got {type(data['features'])}")
+
+              return errors
+
+          all_errors = []
+          for yaml_file in Path('projects').rglob('*.yaml'):
+              file_errors = lint_file(yaml_file)
+              if file_errors:
+                  all_errors.append(f"\n{yaml_file}:")
+                  all_errors.extend(f"  - {e}" for e in file_errors)
+
+          if all_errors:
+              print("LINT ERRORS:")
+              print('\n'.join(all_errors))
+              exit(1)
+          else:
+              print("All YAML files pass linting!")
+          EOF

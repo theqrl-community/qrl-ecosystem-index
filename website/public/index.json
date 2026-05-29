@@ -1,0 +1,24 @@
+{
+  "count": 2,
+  "generated": "2026-05-29T15:37:24Z",
+  "projects": [
+    {
+      "id": "qrl-hub",
+      "name": "QRL Hub",
+      "status": "active",
+      "category": "educational",
+      "description": "A community-maintained educational website covering QRL, quantum computing threats, blockchain security, quantum news, and QRL 2.0 updates.",
+      "url": "https://qrlhub.com/",
+      "github": ""
+    },
+    {
+      "id": "quanta-swap",
+      "name": "QuantaSwap",
+      "status": "active",
+      "category": "defi",
+      "description": "A decentralized exchange built on QRL 2.0 smart contracts.",
+      "url": "https://quanta-swap.io",
+      "github": "https://github.com/quanta-swap/core"
+    }
+  ]
+}

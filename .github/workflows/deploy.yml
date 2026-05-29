@@ -1,0 +1,197 @@
+name: Deploy Hugo Site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: '1.21'
+
+      - name: Get Go dependencies
+        run: go mod download
+
+      - name: Install validation dependencies
+        run: python3 -m pip install --user pyyaml jsonschema
+
+      - name: Validate project data
+        run: |
+          python3 << 'EOF'
+          import json
+          import re
+          import sys
+          from datetime import date, datetime
+          from collections import Counter
+          from pathlib import Path
+          from urllib.parse import urlparse
+
+          import jsonschema
+          import yaml
+
+          VALID_CATEGORIES = {
+              'defi', 'nft', 'wallet', 'explorer', 'infrastructure', 'tooling',
+              'dao', 'gaming', 'identity', 'oracle', 'bridge', 'social',
+              'educational', 'news'
+          }
+          VALID_STATUSES = {'testnet', 'active', 'archived'}
+          VALID_NETWORKS = {'mainnet', 'testnet'}
+          DATE_PATTERN = re.compile(r'^\d{4}-\d{2}-\d{2}$')
+
+          schema = json.loads(Path('schema/project.schema.json').read_text())
+          errors = []
+          ids = []
+
+          def valid_url(value):
+              if not value:
+                  return True
+              parsed = urlparse(value)
+              return bool(parsed.scheme and parsed.netloc)
+
+          def validate_logo_path(yaml_file, logo_path, label):
+              if not logo_path:
+                  return
+              if logo_path.startswith(('http://', 'https://', '//')):
+                  errors.append(f"{yaml_file}: {label} must be a local path, not a URL: {logo_path}")
+                  return
+              full_path = Path('images/logos') / logo_path
+              if not full_path.exists():
+                  errors.append(f"{yaml_file}: {label} file not found: {logo_path} (expected at {full_path})")
+
+          def normalize_for_schema(value):
+              if isinstance(value, (date, datetime)):
+                  return value.isoformat()
+              if isinstance(value, list):
+                  return [normalize_for_schema(item) for item in value]
+              if isinstance(value, dict):
+                  return {key: normalize_for_schema(item) for key, item in value.items()}
+              return value
+
+          for yaml_file in Path('projects').rglob('*.yaml'):
+              if yaml_file.name == 'template.yaml':
+                  continue
+
+              with open(yaml_file) as f:
+                  data = yaml.safe_load(f)
+
+              if not data:
+                  errors.append(f"{yaml_file}: Empty file")
+                  continue
+
+              if yaml_file.name != f"{data.get('id', 'MISSING')}.yaml":
+                  errors.append(f"{yaml_file}: Filename does not match id '{data.get('id')}.yaml'")
+
+              if yaml_file.name != 'template.yaml' and data.get('id'):
+                  ids.append(data['id'])
+
+              status = data.get('status', 'MISSING')
+              parent_dir = yaml_file.parent.name
+              if status == 'archived' and parent_dir != 'archived':
+                  errors.append(f"{yaml_file}: Status is 'archived' but file is in '{parent_dir}/'")
+              elif status in ('active', 'testnet') and parent_dir != 'active':
+                  errors.append(f"{yaml_file}: Status is '{status}' but file is in '{parent_dir}/'")
+
+              try:
+                  jsonschema.validate(instance=normalize_for_schema(data), schema=schema)
+              except jsonschema.ValidationError as e:
+                  errors.append(f"{yaml_file}: Schema validation: {e.message}")
+
+              for field in ['created', 'updated']:
+                  if field in data and not DATE_PATTERN.match(str(data[field])):
+                      errors.append(f"{yaml_file}: Invalid date format for '{field}': {data[field]}")
+
+              if 'description' in data and len(data['description']) > 280:
+                  errors.append(f"{yaml_file}: Description exceeds 280 characters ({len(data['description'])})")
+
+              if data.get('category') and data['category'] not in VALID_CATEGORIES:
+                  errors.append(f"{yaml_file}: Invalid category '{data['category']}'")
+
+              if data.get('status') and data['status'] not in VALID_STATUSES:
+                  errors.append(f"{yaml_file}: Invalid status '{data['status']}'")
+
+              if data.get('network') and data['network'] not in VALID_NETWORKS:
+                  errors.append(f"{yaml_file}: Invalid network '{data['network']}'")
+
+              for field in ['url', 'github', 'docs']:
+                  if field in data and data[field] and not valid_url(data[field]):
+                      errors.append(f"{yaml_file}: Invalid URL for '{field}': {data[field]}")
+
+              validate_logo_path(yaml_file, data.get('logo'), 'logo')
+              for index, logo in enumerate(data.get('logos') or []):
+                  if isinstance(logo, dict):
+                      validate_logo_path(yaml_file, logo.get('path'), f'logos[{index}].path')
+                  elif isinstance(logo, str):
+                      validate_logo_path(yaml_file, logo, f'logos[{index}]')
+
+              if 'tags' in data and not isinstance(data['tags'], list):
+                  errors.append(f"{yaml_file}: Tags must be a list")
+              if 'features' in data and not isinstance(data['features'], list):
+                  errors.append(f"{yaml_file}: Features must be a list")
+
+          duplicates = [project_id for project_id, count in Counter(ids).items() if count > 1]
+          if duplicates:
+              errors.append(f"Duplicate IDs found: {duplicates}")
+
+          if errors:
+              print("VALIDATION ERRORS:")
+              print("\n".join(f"  - {error}" for error in errors))
+              sys.exit(1)
+
+          print("All project data is valid.")
+          EOF
+
+      - name: Generate project content
+        run: go run scripts/generate.go
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3.2.1
+        with:
+          hugo-version: '0.162.1'
+
+      - name: Build Hugo site
+        run: hugo --gc --minify --cleanDestinationDir --forceSyncStatic
+        working-directory: ./website
+
+      - name: Copy generated JSON index
+        run: cp website/static/index.json website/public/index.json
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: ./website/public
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
