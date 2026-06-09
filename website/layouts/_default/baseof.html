@@ -47,18 +47,27 @@
     <header>
         <nav>
             <a href="/" class="site-title" aria-label="{{ .Site.Title }}">
-                {{ with resources.Get "brand/qei.png" }}
-                <img class="site-logo" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="">
+                {{ $lightLogo := resources.Get "brand/qei.png" }}
+                {{ $darkLogo := resources.Get "brand/qei-darkmode.png" }}
+                {{ with $lightLogo }}
+                <img class="site-logo site-logo-light" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="">
+                {{ with $darkLogo }}
+                <img class="site-logo site-logo-dark" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="">
+                {{ end }}
                 {{ else }}
                 <span class="site-title-main">QRL</span><span class="site-title-dot">.index</span>
                 {{ end }}
             </a>
             <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-items" data-nav-toggle>
                 <span>Menu</span>
-                <svg class="menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="menu-icon menu-icon-open" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M4 7h16"></path>
                     <path d="M4 12h16"></path>
                     <path d="M4 17h16"></path>
+                </svg>
+                <svg class="menu-icon menu-icon-close" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
                 </svg>
             </button>
             <div class="nav-items" id="site-nav-items">
@@ -111,7 +120,7 @@
                     </li>
                     <li><a class="nav-link" href="/about/">About</a></li>
                 </ul>
-                <a class="join-button" href="https://github.com/theqrl-community/qrl-ecosystem-index">Submit</a>
+                <a class="join-button" href="https://test-zond.theqrl.org">Build on QRL</a>
             </div>
         </nav>
     </header>

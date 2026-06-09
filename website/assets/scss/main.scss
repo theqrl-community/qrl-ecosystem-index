@@ -170,6 +170,8 @@ header nav {
     gap: clamp(0.8rem, 2vw, 1.5rem);
     flex-wrap: wrap;
     position: relative;
+    width: 100%;
+    min-width: 0;
     min-height: 4rem;
     border: 1px solid var(--line);
     border-radius: 10px;
@@ -182,14 +184,17 @@ header nav {
     list-style: none;
     gap: clamp(0.2rem, 1vw, 0.7rem);
     flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .nav-items {
     display: flex;
     align-items: center;
     gap: clamp(0.5rem, 1.2vw, 0.9rem);
+    flex: 1 1 auto;
     flex-wrap: wrap;
     justify-content: flex-end;
+    min-width: 0;
 }
 
 .menu-toggle {
@@ -198,6 +203,7 @@ header nav {
 }
 
 .menu-icon {
+    flex: 0 0 1.25rem;
     width: 1.25rem;
     height: 1.25rem;
     fill: none;
@@ -207,9 +213,8 @@ header nav {
     stroke-width: 2.2;
 }
 
-.menu-icon path {
-    transform-origin: center;
-    transition: opacity 160ms ease, transform 160ms ease;
+.menu-icon-close {
+    display: none;
 }
 
 header nav a {
@@ -230,7 +235,7 @@ header nav a:hover {
     flex: 0 1 15.5rem;
     max-width: #{'min(15.5rem, calc(100% - 7.25rem))'};
     border-radius: 7px;
-    background: #ffffff;
+    background: transparent;
     color: var(--blue-deep);
     font-family: var(--font-display);
     font-size: clamp(1.55rem, 2.7vw, 2.05rem);
@@ -241,10 +246,58 @@ header nav a:hover {
     white-space: nowrap;
 }
 
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme]) .site-title {
+        background: #ffffff;
+    }
+}
+
+:root[data-theme="light"] .site-title {
+    background: #ffffff;
+}
+
+:root[data-theme="dark"] .site-title {
+    background: transparent;
+}
+
 .site-logo {
     display: block;
     width: 100%;
     height: auto;
+}
+
+.site-logo-light {
+    display: none;
+}
+
+.site-logo-dark {
+    display: block;
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme]) .site-logo-light {
+        display: block;
+    }
+
+    :root:not([data-theme]) .site-logo-dark {
+        display: none;
+    }
+}
+
+:root[data-theme="light"] .site-logo-light {
+    display: block;
+}
+
+:root[data-theme="light"] .site-logo-dark {
+    display: none;
+}
+
+:root[data-theme="dark"] .site-logo-light {
+    display: none;
+}
+
+:root[data-theme="dark"] .site-logo-dark {
+    display: block;
 }
 
 .site-title-main {
@@ -1227,26 +1280,25 @@ main > table th {
         outline-offset: 2px;
     }
 
-    .menu-toggle[aria-expanded="true"] .menu-icon path:nth-child(1) {
-        transform: translateY(5px) rotate(45deg);
+    .menu-toggle[aria-expanded="true"] .menu-icon-open {
+        display: none;
     }
 
-    .menu-toggle[aria-expanded="true"] .menu-icon path:nth-child(2) {
-        opacity: 0;
-    }
-
-    .menu-toggle[aria-expanded="true"] .menu-icon path:nth-child(3) {
-        transform: translateY(-5px) rotate(-45deg);
+    .menu-toggle[aria-expanded="true"] .menu-icon-close {
+        display: block;
     }
 
     .nav-menu {
         display: grid;
         width: 100%;
         gap: 0.15rem 0.35rem;
+        justify-content: stretch;
+        justify-items: stretch;
     }
 
     .nav-menu > li {
         width: 100%;
+        min-width: 0;
     }
 
     .nav-dropdown-menu {
@@ -1257,6 +1309,7 @@ main > table th {
     }
 
     .nav-link {
+        display: flex;
         min-height: 2.45rem;
         justify-content: space-between;
         padding: 0.45rem 0.55rem;
@@ -1372,13 +1425,52 @@ main > table th {
     }
 }
 
+@media (min-width: 761px) and (max-width: 960px) {
+    header nav {
+        gap: clamp(0.45rem, 1vw, 0.75rem);
+        padding: 0.35rem clamp(0.45rem, 0.9vw, 0.65rem);
+    }
+
+    .site-title {
+        flex-basis: clamp(10.5rem, 23vw, 12.75rem);
+        max-width: clamp(10.5rem, 23vw, 12.75rem);
+        padding: 0.3rem 0.42rem;
+    }
+
+    .nav-items {
+        gap: 0.35rem;
+    }
+
+    .nav-menu {
+        gap: 0.1rem;
+    }
+
+    .nav-link {
+        min-height: 2.65rem;
+        padding: 0.45rem clamp(0.32rem, 0.75vw, 0.55rem);
+        font-size: 0.82rem;
+    }
+
+    .join-button {
+        min-height: 2.65rem;
+        padding: 0.68rem 0.7rem;
+        font-size: 0.78rem;
+    }
+}
+
 @media (max-width: 560px) {
-    body > header,
     body > main,
     body > footer {
         width: calc(100% - 2rem);
         max-width: 22rem;
         margin-left: 1rem;
+        margin-right: auto;
+    }
+
+    body > header {
+        width: calc(100% - 2rem);
+        max-width: var(--container);
+        margin-left: auto;
         margin-right: auto;
     }
 
