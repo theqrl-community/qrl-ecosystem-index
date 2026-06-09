@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tags | QRL Ecosystem Index</title>
+    <meta name="description" content="A community-contributed index of projects building on QRL 2.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;600;700&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Roboto+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+    (() => {
+        try {
+            const theme = localStorage.getItem("qrl-theme");
+            if (theme === "light" || theme === "dark") {
+                document.documentElement.dataset.theme = theme;
+            }
+        } catch (error) {}
+    })();
+    </script>
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="alternate" type="application/rss&#43;xml" href="https://qrlecosystem.io/tags/index.xml">
+    </head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="site-title" aria-label="QRL Ecosystem Index">
+                <span class="site-title-main">QRL</span><span class="site-title-dot">.index</span>
+            </a>
+            <div class="nav-items">
+                <ul>
+                    <li><a class="nav-link" href="/projects/">Projects</a></li>
+                    <li><a class="nav-link" href="/categories/">Categories</a></li>
+                    <li><a class="nav-link" href="/project-types/">Project Types</a></li>
+                    <li><a class="nav-link" href="/about/">About</a></li>
+                </ul>
+                <span class="nav-divider" aria-hidden="true"></span>
+                <form class="nav-search" action="/projects/" method="get" role="search">
+                    <label class="visually-hidden" for="site-search">Search projects</label>
+                    <input id="site-search" name="q" type="search" placeholder="Search projects">
+                    <button type="submit" aria-label="Search">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="m16.5 16.5 4 4"></path>
+                        </svg>
+                    </button>
+                </form>
+                <a class="join-button" href="https://github.com/theqrl-community/qrl-ecosystem-index">Submit</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        
+<h1>Tags</h1>
+
+
+
+<ul class="project-list">
+
+    <li>
+        <a href="/tags/education/">
+            
+                Education
+            
+        </a>
+        <span class="count">1</span>
+    </li>
+
+    <li>
+        <a href="/tags/news/">
+            
+                News
+            
+        </a>
+        <span class="count">1</span>
+    </li>
+
+</ul>
+
+
+    </main>
+
+    <footer>
+        <p>A community project. Submit your project via <a href="https://github.com/theqrl-community/qrl-ecosystem-index">GitHub</a>.</p>
+        <button class="theme-toggle" type="button" role="switch" aria-label="Dark mode" aria-checked="true" title="Switch theme" data-theme-toggle>
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path>
+                <path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path>
+                <path d="M20 12h2"></path>
+                <path d="m6.34 17.66-1.41 1.41"></path>
+                <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.99 12.69A9 9 0 1 1 11.31 3.01 7 7 0 0 0 20.99 12.69Z"></path>
+            </svg>
+        </button>
+    </footer>
+    <script>
+    (() => {
+        const button = document.querySelector("[data-theme-toggle]");
+        const root = document.documentElement;
+
+        if (!button) {
+            return;
+        }
+
+        const prefersLight = window.matchMedia("(prefers-color-scheme: light)");
+        const currentTheme = () => root.dataset.theme || (prefersLight.matches ? "light" : "dark");
+        const syncButton = () => {
+            const isDark = currentTheme() === "dark";
+            button.setAttribute("aria-checked", String(isDark));
+            button.title = isDark ? "Switch to light mode" : "Switch to dark mode";
+        };
+
+        button.addEventListener("click", () => {
+            const nextTheme = currentTheme() === "dark" ? "light" : "dark";
+            root.dataset.theme = nextTheme;
+
+            try {
+                localStorage.setItem("qrl-theme", nextTheme);
+            } catch (error) {}
+
+            syncButton();
+        });
+
+        const handlePreferenceChange = () => {
+            if (!root.dataset.theme) {
+                syncButton();
+            }
+        };
+
+        if (typeof prefersLight.addEventListener === "function") {
+            prefersLight.addEventListener("change", handlePreferenceChange);
+        } else if (typeof prefersLight.addListener === "function") {
+            prefersLight.addListener(handlePreferenceChange);
+        }
+
+        syncButton();
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{{- $parts := slice .Title .Params.description .Params.category .Params.status .Params.author .Params.license .Params.project_url .Params.github .Params.docs .Params.discord .Params.twitter .Params.project_type .Params.ecosystem_type -}}
+{{- with (index .Params "project-types") -}}
+    {{- range . -}}
+        {{- $parts = $parts | append . -}}
+        {{- $parts = $parts | append (partial "project-type-label.html" .) -}}
+    {{- end -}}
+{{- end -}}
+{{- range .Params.categories -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- range .Params.tags -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- range .Params.features -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- range .Params.clients -}}
+    {{- $parts = $parts | append .platform -}}
+    {{- $parts = $parts | append .url -}}
+    {{- $parts = $parts | append .github -}}
+{{- end -}}
+{{- range .Params.platforms -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- range .Params.supported_networks -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- range .Params.endpoints -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- range .Params.languages -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- with .Params.language -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- with .Params.network -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- with .Params.contract_address -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- with .Params.token -}}
+    {{- $parts = $parts | append . -}}
+{{- end -}}
+{{- delimit $parts " " | plainify | lower -}}

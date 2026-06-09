@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZondScan | QRL Ecosystem Index</title>
+    <meta name="description" content="A QRL Zond network explorer for browsing blocks, transactions, smart contracts, validators, addresses, and chain activity.">
+    
+    <link rel="icon" href="/brand/favicon.ico" sizes="any">
+    
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32x32.png">
+    
+    
+    <link rel="icon" type="image/png" sizes="16x16" href="/brand/favicon-16x16.png">
+    
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png">
+    
+    
+    
+    
+    
+    
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;600;700&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Roboto+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+    (() => {
+        try {
+            const theme = localStorage.getItem("qrl-theme");
+            if (theme === "light" || theme === "dark") {
+                document.documentElement.dataset.theme = theme;
+            }
+        } catch (error) {}
+    })();
+    </script>
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    </head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="site-title" aria-label="QRL Ecosystem Index">
+                
+                <img class="site-logo" src="/brand/qei.png" width="697" height="154" alt="">
+                
+            </a>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-items" data-nav-toggle>
+                <span>Menu</span>
+                <svg class="menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 7h16"></path>
+                    <path d="M4 12h16"></path>
+                    <path d="M4 17h16"></path>
+                </svg>
+            </button>
+            <div class="nav-items" id="site-nav-items">
+                <ul class="nav-menu">
+                    <li><a class="nav-link" href="/projects/">Projects</a></li>
+                    <li class="nav-dropdown">
+                        <details name="nav-taxonomy">
+                            <summary class="nav-link">
+                                Categories
+                                <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </summary>
+                            <ul class="nav-dropdown-menu">
+                                <li><a href="/categories/">All Categories</a></li>
+                                
+                                <li>
+                                    <a href="/categories/educational/">
+                                        <span>Educational</span>
+                                        <span class="nav-dropdown-count">1</span>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/categories/explorer/">
+                                        <span>Explorer</span>
+                                        <span class="nav-dropdown-count">1</span>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/categories/wallet/">
+                                        <span>Wallet</span>
+                                        <span class="nav-dropdown-count">1</span>
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                        </details>
+                    </li>
+                    <li class="nav-dropdown">
+                        <details name="nav-taxonomy">
+                            <summary class="nav-link">
+                                Project Types
+                                <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </summary>
+                            <ul class="nav-dropdown-menu">
+                                <li><a href="/project-types/">All Project Types</a></li>
+                                
+                                
+                                
+                                
+                                <li>
+                                    <a href="/project-types/dapps/">
+                                        <span>dApps</span>
+                                        <span class="nav-dropdown-count">0</span>
+                                    </a>
+                                </li>
+                                
+                                
+                                <li>
+                                    <a href="/project-types/applications/">
+                                        <span>Applications</span>
+                                        <span class="nav-dropdown-count">2</span>
+                                    </a>
+                                </li>
+                                
+                                
+                                <li>
+                                    <a href="/project-types/infrastructure/">
+                                        <span>Infrastructure</span>
+                                        <span class="nav-dropdown-count">0</span>
+                                    </a>
+                                </li>
+                                
+                                
+                                <li>
+                                    <a href="/project-types/tooling/">
+                                        <span>Tooling</span>
+                                        <span class="nav-dropdown-count">0</span>
+                                    </a>
+                                </li>
+                                
+                                
+                                <li>
+                                    <a href="/project-types/community/">
+                                        <span>Community</span>
+                                        <span class="nav-dropdown-count">1</span>
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                        </details>
+                    </li>
+                    <li><a class="nav-link" href="/about/">About</a></li>
+                </ul>
+                <a class="join-button" href="https://github.com/theqrl-community/qrl-ecosystem-index">Submit</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        
+<article class="project">
+    <header>
+        <h1>ZondScan</h1>
+        <div class="meta">
+            <span class="status status-development">development</span>
+            
+            <a class="category" href="/categories/explorer/">explorer</a>
+            
+            
+            
+            <a class="project-type" href="/project-types/applications/">Applications</a>
+            
+            
+        </div>
+    </header>
+
+    <div class="description">
+        A QRL Zond network explorer for browsing blocks, transactions, smart contracts, validators, addresses, and chain activity.
+    </div>
+
+    <section class="details">
+        <h2>Project Details</h2>
+        <dl>
+            <dt>Type</dt><dd>Applications</dd>
+            <dt>Author</dt><dd>DigitalGuards</dd>
+            <dt>License</dt><dd>MIT</dd>
+            
+            <dt>Website</dt><dd><a href="https://zondscan.com/">https://zondscan.com/</a></dd>
+            
+            
+            <dt>GitHub</dt><dd><a href="https://github.com/DigitalGuards/zondscan">https://github.com/DigitalGuards/zondscan</a></dd>
+            
+            
+            <dt>Open Source</dt><dd>Yes</dd>
+            
+            
+        </dl>
+    </section>
+
+    
+
+    
+    <section class="features">
+        <h2>Features</h2>
+        <ul>
+        
+            <li>Real-time QRL Zond blockchain data exploration</li>
+        
+            <li>Transaction, block, smart contract, and validator views</li>
+        
+            <li>Address details, balance checking, richlist, and unit conversion tools</li>
+        
+            <li>Next.js frontend with a Go-powered backend API</li>
+        
+            <li>Responsive web interface for desktop and mobile devices</li>
+        
+        </ul>
+    </section>
+    
+
+    
+    <section class="long-description">
+        <h2 id="updated-2026-06-09">:
+- testnet
+tags:
+- explorer
+- zond
+- validators
+title: ZondScan
+twitter: &quot;&quot;
+updated: &ldquo;2026-06-09&rdquo;</h2>
+<p>ZondScan is a DigitalGuards block explorer for the QRL Zond network. It
+provides a web interface for exploring blocks, transactions, smart contracts,
+validators, addresses, and network activity.</p>
+<p>The project is open source and built with a Next.js frontend, a Go backend
+API, and a blockchain synchronizer that indexes QRL Zond data into MongoDB
+for fast lookup and analysis.</p>
+
+    </section>
+    
+
+    <footer>
+        <p>Created: 2026-06-09 | Updated: 2026-06-09</p>
+    </footer>
+</article>
+
+    </main>
+
+    <footer>
+        <p>A community project. Submit your project via <a href="https://github.com/theqrl-community/qrl-ecosystem-index">GitHub</a>.</p>
+        <button class="theme-toggle" type="button" role="switch" aria-label="Dark mode" aria-checked="true" title="Switch theme" data-theme-toggle>
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path>
+                <path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path>
+                <path d="M20 12h2"></path>
+                <path d="m6.34 17.66-1.41 1.41"></path>
+                <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.99 12.69A9 9 0 1 1 11.31 3.01 7 7 0 0 0 20.99 12.69Z"></path>
+            </svg>
+        </button>
+    </footer>
+    <script>
+    (() => {
+        const nav = document.querySelector("header nav");
+        const button = document.querySelector("[data-nav-toggle]");
+        const panel = document.getElementById("site-nav-items");
+
+        if (!nav || !button || !panel) {
+            return;
+        }
+
+        const closeMenu = () => {
+            nav.classList.remove("nav-open");
+            button.setAttribute("aria-expanded", "false");
+        };
+
+        button.addEventListener("click", () => {
+            const shouldOpen = button.getAttribute("aria-expanded") !== "true";
+            nav.classList.toggle("nav-open", shouldOpen);
+            button.setAttribute("aria-expanded", String(shouldOpen));
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                closeMenu();
+            }
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!nav.contains(event.target)) {
+                closeMenu();
+            }
+        });
+
+        const desktopQuery = window.matchMedia("(min-width: 761px)");
+        const handleViewportChange = () => {
+            if (desktopQuery.matches) {
+                closeMenu();
+            }
+        };
+
+        if (typeof desktopQuery.addEventListener === "function") {
+            desktopQuery.addEventListener("change", handleViewportChange);
+        } else if (typeof desktopQuery.addListener === "function") {
+            desktopQuery.addListener(handleViewportChange);
+        }
+    })();
+
+    </script>
+    <script>
+    (() => {
+        const button = document.querySelector("[data-theme-toggle]");
+        const root = document.documentElement;
+
+        if (!button) {
+            return;
+        }
+
+        const prefersLight = window.matchMedia("(prefers-color-scheme: light)");
+        const currentTheme = () => root.dataset.theme || (prefersLight.matches ? "light" : "dark");
+        const syncButton = () => {
+            const isDark = currentTheme() === "dark";
+            button.setAttribute("aria-checked", String(isDark));
+            button.title = isDark ? "Switch to light mode" : "Switch to dark mode";
+        };
+
+        button.addEventListener("click", () => {
+            const nextTheme = currentTheme() === "dark" ? "light" : "dark";
+            root.dataset.theme = nextTheme;
+
+            try {
+                localStorage.setItem("qrl-theme", nextTheme);
+            } catch (error) {}
+
+            syncButton();
+        });
+
+        const handlePreferenceChange = () => {
+            if (!root.dataset.theme) {
+                syncButton();
+            }
+        };
+
+        if (typeof prefersLight.addEventListener === "function") {
+            prefersLight.addEventListener("change", handlePreferenceChange);
+        } else if (typeof prefersLight.addListener === "function") {
+            prefersLight.addListener(handlePreferenceChange);
+        }
+
+        syncButton();
+    })();
+    </script>
+</body>
+</html>

@@ -22,8 +22,8 @@
     },
     "status": {
       "type": "string",
-      "enum": ["testnet", "active", "archived"],
-      "description": "Project status"
+      "enum": ["development", "production", "archived"],
+      "description": "Project development stage"
     },
     "description": {
       "type": "string",
@@ -120,10 +120,58 @@
       "type": "boolean",
       "description": "True if professionally audited"
     },
-    "audit_url": {
-      "type": "string",
-      "format": "uri",
-      "description": "Link to security audit report"
+    "audits": {
+      "type": "array",
+      "description": "Security audit reports",
+      "items": {
+        "type": "object",
+        "required": ["auditor", "audit_url"],
+        "properties": {
+          "auditor": {
+            "type": "string",
+            "description": "Name of the auditor or auditing organization"
+          },
+          "audit_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to security audit report"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "clients": {
+      "type": "array",
+      "description": "Platform-specific project destinations. Mark one client with default: true to use it as the primary external destination in cards and indexes.",
+      "items": {
+        "type": "object",
+        "required": ["platform"],
+        "anyOf": [
+          { "required": ["url"] },
+          { "required": ["github"] }
+        ],
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Client platform or channel, e.g. web, android, ios, macos, windows, linux"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Platform-specific destination URL"
+          },
+          "github": {
+            "type": "string",
+            "format": "uri",
+            "description": "Platform-specific source repository URL"
+          },
+          "default": {
+            "type": "boolean",
+            "description": "True if this client should be the default external destination for cards and indexes"
+          }
+        },
+        "additionalProperties": false
+      }
     },
     "dapp": {
       "type": "object",

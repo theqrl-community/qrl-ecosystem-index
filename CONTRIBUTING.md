@@ -28,7 +28,7 @@ This index broadly covers five types of projects.
 | `id` | `string` | Unique slug identifier, lowercase, hyphenated (e.g. `my-qrl-dapp`) |
 | `name` | `string` | Human-readable project name |
 | `project_type` | `enum` | One of: `dapp`, `application`, `infrastructure`, `tooling`, `community` |
-| `status` | `enum` | One of: `testnet`, `active`, `archived` |
+| `status` | `enum` | One of: `development`, `production`, `archived` |
 | `description` | `string` | Short description, max 280 characters |
 | `category` | `enum` | One of: `defi`, `nft`, `wallet`, `explorer`, `infrastructure`, `tooling`, `dao`, `gaming`, `identity`, `oracle`, `bridge`, `social`, `educational`, `news` |
 | `tags` | `list[string]` | Freeform tags for filtering/search |
@@ -51,7 +51,10 @@ This index broadly covers five types of projects.
 | `features` | `list[string]` | Key features or capabilities of the project |
 | `open_source` | `boolean` | True if the source code is public |
 | `audited` | `boolean` | True if professionally audited |
-| `audit_url` | `string` | Link to security audit report |
+| `audits` | `list[object]` | Security audit reports, each with `auditor` and `audit_url` |
+| `clients` | `list[object]` | Platform-specific destinations, each with `platform`, optional `url`, optional `github`, and optional `default` |
+
+Use `clients` when one project has separate platform destinations, such as web, iOS, Android, or desktop wallets. Set `default: true` on the client that should be used as the primary external link in project cards and generated indexes. If no client is marked as the default, the site uses the first client with a `url`, then falls back to the top-level `url`.
 
 ### Project Type-Specific Nested Blocks
 
@@ -143,7 +146,7 @@ Open an issue or reach out on the QRL Discord.
 id: quanta-swap
 name: Quanta Swap
 project_type: dapp
-status: testnet
+status: development
 description: >
   A decentralized token swap protocol built natively
   on QRL 2.0 smart contracts.
@@ -163,9 +166,10 @@ docs: https://docs.qrlswap.example.com
 discord: https://discord.gg/example
 twitter: https://twitter.com/qrlswap
 
-open_source: true
 audited: true
-audit_url: https://security.example.com/audit/qrl-swap
+audits:
+  - auditor: Example Security
+    audit_url: https://security.example.com/audit/qrl-swap
 
 features:
   - Automated market maker (AMM)
@@ -173,7 +177,7 @@ features:
   - Post-quantum secure transactions
 
 dapp:
-  network: testnet
+  networks: testnet
   contract_address: "Q0104..."
 
 long_description: |
@@ -190,7 +194,7 @@ long_description: |
 id: quanta-wallet
 name: Quanta Wallet
 project_type: application
-status: testnet
+status: development
 description: >
   A post-quantum secure wallet for storing, sending,
   and receiving QRL tokens with advanced privacy features.
@@ -210,9 +214,22 @@ docs: https://docs.quanta-wallet.example.com
 discord: https://discord.gg/quanta-wallet
 twitter: https://twitter.com/quantawallet
 
-open_source: true
-audited: false
-audit_url: https://security.example.com/audit/quanta-wallet
+clients:
+  - platform: web
+    url: https://quanta-wallet.example.com
+    github: https://github.com/qrl/quanta-wallet-web
+    default: true
+  - platform: android
+    url: https://play.google.com/store/apps/details?id=com.example.quantawallet
+    github: https://github.com/qrl/quanta-wallet-android
+  - platform: ios
+    url: https://apps.apple.com/app/quanta-wallet/id0000000000
+    github: https://github.com/qrl/quanta-wallet-ios
+
+audited: true
+audits:
+  - auditor: Example Security
+    audit_url: https://security.example.com/audit/quanta-wallet
 
 features:
   - Post-quantum secure key generation

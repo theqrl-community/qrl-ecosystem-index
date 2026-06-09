@@ -26,8 +26,8 @@ Projects are also grouped by category, such as defi, nft, wallet, explorer, infr
 
 ## Project Status
 
-- **testnet** - Projects currently on QRL 2.0 testnet
-- **active** - Projects that are live or in active development
+- **development** - Projects that are still being built, tested, or prepared for release
+- **production** - Projects that are live and intended for public use
 - **archived** - Projects that are no longer active
 
 ## Submitting Updates

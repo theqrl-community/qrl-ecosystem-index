@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>QRL Ecosystem Index</title>
-		<link>https://qrlecosystem.io/</link>
+		<link>http://localhost:1313/</link>
 		<description>Recent content on QRL Ecosystem Index</description>
 		<generator>Hugo</generator>
 		<language>en-us</language>
@@ -10,20 +10,27 @@
 		
 		
 		
-			<atom:link href="https://qrlecosystem.io/index.xml" rel="self" type="application/rss+xml" />
+			<atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
 			<item>
-				<title>QRL Hub</title>
-				<link>https://qrlecosystem.io/projects/active/qrl-hub/</link>
+				<title>MyQRLWallet</title>
+				<link>http://localhost:1313/projects/active/myqrlwallet/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>https://qrlecosystem.io/projects/active/qrl-hub/</guid>
-				<description>&lt;p&gt;QRL Hub is a community-maintained resource website for learning about QRL,&#xA;quantum computing threats, blockchain security, and the quantum-resistant&#xA;future of cryptocurrency. The site includes educational pages, FAQs, quantum&#xA;news, QRL 2.0 information, and links to the official QRL website.&lt;/p&gt;&#xA;&lt;p&gt;QRL Hub states that it is not associated with the QRL Foundation and provides&#xA;educational content only.&lt;/p&gt;</description>
+				<guid>http://localhost:1313/projects/active/myqrlwallet/</guid>
+				<description>&lt;p&gt;MyQRLWallet is a DigitalGuards web wallet for QRL 2.0. It provides a&#xA;browser-based interface for creating accounts and managing transactions on&#xA;the quantum-resistant ledger.&lt;/p&gt;&#xA;&lt;p&gt;The wallet is part of the DigitalGuards QRL Zond ecosystem and links to a&#xA;public frontend repository.&lt;/p&gt;</description>
 			</item>
 			<item>
-				<title>QuantaSwap</title>
-				<link>https://qrlecosystem.io/projects/active/quanta-swap/</link>
+				<title>QRL Hub</title>
+				<link>http://localhost:1313/projects/active/qrl-hub/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>https://qrlecosystem.io/projects/active/quanta-swap/</guid>
-				<description>&lt;p&gt;QuantaSwap is a decentralized exchange (DEX) built on QRL 2.0 smart contracts. It provides an automated market maker (AMM) system allowing users to swap tokens, provide liquidity, and earn yields.&lt;/p&gt;&#xA;&lt;p&gt;The protocol uses a constant product formula for price discovery, ensuring liquidity in all market conditions. Users can earn QSWAP tokens by providing liquidity to pool pairs.&lt;/p&gt;</description>
+				<guid>http://localhost:1313/projects/active/qrl-hub/</guid>
+				<description>&lt;h2 id=&#34;updated-2026-05-29&#34;&gt;itle: QRL Hub&#xA;twitter: &amp;quot;&amp;quot;&#xA;updated: &amp;ldquo;2026-05-29&amp;rdquo;&lt;/h2&gt;&#xA;&lt;p&gt;QRL Hub is a community-maintained resource website for learning about QRL,&#xA;quantum computing threats, blockchain security, and the quantum-resistant&#xA;future of cryptocurrency. The site includes educational pages, FAQs, quantum&#xA;news, QRL 2.0 information, and links to the official QRL website.&lt;/p&gt;&#xA;&lt;p&gt;QRL Hub states that it is not associated with the QRL&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>ZondScan</title>
+				<link>http://localhost:1313/projects/active/zondscan/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/projects/active/zondscan/</guid>
+				<description>&lt;h2 id=&#34;updated-2026-06-09&#34;&gt;:&#xA;- testnet&#xA;tags:&#xA;- explorer&#xA;- zond&#xA;- validators&#xA;title: ZondScan&#xA;twitter: &amp;quot;&amp;quot;&#xA;updated: &amp;ldquo;2026-06-09&amp;rdquo;&lt;/h2&gt;&#xA;&lt;p&gt;ZondScan is a DigitalGuards block explorer for the QRL Zond network. It&#xA;provides a web interface for exploring blocks, transactions, smart contracts,&#xA;validators, addresses, and network activity.&lt;/p&gt;&#xA;&lt;p&gt;The project is open source and built with a Next.js frontend,&lt;/p&gt;</description>
 			</item>
 	</channel>
 </rss>

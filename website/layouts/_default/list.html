@@ -63,21 +63,96 @@
 {{ end }}
 
 {{ if gt (len .Pages) 0 }}
-<ul class="project-list">
+{{ $showsProjectCards := or (eq .Section "projects") (and .Data.Term (in (slice "categories" "project-types" "tags") .Data.Plural)) }}
+{{ if eq .Section "projects" }}
+<div class="project-filter project-search-filter" role="search">
+    <label class="visually-hidden" for="project-directory-search">Search projects</label>
+    <input id="project-directory-search" type="search" data-project-search placeholder="Search projects">
+    <p class="result-summary"><strong data-result-count>{{ len .Pages }}</strong> projects</p>
+</div>
+{{ end }}
+<ul class="project-list{{ if $showsProjectCards }} project-cards{{ end }}"{{ if eq .Section "projects" }} data-project-list{{ end }}>
 {{ range .Pages }}
+    {{ if $showsProjectCards }}
+        {{ partial "project-card.html" . }}
+    {{ else }}
+    {{ $projectTypeSlug := "" }}
+    {{ $visitURL := .Params.project_url }}
+    {{ with (index .Params "project-types") }}
+        {{ range first 1 . }}
+            {{ $projectTypeSlug = . }}
+        {{ end }}
+    {{ end }}
+    {{ with .Params.default_client_url }}
+        {{ $visitURL = . }}
+    {{ end }}
     <li>
         <a href="{{ .RelPermalink }}">{{ .Title }}</a>
         <span class="project-list-meta">
             {{ with .Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
             {{ with .Params.category }}<span class="category">{{ . }}</span>{{ end }}
-            {{ with .Params.project_type }}<span class="project-type">{{ partial "project-type-label.html" . }}</span>{{ end }}
-            {{ with .Params.project_url }}
+            {{ with $projectTypeSlug }}<span class="project-type">{{ partial "project-type-label.html" . }}</span>{{ end }}
+            {{ with $visitURL }}
             <a class="external-link" href="{{ . }}" target="_blank" rel="noopener">Visit site</a>
             {{ end }}
         </span>
     </li>
+    {{ end }}
 {{ end }}
 </ul>
+{{ if eq .Section "projects" }}
+<p class="no-results" data-no-results hidden>No matching projects.</p>
+<script>
+(() => {
+    const projects = Array.from(document.querySelectorAll("[data-project]"));
+    const search = document.querySelector("[data-project-search]");
+    const count = document.querySelector("[data-result-count]");
+    const empty = document.querySelector("[data-no-results]");
+
+    if (!projects.length || !search || !count || !empty) {
+        return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const initialQuery = params.get("q") || "";
+
+    if (initialQuery) {
+        search.value = initialQuery;
+    }
+
+    const normalize = (value) => value
+        .toString()
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+    const queryTokens = () => normalize(search.value)
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    const update = () => {
+        const tokens = queryTokens();
+        let visible = 0;
+
+        projects.forEach((project) => {
+            const searchText = normalize(project.dataset.search || "");
+            const matches = !tokens.length || tokens.every((token) => searchText.includes(token));
+            project.hidden = !matches;
+            if (matches) {
+                visible += 1;
+            }
+        });
+
+        count.textContent = visible;
+        empty.hidden = visible !== 0;
+    };
+
+    search.addEventListener("input", update);
+    update();
+})();
+</script>
+{{ end }}
 {{ else }}
 <p>No projects found.</p>
 {{ end }}

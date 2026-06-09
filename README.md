@@ -10,11 +10,11 @@ This repository is the **data layer** for the QRL ecosystem, providing a structu
 
 | Stage | Description |
 |---|---|
-| `testnet` | Projects currently on QRL 2.0 testnet |
-| `active` | Projects that are live or in active development |
+| `development` | Projects that are still being built, tested, or prepared for release |
+| `production` | Projects that are live and intended for public use |
 | `archived` | Projects that are no longer active |
 
-Note: Both `testnet` and `active` projects are placed in the `projects/active/` directory. The `network` field indicates testnet vs mainnet deployment.
+Note: Both `development` and `production` projects are placed in the `projects/active/` directory. Network deployment is tracked separately in each project type-specific block.
 
 ## Submitting a Project
 

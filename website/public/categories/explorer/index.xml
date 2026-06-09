@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Explorer on QRL Ecosystem Index</title>
+		<link>http://localhost:1314/categories/explorer/</link>
+		<description>Recent content in Explorer on QRL Ecosystem Index</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<atom:link href="http://localhost:1314/categories/explorer/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>ZondScan</title>
+				<link>http://localhost:1314/projects/active/zondscan/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1314/projects/active/zondscan/</guid>
+				<description>&lt;h2 id=&#34;updated-2026-06-09&#34;&gt;:&#xA;- testnet&#xA;tags:&#xA;- explorer&#xA;- zond&#xA;- validators&#xA;title: ZondScan&#xA;twitter: &amp;quot;&amp;quot;&#xA;updated: &amp;ldquo;2026-06-09&amp;rdquo;&lt;/h2&gt;&#xA;&lt;p&gt;ZondScan is a DigitalGuards block explorer for the QRL Zond network. It&#xA;provides a web interface for exploring blocks, transactions, smart contracts,&#xA;validators, addresses, and network activity.&lt;/p&gt;&#xA;&lt;p&gt;The project is open source and built with a Next.js frontend,&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

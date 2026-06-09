@@ -1,11 +1,13 @@
 ---
-audit_url: ""
 audited: false
+audits: []
 author: QRL Hub
 categories:
     - educational
 category: educational
+clients: []
 created: "2026-05-29"
+default_client_url: https://qrlhub.com/
 description: A community-maintained educational website covering QRL, quantum computing threats, blockchain security, quantum news, and QRL 2.0 updates.
 discord: ""
 docs: ""
@@ -26,12 +28,10 @@ project-types:
     - community
 project_type: community
 project_url: https://qrlhub.com/
-status: active
+status: production
 tags:
     - education
     - news
-    - quantum-security
-    - qrl-2
 title: QRL Hub
 twitter: ""
 updated: "2026-05-29"

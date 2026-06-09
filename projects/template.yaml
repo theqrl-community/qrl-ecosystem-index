@@ -5,8 +5,8 @@
 
 id: your-project-id
 name: Your Project Name
-project_type: dapp  # Options: dapp, application, infrastructure, tooling, community
-status: testnet  # Options: testnet, active, archived
+project_type: dapp  # Options: dapp, application, infrastructure, tooling, community (See CONTRIBUTING.md)
+status: development  # Options: development, production, archived (see CONTRIBUTING.md)
 description: >
   A brief description of your project (max 280 characters).
 category: defi  # Options: defi, nft, wallet, explorer, infrastructure, tooling, dao, gaming, identity, oracle, bridge, social, educational, news
@@ -27,7 +27,20 @@ twitter: https://twitter.com/your-handle
 
 open_source: true
 audited: false
-audit_url: https://security.example.com/audit
+# audits:
+#   - auditor: Example Security
+#     audit_url: https://security.example.com/audit
+
+# Platform-specific destinations. Mark one as default for project cards,
+# listings, and generated indexes. Keep url/github above as fallbacks.
+#clients:
+#  - platform: web
+#    url: https://your-project.example.com
+#    github: https://github.com/your-org/your-web-client
+#    default: true
+#  - platform: android
+#    url: https://play.google.com/store/apps/details?id=example
+#    github: https://github.com/your-org/your-android-client
 
 # Logo (local files only - no external URLs for security)
 # Place logo files in images/logos/<project-id>/ and reference them here

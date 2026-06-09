@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ if and .Title (ne .Title .Site.Title) }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
     <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+    {{ with resources.Get "brand/favicon.ico" }}
+    <link rel="icon" href="{{ .RelPermalink }}" sizes="any">
+    {{ end }}
+    {{ with resources.Get "brand/favicon-32x32.png" }}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ .RelPermalink }}">
+    {{ end }}
+    {{ with resources.Get "brand/favicon-16x16.png" }}
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ .RelPermalink }}">
+    {{ end }}
+    {{ with resources.Get "brand/apple-touch-icon.png" }}
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ .RelPermalink }}">
+    {{ end }}
+    {{ $androidIcon192 := resources.Get "brand/android-chrome-192x192.png" }}
+    {{ $androidIcon512 := resources.Get "brand/android-chrome-512x512.png" }}
+    {{ if and $androidIcon192 $androidIcon512 }}
+    {{ $manifestContent := dict "name" .Site.Title "short_name" "QRL Index" "icons" (slice (dict "src" $androidIcon192.RelPermalink "sizes" "192x192" "type" "image/png") (dict "src" $androidIcon512.RelPermalink "sizes" "512x512" "type" "image/png")) "theme_color" "#0d2d4f" "background_color" "#0d2d4f" "display" "standalone" | jsonify }}
+    {{ $manifest := resources.FromString "site.webmanifest" $manifestContent }}
+    <link rel="manifest" href="{{ $manifest.RelPermalink }}">
+    {{ end }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;600;700&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Roboto+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+    (() => {
+        try {
+            const theme = localStorage.getItem("qrl-theme");
+            if (theme === "light" || theme === "dark") {
+                document.documentElement.dataset.theme = theme;
+            }
+        } catch (error) {}
+    })();
+    </script>
     {{ $styles := resources.Get "scss/main.scss" | css.Sass (dict "targetPath" "assets/css/main.css") }}
     <link rel="stylesheet" href="{{ $styles.RelPermalink }}">
     {{ range .AlternativeOutputFormats -}}
@@ -15,15 +47,72 @@
     <header>
         <nav>
             <a href="/" class="site-title" aria-label="{{ .Site.Title }}">
-                <span class="brand-mark">Q</span>
-                <span>{{ .Site.Title }}</span>
+                {{ with resources.Get "brand/qei.png" }}
+                <img class="site-logo" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="">
+                {{ else }}
+                <span class="site-title-main">QRL</span><span class="site-title-dot">.index</span>
+                {{ end }}
             </a>
-            <ul>
-                <li><a href="/projects/">Projects</a></li>
-                <li><a href="/categories/">Categories</a></li>
-                <li><a href="/project-types/">Project Types</a></li>
-                <li><a href="/about/">About</a></li>
-            </ul>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-items" data-nav-toggle>
+                <span>Menu</span>
+                <svg class="menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 7h16"></path>
+                    <path d="M4 12h16"></path>
+                    <path d="M4 17h16"></path>
+                </svg>
+            </button>
+            <div class="nav-items" id="site-nav-items">
+                <ul class="nav-menu">
+                    <li><a class="nav-link" href="/projects/">Projects</a></li>
+                    <li class="nav-dropdown">
+                        <details name="nav-taxonomy">
+                            <summary class="nav-link">
+                                Categories
+                                <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </summary>
+                            <ul class="nav-dropdown-menu">
+                                <li><a href="/categories/">All Categories</a></li>
+                                {{ range site.Taxonomies.categories.Alphabetical }}
+                                <li>
+                                    <a href="{{ .Page.RelPermalink }}">
+                                        <span>{{ .Page.Title }}</span>
+                                        <span class="nav-dropdown-count">{{ .Count }}</span>
+                                    </a>
+                                </li>
+                                {{ end }}
+                            </ul>
+                        </details>
+                    </li>
+                    <li class="nav-dropdown">
+                        <details name="nav-taxonomy">
+                            <summary class="nav-link">
+                                Project Types
+                                <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </summary>
+                            <ul class="nav-dropdown-menu">
+                                <li><a href="/project-types/">All Project Types</a></li>
+                                {{ $taxonomy := index site.Taxonomies "project-types" }}
+                                {{ $types := slice "dapps" "applications" "infrastructure" "tooling" "community" }}
+                                {{ range $types }}
+                                {{ $entry := index $taxonomy . }}
+                                <li>
+                                    <a href="{{ printf "/project-types/%s/" . | relURL }}">
+                                        <span>{{ partial "project-type-label.html" . }}</span>
+                                        <span class="nav-dropdown-count">{{ with $entry }}{{ .Count }}{{ else }}0{{ end }}</span>
+                                    </a>
+                                </li>
+                                {{ end }}
+                            </ul>
+                        </details>
+                    </li>
+                    <li><a class="nav-link" href="/about/">About</a></li>
+                </ul>
+                <a class="join-button" href="https://github.com/theqrl-community/qrl-ecosystem-index">Submit</a>
+            </div>
         </nav>
     </header>
 
@@ -33,6 +122,113 @@
 
     <footer>
         <p>A community project. Submit your project via <a href="https://github.com/theqrl-community/qrl-ecosystem-index">GitHub</a>.</p>
+        <button class="theme-toggle" type="button" role="switch" aria-label="Dark mode" aria-checked="true" title="Switch theme" data-theme-toggle>
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path>
+                <path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path>
+                <path d="M20 12h2"></path>
+                <path d="m6.34 17.66-1.41 1.41"></path>
+                <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.99 12.69A9 9 0 1 1 11.31 3.01 7 7 0 0 0 20.99 12.69Z"></path>
+            </svg>
+        </button>
     </footer>
+    <script>
+    (() => {
+        const nav = document.querySelector("header nav");
+        const button = document.querySelector("[data-nav-toggle]");
+        const panel = document.getElementById("site-nav-items");
+
+        if (!nav || !button || !panel) {
+            return;
+        }
+
+        const closeMenu = () => {
+            nav.classList.remove("nav-open");
+            button.setAttribute("aria-expanded", "false");
+        };
+
+        button.addEventListener("click", () => {
+            const shouldOpen = button.getAttribute("aria-expanded") !== "true";
+            nav.classList.toggle("nav-open", shouldOpen);
+            button.setAttribute("aria-expanded", String(shouldOpen));
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                closeMenu();
+            }
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!nav.contains(event.target)) {
+                closeMenu();
+            }
+        });
+
+        const desktopQuery = window.matchMedia("(min-width: 761px)");
+        const handleViewportChange = () => {
+            if (desktopQuery.matches) {
+                closeMenu();
+            }
+        };
+
+        if (typeof desktopQuery.addEventListener === "function") {
+            desktopQuery.addEventListener("change", handleViewportChange);
+        } else if (typeof desktopQuery.addListener === "function") {
+            desktopQuery.addListener(handleViewportChange);
+        }
+    })();
+
+    </script>
+    <script>
+    (() => {
+        const button = document.querySelector("[data-theme-toggle]");
+        const root = document.documentElement;
+
+        if (!button) {
+            return;
+        }
+
+        const prefersLight = window.matchMedia("(prefers-color-scheme: light)");
+        const currentTheme = () => root.dataset.theme || (prefersLight.matches ? "light" : "dark");
+        const syncButton = () => {
+            const isDark = currentTheme() === "dark";
+            button.setAttribute("aria-checked", String(isDark));
+            button.title = isDark ? "Switch to light mode" : "Switch to dark mode";
+        };
+
+        button.addEventListener("click", () => {
+            const nextTheme = currentTheme() === "dark" ? "light" : "dark";
+            root.dataset.theme = nextTheme;
+
+            try {
+                localStorage.setItem("qrl-theme", nextTheme);
+            } catch (error) {}
+
+            syncButton();
+        });
+
+        const handlePreferenceChange = () => {
+            if (!root.dataset.theme) {
+                syncButton();
+            }
+        };
+
+        if (typeof prefersLight.addEventListener === "function") {
+            prefersLight.addEventListener("change", handlePreferenceChange);
+        } else if (typeof prefersLight.addListener === "function") {
+            prefersLight.addListener(handlePreferenceChange);
+        }
+
+        syncButton();
+    })();
+    </script>
 </body>
 </html>

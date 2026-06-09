@@ -35,7 +35,7 @@ jobs:
           from urllib.parse import urlparse
 
           VALID_CATEGORIES = {'defi', 'nft', 'wallet', 'explorer', 'infrastructure', 'tooling', 'dao', 'gaming', 'identity', 'oracle', 'bridge', 'social', 'educational', 'news'}
-          VALID_STATUSES = {'testnet', 'active', 'archived'}
+          VALID_STATUSES = {'development', 'production', 'archived'}
           VALID_NETWORKS = {'mainnet', 'testnet'}
 
           DATE_PATTERN = re.compile(r'^\d{4}-\d{2}-\d{2}$')
@@ -109,8 +109,15 @@ jobs:
 
               return errors
 
+          def project_yaml_files():
+              return (
+                  yaml_file
+                  for yaml_file in Path('projects').rglob('*.yaml')
+                  if yaml_file.name != 'template.yaml'
+              )
+
           all_errors = []
-          for yaml_file in Path('projects').rglob('*.yaml'):
+          for yaml_file in project_yaml_files():
               file_errors = lint_file(yaml_file)
               if file_errors:
                   all_errors.append(f"\n{yaml_file}:")
