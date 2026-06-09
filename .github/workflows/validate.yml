@@ -26,20 +26,27 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml jsonschema
 
-      - name: Download schema
-        run: curl -sL https://raw.githubusercontent.com/qrllabs/qrl-ecosystem/main/schema/project.schema.json -o schema/project.schema.json || true
-
       - name: Validate YAML files
         run: |
           python << 'EOF'
           import yaml
           import json
           import sys
+          from datetime import date, datetime
           from pathlib import Path
           import jsonschema
 
           schema_path = Path('schema/project.schema.json')
           schema = json.loads(schema_path.read_text()) if schema_path.exists() else None
+
+          def normalize_for_schema(value):
+              if isinstance(value, (date, datetime)):
+                  return value.isoformat()
+              if isinstance(value, list):
+                  return [normalize_for_schema(item) for item in value]
+              if isinstance(value, dict):
+                  return {key: normalize_for_schema(item) for key, item in value.items()}
+              return value
 
           def validate_file(yaml_path):
               errors = []
@@ -65,7 +72,7 @@ jobs:
               # Validate against schema
               if schema:
                   try:
-                      jsonschema.validate(instance=data, schema=schema)
+                      jsonschema.validate(instance=normalize_for_schema(data), schema=schema)
                   except jsonschema.ValidationError as e:
                       errors.append(f"Schema validation: {e.message}")
 
