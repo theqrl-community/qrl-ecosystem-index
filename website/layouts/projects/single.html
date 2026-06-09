@@ -35,10 +35,40 @@
             <dt>Open Source</dt><dd>Yes</dd>
             {{ end }}
             {{ if .Params.audited }}
-            <dt>Audited</dt><dd><a href="{{ .Params.audit_url }}">Yes</a></dd>
+            <dt>Audited</dt>
+            <dd>
+                {{ with .Params.audits }}
+                <ul>
+                    {{ range . }}
+                    <li>
+                        {{ with .auditor }}{{ . }}: {{ end }}
+                        <a href="{{ .audit_url }}">{{ .audit_url }}</a>
+                    </li>
+                    {{ end }}
+                </ul>
+                {{ else }}
+                Yes
+                {{ end }}
+            </dd>
             {{ end }}
         </dl>
     </section>
+
+    {{ with .Params.clients }}
+    <section class="clients">
+        <h2>Clients</h2>
+        <ul class="client-list">
+        {{ range . }}
+            <li>
+                <span class="client-platform">{{ .platform }}</span>
+                {{ if .default }}<span class="status">Default</span>{{ end }}
+                {{ with .url }}<a href="{{ . }}" target="_blank" rel="noopener">Website</a>{{ end }}
+                {{ with .github }}<a href="{{ . }}" target="_blank" rel="noopener">GitHub</a>{{ end }}
+            </li>
+        {{ end }}
+        </ul>
+    </section>
+    {{ end }}
 
     {{ with .Params.features }}
     <section class="features">

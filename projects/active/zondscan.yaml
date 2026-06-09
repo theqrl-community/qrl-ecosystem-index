@@ -1,0 +1,45 @@
+id: zondscan
+name: ZondScan
+project_type: application
+status: development
+description: >
+  A QRL Zond network explorer for browsing blocks, transactions, smart
+  contracts, validators, addresses, and chain activity.
+category: explorer
+tags:
+  - explorer
+  - zond
+  - validators
+author: DigitalGuards
+license: MIT
+created: 2026-06-09
+updated: 2026-06-09
+
+url: https://zondscan.com/
+github: https://github.com/DigitalGuards/zondscan
+
+open_source: true
+audited: false
+
+features:
+  - Real-time QRL Zond blockchain data exploration
+  - Transaction, block, smart contract, and validator views
+  - Address details, balance checking, richlist, and unit conversion tools
+  - Next.js frontend with a Go-powered backend API
+  - Responsive web interface for desktop and mobile devices
+
+long_description: |
+  ZondScan is a DigitalGuards block explorer for the QRL Zond network. It
+  provides a web interface for exploring blocks, transactions, smart contracts,
+  validators, addresses, and network activity.
+
+  The project is open source and built with a Next.js frontend, a Go backend
+  API, and a blockchain synchronizer that indexes QRL Zond data into MongoDB
+  for fast lookup and analysis.
+
+application:
+  platforms:
+    - web
+    - mobile
+  supported_networks:
+    - testnet

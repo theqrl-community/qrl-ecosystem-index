@@ -1,7 +1,7 @@
 id: qrl-hub
 name: QRL Hub
 project_type: community
-status: active
+status: production
 description: >
   A community-maintained educational website covering QRL, quantum computing
   threats, blockchain security, quantum news, and QRL 2.0 updates.
@@ -9,8 +9,6 @@ category: educational
 tags:
   - education
   - news
-  - quantum-security
-  - qrl-2
 author: QRL Hub
 license: none
 created: 2026-05-29

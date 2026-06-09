@@ -1,0 +1,33 @@
+{{- $project := . -}}
+{{- $projectTypeSlug := "" -}}
+{{- $visitURL := $project.Params.project_url -}}
+{{- with (index $project.Params "project-types") -}}
+    {{- range first 1 . -}}
+        {{- $projectTypeSlug = . -}}
+    {{- end -}}
+{{- end -}}
+{{- with $project.Params.default_client_url -}}
+    {{- $visitURL = . -}}
+{{- end -}}
+<li class="project-card"
+    data-project
+    data-search="{{ partial "project-search-text.html" $project }}"
+    data-category="{{ with $project.Params.category }}{{ . | lower }}{{ end }}"
+    data-type="{{ $projectTypeSlug }}"
+    data-status="{{ with $project.Params.status }}{{ . | lower }}{{ end }}">
+    <a class="project-card-hit" href="{{ $project.RelPermalink }}" aria-label="View {{ $project.Title }}"></a>
+    <div class="project-card-main">
+        <span class="project-card-title">{{ $project.Title }}</span>
+        {{ with $project.Params.description }}<p>{{ . }}</p>{{ end }}
+        <span class="project-list-meta">
+            {{ with $project.Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
+            {{ with $project.Params.category }}<a class="meta-chip category" href="{{ printf "/categories/%s/" (. | urlize) | relURL }}">{{ . }}</a>{{ end }}
+            {{ with $projectTypeSlug }}<a class="meta-chip project-type" href="{{ printf "/project-types/%s/" (. | urlize) | relURL }}">{{ partial "project-type-label.html" . }}</a>{{ end }}
+        </span>
+    </div>
+    <div class="project-card-actions">
+        {{ with $visitURL }}
+        <a class="visit-site-button" href="{{ . }}" target="_blank" rel="noopener">Visit Site</a>
+        {{ end }}
+    </div>
+</li>

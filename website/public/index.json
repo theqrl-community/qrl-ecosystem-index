@@ -1,24 +1,45 @@
 {
-  "count": 2,
-  "generated": "2026-05-29T15:37:24Z",
+  "count": 3,
+  "generated": "2026-06-09T00:20:21Z",
   "projects": [
+    {
+      "id": "myqrlwallet",
+      "name": "MyQRLWallet",
+      "status": "development",
+      "category": "wallet",
+      "description": "A web wallet for QRL 2.0 that lets users create accounts and manage transactions on the quantum-resistant ledger.",
+      "url": "https://qrlwallet.com/",
+      "github": "https://github.com/DigitalGuards/myqrlwallet-frontend/",
+      "clients": [
+        {
+          "platform": "web",
+          "url": "https://qrlwallet.com/",
+          "github": "https://github.com/DigitalGuards/myqrlwallet-frontend/",
+          "default": true
+        },
+        {
+          "platform": "android",
+          "url": "https://play.google.com/store/apps/details?id=com.chiefdg.myqrlwallet\u0026pli=1"
+        }
+      ]
+    },
     {
       "id": "qrl-hub",
       "name": "QRL Hub",
-      "status": "active",
+      "status": "production",
       "category": "educational",
       "description": "A community-maintained educational website covering QRL, quantum computing threats, blockchain security, quantum news, and QRL 2.0 updates.",
       "url": "https://qrlhub.com/",
       "github": ""
     },
     {
-      "id": "quanta-swap",
-      "name": "QuantaSwap",
-      "status": "active",
-      "category": "defi",
-      "description": "A decentralized exchange built on QRL 2.0 smart contracts.",
-      "url": "https://quanta-swap.io",
-      "github": "https://github.com/quanta-swap/core"
+      "id": "zondscan",
+      "name": "ZondScan",
+      "status": "development",
+      "category": "explorer",
+      "description": "A QRL Zond network explorer for browsing blocks, transactions, smart contracts, validators, addresses, and chain activity.",
+      "url": "https://zondscan.com/",
+      "github": "https://github.com/DigitalGuards/zondscan"
     }
   ]
 }

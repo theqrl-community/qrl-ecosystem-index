@@ -3,48 +3,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://qrlecosystem.io/about/</loc>
+    <loc>http://localhost:1314/about/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/project-types/applications/</loc>
+    <loc>http://localhost:1314/project-types/applications/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/categories/</loc>
+    <loc>http://localhost:1314/categories/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/project-types/community/</loc>
+    <loc>http://localhost:1314/project-types/community/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/project-types/dapps/</loc>
+    <loc>http://localhost:1314/project-types/dapps/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/categories/defi/</loc>
+    <loc>http://localhost:1314/tags/education/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/tags/dex/</loc>
+    <loc>http://localhost:1314/categories/educational/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/tags/education/</loc>
+    <loc>http://localhost:1314/categories/explorer/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/categories/educational/</loc>
+    <loc>http://localhost:1314/tags/explorer/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/project-types/infrastructure/</loc>
+    <loc>http://localhost:1314/project-types/infrastructure/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/tags/liquidity/</loc>
+    <loc>http://localhost:1314/projects/active/myqrlwallet/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/tags/news/</loc>
+    <loc>http://localhost:1314/tags/news/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/project-types/</loc>
+    <loc>http://localhost:1314/project-types/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/projects/</loc>
+    <loc>http://localhost:1314/projects/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/</loc>
+    <loc>http://localhost:1314/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/projects/active/qrl-hub/</loc>
+    <loc>http://localhost:1314/projects/active/qrl-hub/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/tags/qrl-2/</loc>
+    <loc>http://localhost:1314/tags/qrl-2/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/projects/active/quanta-swap/</loc>
+    <loc>http://localhost:1314/tags/quantum-security/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/tags/quantum-security/</loc>
+    <loc>http://localhost:1314/tags/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/tags/swap/</loc>
+    <loc>http://localhost:1314/project-types/tooling/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/tags/</loc>
+    <loc>http://localhost:1314/tags/validators/</loc>
   </url><url>
-    <loc>https://qrlecosystem.io/project-types/tooling/</loc>
+    <loc>http://localhost:1314/categories/wallet/</loc>
+  </url><url>
+    <loc>http://localhost:1314/tags/wallet/</loc>
+  </url><url>
+    <loc>http://localhost:1314/tags/zond/</loc>
+  </url><url>
+    <loc>http://localhost:1314/projects/active/zondscan/</loc>
   </url>
 </urlset>

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -30,7 +31,8 @@ type Project struct {
 	Twitter         string   `yaml:"twitter"`
 	OpenSource      bool     `yaml:"open_source"`
 	Audited         bool     `yaml:"audited"`
-	AuditURL        string   `yaml:"audit_url"`
+	Audits          []Audit  `yaml:"audits"`
+	Clients         []Client `yaml:"clients"`
 	Logos           []Logo   `yaml:"logos"`
 	Features        []string `yaml:"features"`
 	LongDescription string   `yaml:"long_description"`
@@ -45,6 +47,18 @@ type Project struct {
 type Logo struct {
 	Path        string `yaml:"path"`
 	Description string `yaml:"description"`
+}
+
+type Audit struct {
+	Auditor  string `yaml:"auditor"`
+	AuditURL string `yaml:"audit_url"`
+}
+
+type Client struct {
+	Platform string `yaml:"platform" json:"platform"`
+	URL      string `yaml:"url,omitempty" json:"url,omitempty"`
+	GitHub   string `yaml:"github,omitempty" json:"github,omitempty"`
+	Default  bool   `yaml:"default,omitempty" json:"default,omitempty"`
 }
 
 type DappBlock struct {
@@ -83,6 +97,8 @@ func main() {
 	processDir("projects/active", &projects)
 	// Process archived projects
 	processDir("projects/archived", &projects)
+
+	removeStaleProjectPages(projects)
 
 	// Generate individual project pages
 	for _, p := range projects {
@@ -127,14 +143,39 @@ func processDir(dir string, projects *[]Project) {
 	}
 }
 
-func generateProjectPage(p Project) {
-	// Determine section based on status
-	section := "projects/active"
-	if p.Status == "archived" {
-		section = "projects/archived"
+func removeStaleProjectPages(projects []Project) {
+	expected := make(map[string]bool, len(projects))
+	for _, p := range projects {
+		expected[projectOutputPath(p)] = true
 	}
 
-	outputPath := filepath.Join("website/content", section, p.ID+".md")
+	for _, dir := range []string{
+		filepath.Join("website", "content", "projects", "active"),
+		filepath.Join("website", "content", "projects", "archived"),
+	} {
+		if err := filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error reading generated project path %s: %v\n", path, err)
+				return nil
+			}
+			if entry.IsDir() || filepath.Ext(path) != ".md" {
+				return nil
+			}
+			if expected[path] {
+				return nil
+			}
+			if err := os.Remove(path); err != nil {
+				fmt.Fprintf(os.Stderr, "Error removing stale project page %s: %v\n", path, err)
+			}
+			return nil
+		}); err != nil && !os.IsNotExist(err) {
+			fmt.Fprintf(os.Stderr, "Error scanning generated project pages in %s: %v\n", dir, err)
+		}
+	}
+}
+
+func generateProjectPage(p Project) {
+	outputPath := projectOutputPath(p)
 	if err := os.MkdirAll(filepath.Dir(outputPath), 0755); err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating directory for %s: %v\n", outputPath, err)
 		return
@@ -162,9 +203,20 @@ func generateProjectPage(p Project) {
 		"twitter":     p.Twitter,
 		"open_source": p.OpenSource,
 		"audited":     p.Audited,
-		"audit_url":   p.AuditURL,
+		"audits":      p.Audits,
+		"clients":     p.Clients,
 		"logos":       p.Logos,
 		"features":    p.Features,
+	}
+
+	if client, ok := defaultClient(p); ok {
+		params["default_client"] = client
+	}
+	if url := defaultProjectURL(p); url != "" {
+		params["default_client_url"] = url
+	}
+	if github := defaultProjectGitHub(p); github != "" {
+		params["default_client_github"] = github
 	}
 
 	if p.Dapp != nil {
@@ -202,15 +254,26 @@ func generateProjectPage(p Project) {
 	}
 }
 
+func projectOutputPath(p Project) string {
+	// Determine section based on status
+	section := "projects/active"
+	if p.Status == "archived" {
+		section = "projects/archived"
+	}
+
+	return filepath.Join("website", "content", section, p.ID+".md")
+}
+
 func generateJSONIndex(projects []Project) {
 	type IndexProject struct {
-		ID          string `json:"id"`
-		Name        string `json:"name"`
-		Status      string `json:"status"`
-		Category    string `json:"category"`
-		Description string `json:"description"`
-		URL         string `json:"url"`
-		GitHub      string `json:"github"`
+		ID          string   `json:"id"`
+		Name        string   `json:"name"`
+		Status      string   `json:"status"`
+		Category    string   `json:"category"`
+		Description string   `json:"description"`
+		URL         string   `json:"url"`
+		GitHub      string   `json:"github"`
+		Clients     []Client `json:"clients,omitempty"`
 	}
 
 	var index []IndexProject
@@ -221,8 +284,9 @@ func generateJSONIndex(projects []Project) {
 			Status:      p.Status,
 			Category:    p.Category,
 			Description: strings.TrimSpace(p.Description),
-			URL:         p.URL,
-			GitHub:      p.GitHub,
+			URL:         defaultProjectURL(p),
+			GitHub:      defaultProjectGitHub(p),
+			Clients:     p.Clients,
 		})
 	}
 
@@ -239,6 +303,37 @@ func generateJSONIndex(projects []Project) {
 
 func escapeMarkdown(s string) string {
 	return s
+}
+
+func defaultClient(p Project) (Client, bool) {
+	for _, client := range p.Clients {
+		if client.Default {
+			return client, true
+		}
+	}
+	for _, client := range p.Clients {
+		if client.URL != "" {
+			return client, true
+		}
+	}
+	if len(p.Clients) > 0 {
+		return p.Clients[0], true
+	}
+	return Client{}, false
+}
+
+func defaultProjectURL(p Project) string {
+	if client, ok := defaultClient(p); ok && client.URL != "" {
+		return client.URL
+	}
+	return p.URL
+}
+
+func defaultProjectGitHub(p Project) string {
+	if client, ok := defaultClient(p); ok && client.GitHub != "" {
+		return client.GitHub
+	}
+	return p.GitHub
 }
 
 func projectTypeSlug(projectType string) string {

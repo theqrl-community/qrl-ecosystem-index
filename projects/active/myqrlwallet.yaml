@@ -1,0 +1,50 @@
+id: myqrlwallet
+name: MyQRLWallet
+project_type: application
+status: development
+description: >
+  A web wallet for QRL 2.0 that lets users create accounts and manage
+  transactions on the quantum-resistant ledger.
+category: wallet
+tags:
+  - wallet
+author: DigitalGuards
+license: none
+created: 2026-06-09
+updated: 2026-06-09
+
+url: https://qrlwallet.com/
+github: https://github.com/DigitalGuards/myqrlwallet-frontend/
+twitter: https://x.com/DigitalGuards
+
+open_source: true
+audited: false
+
+clients:
+  - platform: web
+    url: https://qrlwallet.com/
+    github: https://github.com/DigitalGuards/myqrlwallet-frontend/
+    default: true
+  - platform: android
+    url: https://play.google.com/store/apps/details?id=com.chiefdg.myqrlwallet&pli=1
+
+features:
+  - Web-based QRL 2.0 wallet access
+  - Account creation and transaction management
+  - Quantum-resistant ledger support
+  - Zond ecosystem integration
+
+long_description: |
+  MyQRLWallet is a DigitalGuards web wallet for QRL 2.0. It provides a
+  browser-based interface for creating accounts and managing transactions on
+  the quantum-resistant ledger.
+
+  The wallet is part of the DigitalGuards QRL Zond ecosystem and links to a
+  public frontend repository.
+
+application:
+  platforms:
+    - web
+    - mobile
+  supported_networks:
+    - testnet
