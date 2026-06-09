@@ -1,6 +1,6 @@
 {
-  "count": 3,
-  "generated": "2026-06-09T00:20:21Z",
+  "count": 4,
+  "generated": "2026-06-09T03:01:59Z",
   "projects": [
     {
       "id": "myqrlwallet",
@@ -31,6 +31,23 @@
       "description": "A community-maintained educational website covering QRL, quantum computing threats, blockchain security, quantum news, and QRL 2.0 updates.",
       "url": "https://qrlhub.com/",
       "github": ""
+    },
+    {
+      "id": "qrl-web3-wallet",
+      "name": "QRL Web3 Wallet",
+      "status": "development",
+      "category": "wallet",
+      "description": "A Chromium-based browser extension wallet for creating and importing QRL accounts, sending transactions, connecting to dApps, and managing QRC-20 tokens.",
+      "url": "https://github.com/theQRL/qrl-web3-wallet/releases/latest",
+      "github": "https://github.com/theQRL/qrl-web3-wallet",
+      "clients": [
+        {
+          "platform": "chromium",
+          "url": "https://github.com/theQRL/qrl-web3-wallet/releases/latest",
+          "github": "https://github.com/theQRL/qrl-web3-wallet",
+          "default": true
+        }
+      ]
     },
     {
       "id": "zondscan",

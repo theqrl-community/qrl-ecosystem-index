@@ -1,0 +1,51 @@
+id: qrl-web3-wallet
+name: QRL Web3 Wallet
+project_type: application
+status: development
+description: >
+  A Chromium-based browser extension wallet for creating and importing QRL
+  accounts, sending transactions, connecting to dApps, and managing QRC-20
+  tokens.
+category: wallet
+tags:
+  - wallet
+  - browser-extension
+author: The QRL
+license: MIT
+created: 2026-06-09
+updated: 2026-06-09
+
+url: https://github.com/theQRL/qrl-web3-wallet/releases/latest
+github: https://github.com/theQRL/qrl-web3-wallet
+
+open_source: true
+audited: false
+
+clients:
+  - platform: chromium
+    url: https://github.com/theQRL/qrl-web3-wallet/releases/latest
+    github: https://github.com/theQRL/qrl-web3-wallet
+    default: true
+
+features:
+  - Chromium-based extension for Chrome, Brave, Edge, and Vivaldi
+  - Account creation and account import
+  - QRL transaction sending with gas fee estimates
+  - EIP-1193 and EIP-6963 dApp connectivity
+  - QRC-20 token import and transfer support
+
+long_description: |
+  QRL Web3 Wallet is an open-source browser extension wallet developed by The
+  QRL for QRL 2.0. It lets users create and import accounts, send QRL
+  transactions, connect to dApps through EIP-1193 and EIP-6963 provider
+  support, and manage QRC-20 tokens.
+
+  The project README notes that the code relates to the QRL v2.0 testnet and
+  is not suitable for the current QRL v1 mainnet. Pre-built extension bundles
+  are published through the project's GitHub releases.
+
+application:
+  platforms:
+    - chromium
+  supported_networks:
+    - testnet
