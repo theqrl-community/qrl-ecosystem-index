@@ -1,0 +1,51 @@
+id: peerquanta
+name: PeerQuanta
+project_type: application
+status: development
+description: >
+  A decentralized peer-to-peer marketplace for secure and anonymous digital
+  goods and services, with encrypted chat and commitment-protocol features.
+category: defi
+tags:
+  - marketplace
+  - peer-to-peer
+  - encrypted-chat
+author: PeerQuanta
+license: none
+created: 2026-06-10
+updated: 2026-06-10
+
+url: https://peerquanta.com/
+
+open_source: false
+audited: false
+
+clients:
+  - platform: web
+    url: https://peerquanta.com/
+    default: true
+
+features:
+  - Peer-to-peer marketplace for digital goods and services
+  - Secure account, listing, transaction, and reputation flows
+  - Encrypted chat and privacy-oriented marketplace features
+  - Commitment-protocol tools including wagers, polls, notary, and Merkle proofs
+  - Web interface with accessibility and multilingual controls
+
+long_description: |
+  PeerQuanta is a web-based peer-to-peer marketplace for digital goods and
+  services. The site describes itself as a decentralized marketplace focused on
+  secure and anonymous exchange, with encrypted chat and commitment-protocol
+  features.
+
+  The application includes marketplace listings, transactions, user profiles,
+  reputation, notifications, and moderation workflows. Its public web app also
+  exposes tools for secure notes, wagers, notary records, secret sharing,
+  dead-man switches, time-locked content, polls, Merkle proofs, provenance,
+  forums, and certificate workflows.
+
+application:
+  platforms:
+    - web
+  supported_networks:
+    - testnet
