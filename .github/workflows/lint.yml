@@ -35,7 +35,7 @@ jobs:
           from urllib.parse import urlparse
 
           VALID_CATEGORIES = {'defi', 'nft', 'wallet', 'explorer', 'infrastructure', 'tooling', 'dao', 'gaming', 'identity', 'oracle', 'bridge', 'social', 'educational', 'news'}
-          VALID_STATUSES = {'testnet', 'active', 'archived'}
+          VALID_STATUSES = {'development', 'production', 'archived'}
           VALID_NETWORKS = {'mainnet', 'testnet'}
 
           DATE_PATTERN = re.compile(r'^\d{4}-\d{2}-\d{2}$')
