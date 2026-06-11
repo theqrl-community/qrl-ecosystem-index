@@ -1,0 +1,18 @@
+{{ $item := .item }}
+{{ $count := .count }}
+{{ $status := .status }}
+<article class="coverage-card">
+    <header>
+        <div>
+            <p class="coverage-status">{{ $status }}</p>
+            <h3>{{ $item.title }}</h3>
+        </div>
+        <span class="coverage-count">{{ $count }}</span>
+    </header>
+    <p>{{ $item.description }}</p>
+    <ul>
+        {{ range $item.ideas }}
+        <li>{{ . }}</li>
+        {{ end }}
+    </ul>
+</article>

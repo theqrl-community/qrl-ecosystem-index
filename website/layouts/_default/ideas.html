@@ -1,0 +1,142 @@
+{{ define "main" }}
+{{ $projects := where (where site.RegularPages "Section" "projects") "Params.status" "!=" "archived" }}
+{{ $projectTypes := slice
+    (dict "slug" "dapps" "project_type" "dapp" "title" "dApps" "description" "Decentralized, smart-contract based applications with on-chain logic." "ideas" (slice "Starter dApps for token swaps, escrow, registries, auctions, and governance." "Reference apps that show wallet connection, contract reads, and transaction submission." "Small, testnet-first examples that other builders can fork."))
+    (dict "slug" "applications" "project_type" "application" "title" "Applications" "description" "User-facing wallets, explorers, dashboards, and interfaces." "ideas" (slice "Mobile wallet and portfolio interfaces." "Network dashboards for validators, tokens, and contract activity." "Payment, checkout, and invoice tools for merchants."))
+    (dict "slug" "infrastructure" "project_type" "infrastructure" "title" "Infrastructure" "description" "Services that support or extend the QRL network." "ideas" (slice "Public RPC endpoint directory with uptime and latency checks." "Hosted indexer APIs for blocks, transactions, accounts, events, tokens, and validators." "Snapshot, archive node, faucet, and network status services."))
+    (dict "slug" "tooling" "project_type" "tooling" "title" "Tooling" "description" "SDKs, libraries, templates, testing tools, and developer utilities." "ideas" (slice "TypeScript, Go, Python, and Rust client libraries." "CLI tools for scaffolding, deployment, token metadata, and network queries." "Local development stack with a node, explorer, faucet, and example contracts."))
+    (dict "slug" "community" "project_type" "community" "title" "Community" "description" "Educational resources, news, forums, and ecosystem coordination." "ideas" (slice "Grants board, bounty board, and public roadmap tracker." "News, podcast, newsletter, or research digest focused on QRL 2.0." "Hands-on courses for wallets, contracts, and dApp development."))
+}}
+{{ $categories := slice
+    (dict "slug" "defi" "title" "DeFi" "description" "Financial protocols and primitives." "ideas" (slice "Token launchpad for QRC-20 creation, metadata, distribution, and verification." "Decentralized exchange or swap interface for QRC-20 tokens." "Lending, borrowing, collateral, escrow, and payment experiments."))
+    (dict "slug" "nft" "title" "NFT" "description" "NFT minting, collections, marketplaces, and galleries." "ideas" (slice "NFT minting tool with metadata hosting guidance." "QRL-native marketplace, gallery, or collection manager." "Verification tools for collection provenance and creator profiles."))
+    (dict "slug" "wallet" "title" "Wallet" "description" "Wallets, signing tools, and account UX." "ideas" (slice "Multisig wallet for teams, treasuries, and validator operators." "Hardware-wallet integration path or signing bridge." "Address book, contact labels, and payment request links."))
+    (dict "slug" "explorer" "title" "Explorer" "description" "Interfaces for chain, contract, validator, and token activity." "ideas" (slice "Specialized token, contract, validator, and rich-list dashboards." "Analytics for transactions, gas, active accounts, and contract usage." "Embeddable widgets for project pages and documentation."))
+    (dict "slug" "infrastructure" "title" "Infrastructure" "description" "Nodes, APIs, indexers, monitoring, and network services." "ideas" (slice "Public RPC directory with health checks and rate-limit notes." "Hosted indexer API with event and token support." "Monitoring templates for Prometheus, Grafana, Docker Compose, and cloud deployments."))
+    (dict "slug" "tooling" "title" "Tooling" "description" "Developer tools, SDKs, templates, and testing utilities." "ideas" (slice "Starter dApp template with wallet and contract examples." "Contract example repository for tokens, escrow, governance, auctions, and registries." "Test utilities for wallets, dApps, providers, and indexers."))
+    (dict "slug" "dao" "title" "DAO" "description" "Governance, treasuries, proposals, and coordination." "ideas" (slice "DAO voting interface for proposals, delegation, discussions, and treasury actions." "Grants board for funding requests, milestones, and delivery updates." "Contribution registry for builders, auditors, validators, and maintainers."))
+    (dict "slug" "gaming" "title" "Gaming" "description" "Games and game-adjacent on-chain assets." "ideas" (slice "Game item registry or inventory demo using QRL contracts." "Simple on-chain game templates such as raffles, tournaments, collectibles, or strategy games." "Randomness-backed game mechanics and fair-selection flows."))
+    (dict "slug" "identity" "title" "Identity" "description" "Names, profiles, credentials, and attestations." "ideas" (slice "Human-readable name service for addresses, profiles, websites, and project handles." "Verifiable profile pages for projects, validators, teams, and contributors." "Attestation tools for credentials, memberships, audits, and project claims."))
+    (dict "slug" "oracle" "title" "Oracle" "description" "External data feeds and signed data publication." "ideas" (slice "Price feed oracle for major assets and QRC-20 tokens." "Proof-of-reserve or proof-of-liability attestations." "Signed data publisher templates for verifiable feeds."))
+    (dict "slug" "bridge" "title" "Bridge" "description" "Cross-chain value, messaging, metadata, and compatibility." "ideas" (slice "Research-grade bridge prototypes for value or message passing." "Wrapped asset dashboard with supply, custody model, risk notes, and contract addresses." "Wallet-provider compatibility examples for common dApp libraries."))
+    (dict "slug" "social" "title" "Social" "description" "Social applications, forums, messaging, and reputation." "ideas" (slice "Encrypted messaging or contact discovery tied to wallet identities." "Social feed or forum experiments using QRL accounts for posting, voting, or moderation." "Reputation tools for contributors, projects, and validator operators."))
+    (dict "slug" "educational" "title" "Educational" "description" "Guides, courses, explainers, and learning paths." "ideas" (slice "Hands-on QRL 2.0 course covering wallets, contracts, and dApps." "Interactive tutorials for deploying and testing contracts." "Builder-focused glossary and migration notes."))
+    (dict "slug" "news" "title" "News" "description" "Reporting, newsletters, media, and ecosystem updates." "ideas" (slice "News site, podcast, or newsletter focused on QRL 2.0 ecosystem development." "Release and governance digest for users and builders." "Project launch calendar and ecosystem changelog."))
+}}
+{{ $representedCategories := 0 }}
+{{ range $categories }}
+    {{ if gt (len (where $projects "Params.category" .slug)) 0 }}
+        {{ $representedCategories = add $representedCategories 1 }}
+    {{ end }}
+{{ end }}
+{{ $representedProjectTypes := 0 }}
+{{ range $projectTypes }}
+    {{ if gt (len (where $projects "Params.project_type" .project_type)) 0 }}
+        {{ $representedProjectTypes = add $representedProjectTypes 1 }}
+    {{ end }}
+{{ end }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+
+<section class="ideas-section" aria-labelledby="coverage-title">
+    <div class="section-heading">
+        <p class="eyebrow">Generated from listings</p>
+        <h2 id="coverage-title">Coverage Snapshot</h2>
+    </div>
+    <div class="coverage-stats">
+        <div class="coverage-stat">
+            <span class="count">{{ len $projects }}</span>
+            <span class="label">Projects listed</span>
+        </div>
+        <div class="coverage-stat">
+            <span class="count">{{ sub (len $categories) $representedCategories }}</span>
+            <span class="label">Missing categories</span>
+        </div>
+        <div class="coverage-stat">
+            <span class="count">{{ sub (len $projectTypes) $representedProjectTypes }}</span>
+            <span class="label">Missing project types</span>
+        </div>
+    </div>
+</section>
+
+<section class="ideas-section" aria-labelledby="priority-title">
+    <div class="section-heading">
+        <p class="eyebrow">Highest need</p>
+        <h2 id="priority-title">Unrepresented Categories</h2>
+    </div>
+    {{ $hasMissingCategory := false }}
+    <div class="coverage-grid">
+        {{ range $categories }}
+            {{ $count := len (where $projects "Params.category" .slug) }}
+            {{ if eq $count 0 }}
+                {{ $hasMissingCategory = true }}
+                {{ partial "coverage-card.html" (dict "item" . "count" $count "status" "Missing") }}
+            {{ end }}
+        {{ end }}
+    </div>
+    {{ if not $hasMissingCategory }}
+    <p>Every category currently has at least one listed project. The next best target is depth: more independent projects, implementations, and tools in each category.</p>
+    {{ end }}
+</section>
+
+<section class="ideas-section" aria-labelledby="light-title">
+    <div class="section-heading">
+        <p class="eyebrow">Needs depth</p>
+        <h2 id="light-title">Lightly Covered Categories</h2>
+    </div>
+    {{ $hasLightCategory := false }}
+    <div class="coverage-grid">
+        {{ range $categories }}
+            {{ $count := len (where $projects "Params.category" .slug) }}
+            {{ if eq $count 1 }}
+                {{ $hasLightCategory = true }}
+                {{ partial "coverage-card.html" (dict "item" . "count" $count "status" "Light coverage") }}
+            {{ end }}
+        {{ end }}
+    </div>
+    {{ if not $hasLightCategory }}
+    <p>No category has exactly one listing right now.</p>
+    {{ end }}
+</section>
+
+<section class="ideas-section" aria-labelledby="type-title">
+    <div class="section-heading">
+        <p class="eyebrow">Project type balance</p>
+        <h2 id="type-title">Project Type Coverage</h2>
+    </div>
+    <div class="coverage-grid coverage-grid-compact">
+        {{ range $projectTypes }}
+            {{ $count := len (where $projects "Params.project_type" .project_type) }}
+            {{ $status := "Covered" }}
+            {{ if eq $count 0 }}
+                {{ $status = "Missing" }}
+            {{ else if eq $count 1 }}
+                {{ $status = "Light coverage" }}
+            {{ end }}
+            {{ partial "coverage-card.html" (dict "item" . "count" $count "status" $status) }}
+        {{ end }}
+    </div>
+</section>
+
+<section class="ideas-section" aria-labelledby="checklist-title">
+    <div class="section-heading">
+        <p class="eyebrow">How to choose</p>
+        <h2 id="checklist-title">Coverage Checklist</h2>
+    </div>
+    <ul>
+        <li>Does it make QRL easier to use, build on, monitor, or explain?</li>
+        <li>Does it fill a category or project type with few or no current listings?</li>
+        <li>Can it be maintained by a small team or community contributor?</li>
+        <li>Does it have a clear first version that can ship on testnet?</li>
+        <li>Can the project publish enough information for others to evaluate and list it?</li>
+    </ul>
+</section>
+
+<section class="ideas-section" aria-labelledby="existing-title">
+    <div class="section-heading">
+        <p class="eyebrow">Keep the index current</p>
+        <h2 id="existing-title">Adding Existing Projects</h2>
+    </div>
+    <p>If one of these ideas already exists, it should be added as a project listing rather than staying only as a gap. Submit a YAML file in <code>projects/active/</code> using the repository template, then include links to the website, repository, docs, clients, and any known deployment details.</p>
+</section>
+{{ end }}

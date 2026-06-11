@@ -20,7 +20,7 @@
     {{ $androidIcon192 := resources.Get "brand/android-chrome-192x192.png" }}
     {{ $androidIcon512 := resources.Get "brand/android-chrome-512x512.png" }}
     {{ if and $androidIcon192 $androidIcon512 }}
-    {{ $manifestContent := dict "name" .Site.Title "short_name" "QRL Index" "icons" (slice (dict "src" $androidIcon192.RelPermalink "sizes" "192x192" "type" "image/png") (dict "src" $androidIcon512.RelPermalink "sizes" "512x512" "type" "image/png")) "theme_color" "#0d2d4f" "background_color" "#0d2d4f" "display" "standalone" | jsonify }}
+    {{ $manifestContent := dict "name" .Site.Title "short_name" "QRL Index" "icons" (slice (dict "src" $androidIcon192.RelPermalink "sizes" "192x192" "type" "image/png") (dict "src" $androidIcon512.RelPermalink "sizes" "512x512" "type" "image/png")) "theme_color" "#071923" "background_color" "#071923" "display" "standalone" | jsonify }}
     {{ $manifest := resources.FromString "site.webmanifest" $manifestContent }}
     <link rel="manifest" href="{{ $manifest.RelPermalink }}">
     {{ end }}
@@ -118,6 +118,7 @@
                             </ul>
                         </details>
                     </li>
+                    <li><a class="nav-link" href="/ideas/">Ideas</a></li>
                     <li><a class="nav-link" href="/about/">About</a></li>
                 </ul>
                 <a class="join-button" href="https://test-zond.theqrl.org">Build on QRL</a>
@@ -195,6 +196,64 @@
         }
     })();
 
+    </script>
+    <script>
+    (() => {
+        const dropdowns = Array.from(document.querySelectorAll(".nav-dropdown details"));
+
+        if (!dropdowns.length) {
+            return;
+        }
+
+        const desktopQuery = window.matchMedia("(min-width: 761px)");
+        const isDesktop = () => desktopQuery.matches;
+        const closeDropdown = (details) => {
+            if (isDesktop()) {
+                details.open = false;
+            }
+        };
+
+        dropdowns.forEach((details) => {
+            const summary = details.querySelector("summary");
+
+            details.addEventListener("pointerenter", () => {
+                if (isDesktop()) {
+                    details.open = true;
+                }
+            });
+
+            details.addEventListener("pointerleave", () => {
+                closeDropdown(details);
+            });
+
+            details.addEventListener("focusin", () => {
+                if (isDesktop()) {
+                    details.open = true;
+                }
+            });
+
+            details.addEventListener("focusout", (event) => {
+                if (!details.contains(event.relatedTarget)) {
+                    closeDropdown(details);
+                }
+            });
+
+            summary.addEventListener("click", (event) => {
+                if (isDesktop()) {
+                    event.preventDefault();
+                    details.open = true;
+                }
+            });
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                dropdowns.forEach((details) => {
+                    details.open = false;
+                });
+            }
+        });
+    })();
     </script>
     <script>
     (() => {

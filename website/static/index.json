@@ -1,6 +1,6 @@
 {
-  "count": 4,
-  "generated": "2026-06-09T03:01:59Z",
+  "count": 6,
+  "generated": "2026-06-10T14:05:13Z",
   "projects": [
     {
       "id": "myqrlwallet",
@@ -20,6 +20,22 @@
         {
           "platform": "android",
           "url": "https://play.google.com/store/apps/details?id=com.chiefdg.myqrlwallet\u0026pli=1"
+        }
+      ]
+    },
+    {
+      "id": "peerquanta",
+      "name": "PeerQuanta",
+      "status": "development",
+      "category": "defi",
+      "description": "A decentralized peer-to-peer marketplace for secure and anonymous digital goods and services, with encrypted chat and commitment-protocol features.",
+      "url": "https://peerquanta.com/",
+      "github": "",
+      "clients": [
+        {
+          "platform": "web",
+          "url": "https://peerquanta.com/",
+          "default": true
         }
       ]
     },
@@ -45,6 +61,23 @@
           "platform": "chromium",
           "url": "https://github.com/theQRL/qrl-web3-wallet/releases/latest",
           "github": "https://github.com/theQRL/qrl-web3-wallet",
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "quantapool",
+      "name": "QuantaPool",
+      "status": "development",
+      "category": "defi",
+      "description": "A decentralized QRL liquid staking protocol for staking QRL, receiving stQRL, and earning validator rewards while staying liquid.",
+      "url": "https://quantapool.io/",
+      "github": "https://github.com/DigitalGuards/QuantaPool",
+      "clients": [
+        {
+          "platform": "web",
+          "url": "https://quantapool.io/",
+          "github": "https://github.com/DigitalGuards/QuantaPool",
           "default": true
         }
       ]
