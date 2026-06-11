@@ -46,11 +46,6 @@ long_description: |
   The deployed web app defaults to the QRL 2.0 Testnet and links to the public
   DigitalGuards QuantaPool repository.
 
-  Testnet contracts shown by the app include the DepositPool at
-  Q109d7C528a67b80eb638D4C85e7C4545ef9Bb9aC, stQRL at
-  QA2f23388d1e3986416A36d2Ef113850D6900b69C, and ValidatorManager at
-  QA5b6e85B7713670589e4eAf2F039380Ec2792c8C.
-
 dapp:
   network: testnet
   contract_address: "Q109d7C528a67b80eb638D4C85e7C4545ef9Bb9aC"
