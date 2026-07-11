@@ -33,6 +33,7 @@ type Project struct {
 	Audited         bool     `yaml:"audited"`
 	Audits          []Audit  `yaml:"audits"`
 	Clients         []Client `yaml:"clients"`
+	Logo            string   `yaml:"logo"`
 	Logos           []Logo   `yaml:"logos"`
 	Features        []string `yaml:"features"`
 	LongDescription string   `yaml:"long_description"`
@@ -108,6 +109,12 @@ func main() {
 	// Generate JSON index
 	generateJSONIndex(projects)
 
+	// Copy local project logos into Hugo's published static tree.
+	if err := copyLogoAssets(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error copying logo assets: %v\n", err)
+		os.Exit(1)
+	}
+
 	fmt.Printf("Generated %d project pages\n", len(projects))
 }
 
@@ -138,9 +145,50 @@ func processDir(dir string, projects *[]Project) {
 			fmt.Fprintf(os.Stderr, "Error parsing YAML %s: %v\n", filepath, err)
 			continue
 		}
+		if project.Logo != "" && len(project.Logos) == 0 {
+			project.Logos = []Logo{{Path: project.Logo}}
+		}
 
 		*projects = append(*projects, project)
 	}
+}
+
+func copyLogoAssets() error {
+	sourceDir := filepath.Join("images", "logos")
+	destinationDir := filepath.Join("website", "static", "images", "logos")
+
+	if err := os.RemoveAll(destinationDir); err != nil {
+		return err
+	}
+
+	return filepath.WalkDir(sourceDir, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		relativePath, err := filepath.Rel(sourceDir, path)
+		if err != nil {
+			return err
+		}
+		destinationPath := filepath.Join(destinationDir, relativePath)
+
+		if entry.IsDir() {
+			return os.MkdirAll(destinationPath, 0755)
+		}
+		if entry.Name() == ".gitkeep" {
+			return nil
+		}
+
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		info, err := entry.Info()
+		if err != nil {
+			return err
+		}
+		return os.WriteFile(destinationPath, data, info.Mode().Perm())
+	})
 }
 
 func removeStaleProjectPages(projects []Project) {
@@ -273,6 +321,7 @@ func generateJSONIndex(projects []Project) {
 		Description string   `json:"description"`
 		URL         string   `json:"url"`
 		GitHub      string   `json:"github"`
+		Logo        string   `json:"logo,omitempty"`
 		Clients     []Client `json:"clients,omitempty"`
 	}
 
@@ -286,6 +335,7 @@ func generateJSONIndex(projects []Project) {
 			Description: strings.TrimSpace(p.Description),
 			URL:         defaultProjectURL(p),
 			GitHub:      defaultProjectGitHub(p),
+			Logo:        defaultLogoURL(p),
 			Clients:     p.Clients,
 		})
 	}
@@ -334,6 +384,13 @@ func defaultProjectGitHub(p Project) string {
 		return client.GitHub
 	}
 	return p.GitHub
+}
+
+func defaultLogoURL(p Project) string {
+	if len(p.Logos) == 0 || p.Logos[0].Path == "" {
+		return ""
+	}
+	return "/images/logos/" + filepath.ToSlash(strings.TrimPrefix(p.Logos[0].Path, "/"))
 }
 
 func projectTypeSlug(projectType string) string {
