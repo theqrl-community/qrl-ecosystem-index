@@ -1,0 +1,1 @@
+{{ partial "agent/single.md" . }}

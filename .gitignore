@@ -4,3 +4,7 @@
 /public/
 /website/public/
 /website/resources/_gen/
+
+# Python cache files
+__pycache__/
+*.pyc

@@ -6,6 +6,9 @@
     <meta name="theme-color" content="#f4f2eb">
     <title>{{ if and .Title (ne .Title .Site.Title) }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
     <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+    {{ with .OutputFormats.Get "html" }}
+    <link rel="canonical" href="{{ .Permalink }}">
+    {{ end }}
     {{ with resources.Get "brand/favicon.ico" }}
     <link rel="icon" href="{{ .RelPermalink }}" sizes="any">
     {{ end }}

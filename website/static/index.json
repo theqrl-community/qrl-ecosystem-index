@@ -1,25 +1,38 @@
 {
-  "count": 6,
-  "generated": "2026-06-10T14:05:13Z",
+  "count": 8,
+  "generated": "2026-07-11T22:57:51Z",
   "projects": [
     {
       "id": "myqrlwallet",
       "name": "MyQRLWallet",
       "status": "development",
       "category": "wallet",
-      "description": "A web wallet for QRL 2.0 that lets users create accounts and manage transactions on the quantum-resistant ledger.",
-      "url": "https://qrlwallet.com/",
+      "description": "A family of wallet applications for QRL 2.0: web wallet, Android app, desktop wallet, and browser extension, with post-quantum dApp connectivity over the QRL Connect relay protocol.",
+      "url": "https://myqrlwallet.com/",
       "github": "https://github.com/DigitalGuards/myqrlwallet-frontend/",
       "clients": [
         {
           "platform": "web",
-          "url": "https://qrlwallet.com/",
-          "github": "https://github.com/DigitalGuards/myqrlwallet-frontend/",
+          "url": "https://myqrlwallet.com/",
           "default": true
         },
         {
+          "platform": "web wallet",
+          "url": "https://qrlwallet.com/",
+          "github": "https://github.com/DigitalGuards/myqrlwallet-frontend/"
+        },
+        {
           "platform": "android",
-          "url": "https://play.google.com/store/apps/details?id=com.chiefdg.myqrlwallet\u0026pli=1"
+          "url": "https://play.google.com/store/apps/details?id=com.chiefdg.myqrlwallet"
+        },
+        {
+          "platform": "desktop",
+          "url": "https://github.com/DigitalGuards/myqrlwallet-desktop/releases",
+          "github": "https://github.com/DigitalGuards/myqrlwallet-desktop"
+        },
+        {
+          "platform": "browser extension",
+          "github": "https://github.com/DigitalGuards/myqrlwallet-extension"
         }
       ]
     },
@@ -66,6 +79,15 @@
       ]
     },
     {
+      "id": "qrlwallet-connect",
+      "name": "QRL Wallet Connect",
+      "status": "development",
+      "category": "tooling",
+      "description": "A TypeScript SDK (@qrlwallet/connect) for connecting dApps to MyQRLWallet over a post-quantum encrypted relay, with QR code and deep-link pairing, an EIP-1193 style provider, and persistent sessions.",
+      "url": "https://www.npmjs.com/package/@qrlwallet/connect",
+      "github": "https://github.com/DigitalGuards/myqrlwallet-connect"
+    },
+    {
       "id": "quantapool",
       "name": "QuantaPool",
       "status": "development",
@@ -78,6 +100,24 @@
           "platform": "web",
           "url": "https://quantapool.io/",
           "github": "https://github.com/DigitalGuards/QuantaPool",
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "quantaswap",
+      "name": "QuantaSwap",
+      "status": "development",
+      "category": "defi",
+      "description": "Cross-chain atomic swaps between native QRL and native ETH using hashed timelock contracts on both chains. No bridge, no wrapped assets, no custodian: each leg settles natively and the swap secret never leaves the client.",
+      "url": "https://quantaswap.io/",
+      "github": "https://github.com/DigitalGuards/QuantaSwap",
+      "logo": "/images/logos/quantaswap/icon.svg",
+      "clients": [
+        {
+          "platform": "web",
+          "url": "https://quantaswap.io/",
+          "github": "https://github.com/DigitalGuards/QuantaSwap",
           "default": true
         }
       ]

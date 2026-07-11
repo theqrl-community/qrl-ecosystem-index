@@ -230,6 +230,8 @@ func generateProjectPage(p Project) {
 	}
 
 	params := map[string]interface{}{
+		"url":          projectPermalink(p),
+		"aliases":      legacyProjectAliases(p),
 		"title":        p.Name,
 		"status":       p.Status,
 		"category":     p.Category,
@@ -310,6 +312,17 @@ func projectOutputPath(p Project) string {
 	}
 
 	return filepath.Join("website", "content", section, p.ID+".md")
+}
+
+func projectPermalink(p Project) string {
+	return "/projects/" + p.ID + "/"
+}
+
+func legacyProjectAliases(p Project) []string {
+	return []string{
+		"/projects/active/" + p.ID + "/",
+		"/projects/archived/" + p.ID + "/",
+	}
 }
 
 func generateJSONIndex(projects []Project) {

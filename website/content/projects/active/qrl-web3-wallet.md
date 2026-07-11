@@ -1,4 +1,7 @@
 ---
+aliases:
+    - /projects/active/qrl-web3-wallet/
+    - /projects/archived/qrl-web3-wallet/
 audited: false
 audits: []
 author: The QRL
@@ -47,6 +50,7 @@ tags:
 title: QRL Web3 Wallet
 twitter: ""
 updated: "2026-06-09"
+url: /projects/qrl-web3-wallet/
 ---
 
 QRL Web3 Wallet is an open-source browser extension wallet developed by The
