@@ -1,4 +1,7 @@
 ---
+aliases:
+    - /projects/active/peerquanta/
+    - /projects/archived/peerquanta/
 audited: false
 audits: []
 author: PeerQuanta
@@ -45,6 +48,7 @@ tags:
 title: PeerQuanta
 twitter: ""
 updated: "2026-06-10"
+url: /projects/peerquanta/
 ---
 
 PeerQuanta is a web-based peer-to-peer marketplace for digital goods and

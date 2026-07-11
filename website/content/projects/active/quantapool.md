@@ -1,4 +1,7 @@
 ---
+aliases:
+    - /projects/active/quantapool/
+    - /projects/archived/quantapool/
 audited: false
 audits: []
 author: DigitalGuards
@@ -47,6 +50,7 @@ title: QuantaPool
 token: stQRL
 twitter: ""
 updated: "2026-06-10"
+url: /projects/quantapool/
 ---
 
 QuantaPool is an open-source liquid staking dApp for QRL. Users stake QRL
@@ -58,9 +62,4 @@ validators, exposes pool and validator statistics, supports withdrawal
 requests and claims, and connects through the QRL Wallet browser extension.
 The deployed web app defaults to the QRL 2.0 Testnet and links to the public
 DigitalGuards QuantaPool repository.
-
-Testnet contracts shown by the app include the DepositPool at
-Q109d7C528a67b80eb638D4C85e7C4545ef9Bb9aC, stQRL at
-QA2f23388d1e3986416A36d2Ef113850D6900b69C, and ValidatorManager at
-QA5b6e85B7713670589e4eAf2F039380Ec2792c8C.
 

@@ -1,4 +1,7 @@
 ---
+aliases:
+    - /projects/active/qrl-hub/
+    - /projects/archived/qrl-hub/
 audited: false
 audits: []
 author: QRL Hub
@@ -35,6 +38,7 @@ tags:
 title: QRL Hub
 twitter: ""
 updated: "2026-05-29"
+url: /projects/qrl-hub/
 ---
 
 QRL Hub is a community-maintained resource website for learning about QRL,

@@ -177,6 +177,9 @@ jobs:
       - name: Copy generated JSON index
         run: cp website/static/index.json website/public/index.json
 
+      - name: Validate agent-friendly outputs
+        run: python3 scripts/validate_agent_outputs.py
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:

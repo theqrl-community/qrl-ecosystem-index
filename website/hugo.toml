@@ -1,7 +1,26 @@
-baseURL = "https://qrlecosystem.io/"
+baseURL = "https://www.qrlecosystem.com/"
+enableRobotsTXT = true
 locale = "en-us"
 title = "QRL Ecosystem Index"
 theme = []
+
+[outputFormats.markdown]
+baseName = "index.html"
+permalinkable = true
+
+[outputFormats.llms]
+mediaType = "text/plain"
+baseName = "llms"
+isPlainText = true
+notAlternative = true
+root = true
+
+[outputs]
+home = ["html", "rss", "markdown", "llms"]
+page = ["html", "markdown"]
+section = ["html", "rss", "markdown"]
+taxonomy = ["html", "rss", "markdown"]
+term = ["html", "rss", "markdown"]
 
 [params]
 description = "A community-contributed index of projects building on QRL 2.0"

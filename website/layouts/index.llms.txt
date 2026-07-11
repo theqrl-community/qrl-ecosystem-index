@@ -1,0 +1,51 @@
+{{- $projects := where site.RegularPages "Section" "projects" -}}
+{{- $activeProjects := sort (where $projects "Params.status" "!=" "archived") "Title" -}}
+{{- $archivedProjects := sort (where $projects "Params.status" "archived") "Title" -}}
+# {{ site.Title }}
+
+> {{ site.Params.description }}
+
+The QRL Ecosystem Index is community-maintained and informational. Inclusion does not imply endorsement, audit, affiliation, or approval by QRL or the QRL Foundation. Project status, capabilities, and links reflect the submitted listing data and should be independently verified.
+
+## Core Resources
+
+{{ with site.Home.OutputFormats.Get "markdown" -}}
+- [Site overview]({{ .Permalink }}): A concise introduction to the index and its current projects.
+{{- end }}
+{{- with site.GetPage "/projects" }}{{ with .OutputFormats.Get "markdown" }}
+- [Project directory]({{ .Permalink }}): All active and archived project listings in the index.
+{{- end }}{{ end }}
+{{- with site.GetPage "/about" }}{{ with .OutputFormats.Get "markdown" }}
+- [About the index]({{ .Permalink }}): Scope, organization, project statuses, and contribution context.
+{{- end }}{{ end }}
+{{- with site.GetPage "/ideas" }}{{ with .OutputFormats.Get "markdown" }}
+- [Builder ideas]({{ .Permalink }}): Ecosystem coverage gaps and possible starting points for builders.
+{{- end }}{{ end }}
+- [Structured project index]({{ "index.json" | absURL }}): Machine-readable summary data for every project.
+- [Sitemap]({{ "sitemap.xml" | absURL }}): Canonical HTML pages published by the site.
+
+## Projects
+
+{{ range $activeProjects -}}
+{{- $project := . }}
+{{- with $project.OutputFormats.Get "markdown" }}
+- [{{ $project.Title }}]({{ .Permalink }}): {{ $project.Params.description | plainify }} Status: {{ $project.Params.status }}; type: {{ $project.Params.project_type }}; category: {{ $project.Params.category }}.
+{{- end }}
+{{- end }}
+
+## Optional
+
+{{ range $archivedProjects -}}
+{{- $project := . }}
+{{- with $project.OutputFormats.Get "markdown" }}
+- [Archived project: {{ $project.Title }}]({{ .Permalink }}): {{ $project.Params.description | plainify }}
+{{- end }}
+{{- end }}
+{{- range slice "/categories" "/project-types" "/tags" }}
+{{- with site.GetPage . }}
+{{- $page := . }}
+{{- with $page.OutputFormats.Get "markdown" }}
+- [{{ $page.Title }}]({{ .Permalink }}): Browse projects using this index taxonomy.
+{{- end }}
+{{- end }}
+{{- end }}

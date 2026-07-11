@@ -1,4 +1,7 @@
 ---
+aliases:
+    - /projects/active/zondscan/
+    - /projects/archived/zondscan/
 audited: false
 audits: []
 author: DigitalGuards
@@ -40,6 +43,7 @@ tags:
 title: ZondScan
 twitter: ""
 updated: "2026-06-09"
+url: /projects/zondscan/
 ---
 
 ZondScan is a DigitalGuards block explorer for the QRL Zond network. It
