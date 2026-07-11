@@ -1,33 +1,51 @@
-{{- $project := . -}}
+{{- $project := .project -}}
+{{- $variant := .variant | default "" -}}
 {{- $projectTypeSlug := "" -}}
-{{- $visitURL := $project.Params.project_url -}}
 {{- with (index $project.Params "project-types") -}}
-    {{- range first 1 . -}}
-        {{- $projectTypeSlug = . -}}
+    {{- range first 1 . }}{{ $projectTypeSlug = . }}{{ end -}}
+{{- end -}}
+{{- if not $projectTypeSlug }}{{ $projectTypeSlug = $project.Params.project_type }}{{ end -}}
+{{- $visitURL := $project.Params.project_url -}}
+{{- with $project.Params.default_client_url }}{{ $visitURL = . }}{{ end -}}
+{{- $cleanTitle := replaceRE "[^[:alnum:]]" "" $project.Title -}}
+{{- $initials := upper (substr $cleanTitle 0 2) -}}
+{{- if not $initials }}{{ $initials = "QI" }}{{ end -}}
+{{- $logoURL := "" -}}
+{{- with $project.Params.logos -}}
+    {{- with index . 0 -}}
+        {{- with .path }}{{ $logoURL = printf "/images/logos/%s" . }}{{ end -}}
     {{- end -}}
 {{- end -}}
-{{- with $project.Params.default_client_url -}}
-    {{- $visitURL = . -}}
-{{- end -}}
-<li class="project-card"
+<article class="project-card{{ with $variant }} {{ . }}{{ end }}"
     data-project
     data-search="{{ partial "project-search-text.html" $project }}"
     data-category="{{ with $project.Params.category }}{{ . | lower }}{{ end }}"
-    data-type="{{ $projectTypeSlug }}"
+    data-type="{{ $projectTypeSlug | lower }}"
     data-status="{{ with $project.Params.status }}{{ . | lower }}{{ end }}">
-    <a class="project-card-hit" href="{{ $project.RelPermalink }}" aria-label="View {{ $project.Title }}"></a>
-    <div class="project-card-main">
-        <span class="project-card-title">{{ $project.Title }}</span>
-        {{ with $project.Params.description }}<p>{{ . }}</p>{{ end }}
-        <span class="project-list-meta">
+    <a class="project-card-link" href="{{ $project.RelPermalink }}" aria-label="View {{ $project.Title }} listing"></a>
+    <div class="project-card-top">
+        <div class="project-mark project-mark-small">
+            {{ if $logoURL }}<img src="{{ $logoURL | relURL }}" alt="" loading="lazy">{{ else }}<span>{{ $initials }}</span>{{ end }}
+        </div>
+        <div class="project-card-badges">
             {{ with $project.Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
-            {{ with $project.Params.category }}<a class="meta-chip category" href="{{ printf "/categories/%s/" (. | urlize) | relURL }}">{{ . }}</a>{{ end }}
-            {{ with $projectTypeSlug }}<a class="meta-chip project-type" href="{{ printf "/project-types/%s/" (. | urlize) | relURL }}">{{ partial "project-type-label.html" . }}</a>{{ end }}
-        </span>
+            {{ if $project.Params.open_source }}<span class="meta-chip source-chip">Open source</span>{{ end }}
+        </div>
     </div>
-    <div class="project-card-actions">
+    <div class="project-card-body">
+        <p class="project-card-kicker">
+            {{ with $project.Params.category }}<span>{{ . }}</span>{{ end }}
+            {{ with $projectTypeSlug }}<span>{{ partial "project-type-label.html" . }}</span>{{ end }}
+        </p>
+        <h3><span class="project-card-title">{{ $project.Title }}</span></h3>
+        {{ with $project.Params.description }}<p class="project-card-description">{{ . }}</p>{{ end }}
+    </div>
+    <div class="project-card-footer">
+        <span class="project-card-author">{{ with $project.Params.author }}By {{ . }}{{ end }}</span>
         {{ with $visitURL }}
-        <a class="visit-site-button" href="{{ . }}" target="_blank" rel="noopener">Visit Site</a>
+        <a class="card-action" href="{{ . }}" target="_blank" rel="noopener">Visit project <span aria-hidden="true">↗</span></a>
+        {{ else }}
+        <a class="card-action" href="{{ $project.RelPermalink }}">View listing <span aria-hidden="true">↗</span></a>
         {{ end }}
     </div>
-</li>
+</article>

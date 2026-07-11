@@ -6,13 +6,13 @@ The QRL Ecosystem Index is a community-maintained directory of projects, tools, 
 
 The index is intentionally lightweight. Each listing is stored as a YAML file in the public repository, validated against a shared schema, and organized by project type, category, tags, and status. This makes it easy for contributors to add new projects, update existing entries, and review changes through GitHub.
 
-## What Gets Listed
+## What gets listed
 
 Listings may include decentralized applications, user-facing applications, infrastructure, developer tooling, and community resources. A project does not need to be complete to be included, but it should have enough public information for others to understand what it is, who maintains it, and how it relates to QRL 2.0.
 
 This index is informational. Inclusion does not mean endorsement by QRL, the QRL Foundation, or the maintainers of this repository.
 
-## How Projects Are Organized
+## How projects are organized
 
 Each project is assigned a project type:
 
@@ -24,12 +24,12 @@ Each project is assigned a project type:
 
 Projects are also grouped by category, such as defi, nft, wallet, explorer, infrastructure, tooling, dao, gaming, identity, oracle, bridge, social, educational, and news.
 
-## Project Status
+## Project status
 
 - **development** - Projects that are still being built, tested, or prepared for release
 - **production** - Projects that are live and intended for public use
 - **archived** - Projects that are no longer active
 
-## Submitting Updates
+## Submitting updates
 
 Project data is managed through GitHub. To add a new project or update an existing one, open a pull request in the [qrl-ecosystem-index repository](https://github.com/theqrl-community/qrl-ecosystem-index). See [CONTRIBUTING.md](https://github.com/theqrl-community/qrl-ecosystem-index/blob/main/CONTRIBUTING.md) for the submission format, validation rules, and branding guidance.
