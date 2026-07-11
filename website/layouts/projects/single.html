@@ -1,94 +1,110 @@
 {{ define "main" }}
-<article class="project">
-    <header>
-        <h1>{{ .Title }}</h1>
-        <div class="meta">
-            <span class="status status-{{ .Params.status }}">{{ .Params.status }}</span>
-            {{ with .Params.category }}
-            <a class="category" href="{{ printf "/categories/%s/" (. | urlize) | relURL }}">{{ . }}</a>
-            {{ end }}
-            {{ with (index .Params "project-types") }}
-            {{ range first 1 . }}
-            <a class="project-type" href="{{ printf "/project-types/%s/" (. | urlize) | relURL }}">{{ partial "project-type-label.html" . }}</a>
-            {{ end }}
-            {{ end }}
+{{- $projectTypeSlug := .Params.project_type -}}
+{{- with (index .Params "project-types") }}{{ range first 1 . }}{{ $projectTypeSlug = . }}{{ end }}{{ end -}}
+{{- $visitURL := .Params.project_url -}}
+{{- with .Params.default_client_url }}{{ $visitURL = . }}{{ end -}}
+{{- $cleanTitle := replaceRE "[^[:alnum:]]" "" .Title -}}
+{{- $initials := upper (substr $cleanTitle 0 2) -}}
+{{- if not $initials }}{{ $initials = "QI" }}{{ end -}}
+{{- $logoURL := "" -}}
+{{- with .Params.logos }}{{ with index . 0 }}{{ with .path }}{{ $logoURL = printf "/images/logos/%s" . }}{{ end }}{{ end }}{{ end -}}
+
+<article class="project-page">
+    <a class="back-link" href="{{ relURL "/projects/" }}"><span aria-hidden="true">←</span> All projects</a>
+
+    <header class="project-hero">
+        <div class="project-hero-main">
+            <div class="project-identity">
+                <div class="project-mark project-mark-large">
+                    {{ if $logoURL }}<img src="{{ $logoURL | relURL }}" alt="" loading="lazy">{{ else }}<span>{{ $initials }}</span>{{ end }}
+                </div>
+                <div>
+                    <p class="eyebrow">{{ partial "project-type-label.html" $projectTypeSlug }}</p>
+                    <h1>{{ .Title }}</h1>
+                </div>
+            </div>
+            <div class="project-meta">
+                {{ with .Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
+                {{ with .Params.category }}<a class="meta-chip category" href="{{ printf "/categories/%s/" (. | urlize) | relURL }}">{{ . }}</a>{{ end }}
+                <a class="meta-chip project-type" href="{{ printf "/project-types/%s/" ($projectTypeSlug | urlize) | relURL }}">{{ partial "project-type-label.html" $projectTypeSlug }}</a>
+            </div>
+            <p class="project-dek">{{ .Params.description }}</p>
+            <div class="project-actions">
+                {{ with $visitURL }}<a class="button button-primary" href="{{ . }}" target="_blank" rel="noopener">Visit project <span aria-hidden="true">↗</span></a>{{ end }}
+                {{ with .Params.docs }}<a class="button button-secondary" href="{{ . }}" target="_blank" rel="noopener">Read docs <span aria-hidden="true">↗</span></a>{{ end }}
+                {{ with .Params.github }}<a class="text-action" href="{{ . }}" target="_blank" rel="noopener">Source on GitHub <span aria-hidden="true">↗</span></a>{{ end }}
+            </div>
         </div>
+        <aside class="project-quick-facts">
+            <p class="eyebrow">Listing facts</p>
+            <dl class="facts-list">
+                <dt>Maintainer</dt><dd>{{ .Params.author }}</dd>
+                <dt>License</dt><dd>{{ .Params.license }}</dd>
+                {{ if .Params.open_source }}<dt>Source</dt><dd>Open source</dd>{{ end }}
+                {{ if .Params.audited }}<dt>Audit</dt><dd>Listed as audited</dd>{{ end }}
+                <dt>Updated</dt><dd>{{ .Params.updated }}</dd>
+            </dl>
+        </aside>
     </header>
 
-    <div class="description">
-        {{ .Params.description }}
-    </div>
+    <div class="project-content-grid">
+        <div class="project-main-content">
+            {{ if .RawContent }}
+            <section class="project-section project-overview">
+                <p class="eyebrow">Overview</p>
+                <div class="prose">{{ .RawContent | markdownify }}</div>
+            </section>
+            {{ end }}
 
-    <section class="details">
-        <h2>Project Details</h2>
-        <dl>
-            <dt>Type</dt><dd>{{ partial "project-type-label.html" .Params.project_type }}</dd>
-            <dt>Author</dt><dd>{{ .Params.author }}</dd>
-            <dt>License</dt><dd>{{ .Params.license }}</dd>
-            {{ if .Params.project_url }}
-            <dt>Website</dt><dd><a href="{{ .Params.project_url }}">{{ .Params.project_url }}</a></dd>
-            {{ end }}
-            {{ if .Params.github }}
-            <dt>GitHub</dt><dd><a href="{{ .Params.github }}">{{ .Params.github }}</a></dd>
-            {{ end }}
-            {{ if .Params.open_source }}
-            <dt>Open Source</dt><dd>Yes</dd>
-            {{ end }}
-            {{ if .Params.audited }}
-            <dt>Audited</dt>
-            <dd>
-                {{ with .Params.audits }}
-                <ul>
-                    {{ range . }}
-                    <li>
-                        {{ with .auditor }}{{ . }}: {{ end }}
-                        <a href="{{ .audit_url }}">{{ .audit_url }}</a>
-                    </li>
-                    {{ end }}
+            {{ with .Params.features }}
+            <section class="project-section">
+                <div class="section-heading">
+                    <p class="eyebrow">What it offers</p>
+                    <h2>Capabilities</h2>
+                </div>
+                <ul class="feature-list">
+                {{ range . }}<li><span class="feature-marker" aria-hidden="true">+</span><span>{{ . }}</span></li>{{ end }}
                 </ul>
-                {{ else }}
-                Yes
-                {{ end }}
-            </dd>
+            </section>
             {{ end }}
-        </dl>
-    </section>
 
-    {{ with .Params.clients }}
-    <section class="clients">
-        <h2>Clients</h2>
-        <ul class="client-list">
-        {{ range . }}
-            <li>
-                <span class="client-platform">{{ .platform }}</span>
-                {{ if .default }}<span class="status">Default</span>{{ end }}
-                {{ with .url }}<a href="{{ . }}" target="_blank" rel="noopener">Website</a>{{ end }}
-                {{ with .github }}<a href="{{ . }}" target="_blank" rel="noopener">GitHub</a>{{ end }}
-            </li>
-        {{ end }}
-        </ul>
-    </section>
-    {{ end }}
+            {{ with .Params.clients }}
+            <section class="project-section">
+                <div class="section-heading">
+                    <p class="eyebrow">Access points</p>
+                    <h2>Clients</h2>
+                </div>
+                <ul class="client-list">
+                {{ range . }}
+                    <li>
+                        <div><strong>{{ .platform }}</strong>{{ if .default }}<span class="status status-production">Default</span>{{ end }}</div>
+                        <div class="client-links">
+                            {{ with .url }}<a href="{{ . }}" target="_blank" rel="noopener">Open client ↗</a>{{ end }}
+                            {{ with .github }}<a href="{{ . }}" target="_blank" rel="noopener">GitHub ↗</a>{{ end }}
+                        </div>
+                    </li>
+                {{ end }}
+                </ul>
+            </section>
+            {{ end }}
+        </div>
 
-    {{ with .Params.features }}
-    <section class="features">
-        <h2>Features</h2>
-        <ul>
-        {{ range . }}
-            <li>{{ . }}</li>
-        {{ end }}
-        </ul>
-    </section>
-    {{ end }}
-
-    {{ if .RawContent }}
-    <section class="long-description">
-        {{ .RawContent | markdownify }}
-    </section>
-    {{ end }}
-
-    <footer>
-        <p>Created: {{ .Params.created }} | Updated: {{ .Params.updated }}</p>
-    </footer>
+        <aside class="project-sidebar">
+            <section class="sidebar-panel">
+                <p class="eyebrow">Project links</p>
+                <div class="sidebar-links">
+                    {{ with .Params.project_url }}<a href="{{ . }}" target="_blank" rel="noopener"><span>Website</span><span aria-hidden="true">↗</span></a>{{ end }}
+                    {{ with .Params.docs }}<a href="{{ . }}" target="_blank" rel="noopener"><span>Documentation</span><span aria-hidden="true">↗</span></a>{{ end }}
+                    {{ with .Params.github }}<a href="{{ . }}" target="_blank" rel="noopener"><span>GitHub</span><span aria-hidden="true">↗</span></a>{{ end }}
+                    {{ with .Params.twitter }}<a href="{{ . }}" target="_blank" rel="noopener"><span>Social profile</span><span aria-hidden="true">↗</span></a>{{ end }}
+                </div>
+            </section>
+            <section class="sidebar-note">
+                <p class="eyebrow">About this listing</p>
+                <p>The index is community-maintained and informational. Inclusion does not imply endorsement, audit, or affiliation with QRL or the QRL Foundation.</p>
+                <p class="sidebar-note-date">Created {{ .Params.created }} · Updated {{ .Params.updated }}</p>
+            </section>
+        </aside>
+    </div>
 </article>
 {{ end }}

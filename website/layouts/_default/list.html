@@ -1,14 +1,18 @@
 {{ define "main" }}
-<h1>
-{{- if and .Data.Term (eq .Data.Plural "project-types") -}}
-{{ partial "project-type-label.html" .Data.Term }}
-{{- else -}}
-{{ .Title }}
-{{- end -}}
-</h1>
-{{ .Content }}
+{{ $isProjectTypeIndex := and (eq .Data.Plural "project-types") (not .Data.Term) }}
+{{ $isTaxonomyIndex := and .Data.Terms (not .Data.Term) }}
+{{ $isTermPage := and .Data.Term (in (slice "categories" "project-types" "tags") .Data.Plural) }}
+{{ $showsProjectCards := or (eq .Section "projects") $isTermPage }}
+{{ $heading := .Title }}
+{{ if and .Data.Term (eq .Data.Plural "project-types") }}{{ $heading = partial "project-type-label.html" .Data.Term }}{{ end }}
 
-{{ if and (eq .Data.Plural "project-types") (not .Data.Term) }}
+<section class="page-hero page-hero-compact">
+    <p class="eyebrow">{{ if eq .Section "projects" }}Directory{{ else if .Data.Term }}Browse by taxonomy{{ else }}Explore the index{{ end }}</p>
+    <h1>{{ $heading }}</h1>
+    {{ if .Content }}<div class="page-dek">{{ .Content }}</div>{{ end }}
+</section>
+
+{{ if $isProjectTypeIndex }}
 {{ $taxonomy := index site.Taxonomies "project-types" }}
 {{ $types := slice
     (dict "slug" "dapps" "description" "Decentralized, smart-contract based applications with on-chain logic.")
@@ -17,95 +21,75 @@
     (dict "slug" "tooling" "description" "Development tools, libraries, and SDKs.")
     (dict "slug" "community" "description" "Unofficial community groups, spaces, informational websites, and educational content.")
 }}
-<ul class="project-list project-type-index">
-{{ range $types }}
-    {{ $entry := index $taxonomy .slug }}
-    <li>
-        <a href="{{ printf "/project-types/%s/" .slug | relURL }}">{{ partial "project-type-label.html" .slug }}</a>
-        <span>{{ .description }}</span>
-        <span class="count">{{ with $entry }}{{ .Count }}{{ else }}0{{ end }}</span>
-    </li>
-{{ end }}
-</ul>
-{{ else if .Data.Terms }}
-<ul class="project-list">
-{{ range .Data.Terms.Alphabetical }}
-    <li>
-        <a href="{{ .Page.RelPermalink }}">
-            {{ if eq .Page.Data.Plural "project-types" }}
-                {{ partial "project-type-label.html" .Name }}
-            {{ else }}
-                {{ .Page.Title }}
-            {{ end }}
-        </a>
-        <span class="count">{{ .Count }}</span>
-    </li>
-{{ end }}
-</ul>
-{{ else }}
-{{ if .Data.Term }}
-<p>
-    {{ if eq .Data.Plural "categories" }}
-    Projects in category:
-    {{ else if eq .Data.Plural "project-types" }}
-    Projects of type:
-    {{ else }}
-    Projects tagged with:
+<div class="taxonomy-overview">
+    {{ range $index, $item := $types }}
+    {{ $entry := index $taxonomy $item.slug }}
+    <a class="taxonomy-card" href="{{ printf "/project-types/%s/" $item.slug | relURL }}">
+        <span class="taxonomy-card-index">{{ printf "%02d" (add 1 $index) }}</span>
+        <span class="taxonomy-card-content"><strong>{{ partial "project-type-label.html" $item.slug }}</strong><span>{{ $item.description }}</span></span>
+        <span class="taxonomy-card-count">{{ with $entry }}{{ .Count }}{{ else }}0{{ end }}</span>
+    </a>
     {{ end }}
-    <strong>
-        {{ if eq .Data.Plural "project-types" }}
-            {{ partial "project-type-label.html" .Data.Term }}
-        {{ else }}
-            {{ .Data.Term }}
-        {{ end }}
-    </strong>
-</p>
-{{ end }}
-
-{{ if gt (len .Pages) 0 }}
-{{ $showsProjectCards := or (eq .Section "projects") (and .Data.Term (in (slice "categories" "project-types" "tags") .Data.Plural)) }}
-{{ if eq .Section "projects" }}
-<div class="project-filter project-search-filter" role="search">
-    <label class="visually-hidden" for="project-directory-search">Search projects</label>
-    <input id="project-directory-search" type="search" data-project-search placeholder="Search projects">
-    <p class="result-summary"><strong data-result-count>{{ len .Pages }}</strong> projects</p>
 </div>
-{{ end }}
-<ul class="project-list{{ if $showsProjectCards }} project-cards{{ end }}"{{ if eq .Section "projects" }} data-project-list{{ end }}>
-{{ range .Pages }}
-    {{ if $showsProjectCards }}
-        {{ partial "project-card.html" . }}
-    {{ else }}
-    {{ $projectTypeSlug := "" }}
-    {{ $visitURL := .Params.project_url }}
-    {{ with (index .Params "project-types") }}
-        {{ range first 1 . }}
-            {{ $projectTypeSlug = . }}
+{{ else if $isTaxonomyIndex }}
+<div class="browse-grid browse-grid-large">
+    {{ range .Data.Terms.Alphabetical }}
+    <a class="browse-card" href="{{ .Page.RelPermalink }}"><span>{{ if eq .Page.Data.Plural "project-types" }}{{ partial "project-type-label.html" .Name }}{{ else }}{{ .Page.Title }}{{ end }}</span><strong>{{ .Count }}</strong></a>
+    {{ end }}
+</div>
+{{ else if $showsProjectCards }}
+<section class="listing-section" aria-labelledby="listing-results-title">
+    <div class="listing-toolbar">
+        <div>
+            <p class="eyebrow">{{ if eq .Section "projects" }}All listings{{ else }}Matching projects{{ end }}</p>
+            <h2 id="listing-results-title">{{ if eq .Section "projects" }}Explore projects{{ else }}Projects in this view{{ end }}</h2>
+        </div>
+        <p class="result-summary"><strong data-result-count>{{ len .Pages }}</strong> matching projects</p>
+    </div>
+    <div class="project-filter{{ if ne .Section "projects" }} project-filter-single{{ end }}" role="search">
+        <label class="filter-control filter-control-search" for="project-directory-search">
+            <span>Search</span>
+            <input id="project-directory-search" type="search" data-project-search placeholder="Name, author, or capability">
+        </label>
+        {{ if eq .Section "projects" }}
+        <label class="filter-control" for="project-directory-category">
+            <span>Category</span>
+            <select id="project-directory-category" data-project-category>
+                <option value="">All categories</option>
+                {{ range site.Taxonomies.categories.Alphabetical }}<option value="{{ .Name | lower }}">{{ .Page.Title }}</option>{{ end }}
+            </select>
+        </label>
+        <label class="filter-control" for="project-directory-type">
+            <span>Project type</span>
+            <select id="project-directory-type" data-project-type>
+                <option value="">All types</option>
+                {{ $types := slice "dapps" "applications" "infrastructure" "tooling" "community" }}
+                {{ range $types }}<option value="{{ . }}">{{ partial "project-type-label.html" . }}</option>{{ end }}
+            </select>
+        </label>
+        <label class="filter-control" for="project-directory-status">
+            <span>Status</span>
+            <select id="project-directory-status" data-project-status>
+                <option value="">All statuses</option>
+                <option value="production">Production</option>
+                <option value="development">Development</option>
+                <option value="archived">Archived</option>
+            </select>
+        </label>
         {{ end }}
-    {{ end }}
-    {{ with .Params.default_client_url }}
-        {{ $visitURL = . }}
-    {{ end }}
-    <li>
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <span class="project-list-meta">
-            {{ with .Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
-            {{ with .Params.category }}<span class="category">{{ . }}</span>{{ end }}
-            {{ with $projectTypeSlug }}<span class="project-type">{{ partial "project-type-label.html" . }}</span>{{ end }}
-            {{ with $visitURL }}
-            <a class="external-link" href="{{ . }}" target="_blank" rel="noopener">Visit site</a>
-            {{ end }}
-        </span>
-    </li>
-    {{ end }}
-{{ end }}
-</ul>
-{{ if eq .Section "projects" }}
-<p class="no-results" data-no-results hidden>No matching projects.</p>
+    </div>
+    <div class="project-grid" data-project-list>
+        {{ range .Pages }}{{ partial "project-card.html" (dict "project" .) }}{{ end }}
+    </div>
+    <p class="no-results" data-no-results hidden>No matching projects. Try a broader search.</p>
+</section>
 <script>
 (() => {
     const projects = Array.from(document.querySelectorAll("[data-project]"));
     const search = document.querySelector("[data-project-search]");
+    const category = document.querySelector("[data-project-category]");
+    const type = document.querySelector("[data-project-type]");
+    const status = document.querySelector("[data-project-status]");
     const count = document.querySelector("[data-result-count]");
     const empty = document.querySelector("[data-no-results]");
 
@@ -113,48 +97,31 @@
         return;
     }
 
-    const params = new URLSearchParams(window.location.search);
-    const initialQuery = params.get("q") || "";
-
-    if (initialQuery) {
-        search.value = initialQuery;
-    }
-
-    const normalize = (value) => value
-        .toString()
-        .normalize("NFKD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-
-    const queryTokens = () => normalize(search.value)
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
-
+    const normalize = (value) => value.toString().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     const update = () => {
-        const tokens = queryTokens();
+        const tokens = normalize(search.value).trim().split(/\s+/).filter(Boolean);
         let visible = 0;
-
         projects.forEach((project) => {
-            const searchText = normalize(project.dataset.search || "");
-            const matches = !tokens.length || tokens.every((token) => searchText.includes(token));
+            const matches =
+                (!tokens.length || tokens.every((token) => normalize(project.dataset.search || "").includes(token))) &&
+                (!category || !category.value || project.dataset.category === category.value) &&
+                (!type || !type.value || project.dataset.type === type.value) &&
+                (!status || !status.value || project.dataset.status === status.value);
             project.hidden = !matches;
-            if (matches) {
-                visible += 1;
-            }
+            if (matches) visible += 1;
         });
-
         count.textContent = visible;
         empty.hidden = visible !== 0;
     };
 
-    search.addEventListener("input", update);
+    [search, category, type, status].filter(Boolean).forEach((control) => {
+        control.addEventListener("input", update);
+        control.addEventListener("change", update);
+    });
     update();
 })();
 </script>
-{{ end }}
 {{ else }}
-<p>No projects found.</p>
-{{ end }}
+<p class="empty-state">No projects found in this view.</p>
 {{ end }}
 {{ end }}

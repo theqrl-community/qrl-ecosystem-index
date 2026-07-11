@@ -1,4 +1,33 @@
 {{ define "main" }}
-<h1>{{ .Title }}</h1>
-{{ .Content }}
+<section class="page-hero page-hero-compact">
+    <p class="eyebrow">About the index</p>
+    <h1>{{ .Title }}</h1>
+    <p class="page-dek">A structured, community-maintained view of the projects and people shaping QRL 2.0.</p>
+</section>
+
+<div class="content-layout">
+    <article class="prose">
+        {{ .Content }}
+    </article>
+    <aside class="sidebar-stack">
+        <section class="sidebar-panel">
+            <p class="eyebrow">For institutions</p>
+            <h2>Read the source clearly.</h2>
+            <p>Listings expose their category, status, maintainer, links, and update history so the ecosystem can be evaluated with appropriate context.</p>
+        </section>
+        <section class="sidebar-note">
+            <p class="eyebrow">Important context</p>
+            <p>This is an informational community project. It is not an endorsement, audit, or official registry.</p>
+        </section>
+    </aside>
+</div>
+
+<section class="split-callout" aria-labelledby="about-contribute-title">
+    <div>
+        <p class="eyebrow">For builders</p>
+        <h2 id="about-contribute-title">Add what you’re building.</h2>
+        <p>Use the shared template and contribution guide to submit a project or keep an existing listing current.</p>
+    </div>
+    <a class="button button-primary" href="https://github.com/theqrl-community/qrl-ecosystem-index/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Read the submission guide <span aria-hidden="true">↗</span></a>
+</section>
 {{ end }}

@@ -35,10 +35,13 @@
         {{ $representedProjectTypes = add $representedProjectTypes 1 }}
     {{ end }}
 {{ end }}
-<h1>{{ .Title }}</h1>
-{{ .Content }}
+<section class="page-hero page-hero-compact ideas-hero">
+    <p class="eyebrow">Builder opportunity map</p>
+    <h1>{{ .Title }}</h1>
+    <div class="page-dek">{{ .Content }}</div>
+</section>
 
-<section class="ideas-section" aria-labelledby="coverage-title">
+<section class="ideas-section ideas-section-first" aria-labelledby="coverage-title">
     <div class="section-heading">
         <p class="eyebrow">Generated from listings</p>
         <h2 id="coverage-title">Coverage Snapshot</h2>

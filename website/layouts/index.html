@@ -1,118 +1,129 @@
 {{ define "main" }}
-<section class="hero">
-    <div class="hero-content">
-        <p class="eyebrow"></p>
-        <h1><span>QRL</span> <span>Ecosystem</span> <span>Index</span></h1>
-        <p>A community-contributed index of projects building on QRL 2.0</p>
+{{ $projects := where site.RegularPages "Section" "projects" }}
+{{ $activeProjects := where $projects "Params.status" "!=" "archived" }}
+{{ $production := sort (where $activeProjects "Params.status" "production") "Title" }}
+{{ $production = sort $production "Params.updated" "desc" }}
+{{ $development := sort (where $activeProjects "Params.status" "development") "Title" }}
+{{ $development = sort $development "Params.updated" "desc" }}
+{{ $featured := slice }}
+{{ range $production }}
+    {{ if lt (len $featured) 3 }}{{ $featured = $featured | append . }}{{ end }}
+{{ end }}
+{{ if lt (len $featured) 3 }}
+    {{ range $development }}
+        {{ if lt (len $featured) 3 }}{{ $featured = $featured | append . }}{{ end }}
+    {{ end }}
+{{ end }}
+{{ $projectTypes := index site.Taxonomies "project-types" }}
+
+<section class="home-hero">
+    <div class="hero-copy">
+        <p class="eyebrow">QRL / Ecosystem Index</p>
+        <h1>A clearer view of what’s being built on QRL.</h1>
+        <p class="hero-dek">A community-maintained directory of projects, tools, services, and resources connected to QRL 2.0.</p>
         <div class="hero-actions">
-            <a class="button button-primary" href="/projects/">Browse Projects</a>
-            <a class="button button-secondary" href="https://github.com/theqrl-community/qrl-ecosystem-index">Submit Project <span aria-hidden="true">&rarr;</span></a>
+            <a class="button button-primary" href="#directory">Explore the index <span aria-hidden="true">↓</span></a>
+            <a class="button button-secondary" href="https://github.com/theqrl-community/qrl-ecosystem-index/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Submit a project <span aria-hidden="true">↗</span></a>
         </div>
     </div>
-    <div class="quantum-field" aria-hidden="true"></div>
+    <aside class="hero-aside" aria-label="Index context">
+        <div class="hero-aside-header">
+            <span class="hero-aside-label">Index status</span>
+            <span class="hero-aside-mark" aria-hidden="true">01</span>
+        </div>
+        <h2>Community maintained.</h2>
+        <p>Structured listings make the ecosystem easier to explore, compare, and contribute to.</p>
+        <div class="hero-aside-grid">
+            <div><strong>{{ len $activeProjects }}</strong><span>active projects</span></div>
+            <div><strong>{{ len site.Taxonomies.categories }}</strong><span>categories</span></div>
+            <div><strong>{{ len $projectTypes }}</strong><span>project types</span></div>
+        </div>
+    </aside>
 </section>
 
-<section class="ecosystem-browser" aria-labelledby="ecosystem-browser-title">
+<section class="signal-rail" aria-label="Index overview">
+    <div class="signal-item"><span class="signal-value">{{ len $projects }}</span><span class="signal-label">Projects listed</span></div>
+    <div class="signal-item"><span class="signal-value">{{ len $activeProjects }}</span><span class="signal-label">Active now</span></div>
+    <div class="signal-item"><span class="signal-value">{{ len site.Taxonomies.categories }}</span><span class="signal-label">Categories represented</span></div>
+    <div class="signal-item"><span class="signal-value">{{ len $projectTypes }}</span><span class="signal-label">Project types</span></div>
+</section>
+
+<section class="section-shell" aria-labelledby="featured-title">
     <div class="section-heading section-heading-row">
         <div>
-            <p class="eyebrow">Directory</p>
-            <h2 id="ecosystem-browser-title">Explore Projects</h2>
+            <p class="eyebrow">A representative sample</p>
+            <h2 id="featured-title">Projects in view</h2>
         </div>
-        <p class="result-summary"><strong data-result-count>{{ len (where site.RegularPages "Section" "projects") }}</strong> projects</p>
+        <a class="section-link" href="{{ relURL "/projects/" }}">See all projects <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="project-grid featured-grid">
+        {{ range $featured }}
+            {{ partial "project-card.html" (dict "project" . "variant" "project-card-featured") }}
+        {{ end }}
+    </div>
+    <p class="section-note section-note-bottom">Generated to help visitors explore different parts of the ecosystem. This is not a ranking or endorsement.</p>
+</section>
+
+<section class="section-shell directory-section" id="directory" aria-labelledby="directory-title">
+    <div class="section-heading section-heading-row">
+        <div>
+            <p class="eyebrow">Browse the ecosystem</p>
+            <h2 id="directory-title">The full index</h2>
+        </div>
+        <p class="result-summary"><strong data-result-count>{{ len $projects }}</strong> matching projects</p>
     </div>
 
     <div class="project-filter" role="search">
-        <label class="visually-hidden" for="project-search">Search projects</label>
-        <input id="project-search" type="search" data-project-search placeholder="Search projects">
-
-        <label class="visually-hidden" for="project-category">Category</label>
-        <select id="project-category" data-project-category>
-            <option value="">All categories</option>
-            {{ range site.Taxonomies.categories.Alphabetical }}
-            <option value="{{ .Name | lower }}">{{ .Page.Title }}</option>
-            {{ end }}
-        </select>
-
-        <label class="visually-hidden" for="project-type">Project type</label>
-        <select id="project-type" data-project-type>
-            <option value="">All types</option>
-            {{ $taxonomy := index site.Taxonomies "project-types" }}
-            {{ $types := slice "dapps" "applications" "infrastructure" "tooling" "community" }}
-            {{ range $types }}
-            {{ $entry := index $taxonomy . }}
-            {{ if $entry }}
-            <option value="{{ . }}">{{ partial "project-type-label.html" . }}</option>
-            {{ end }}
-            {{ end }}
-        </select>
-
-        <label class="visually-hidden" for="project-status">Status</label>
-        <select id="project-status" data-project-status>
-            <option value="">All statuses</option>
-            <option value="production">Production</option>
-            <option value="development">Development</option>
-            <option value="archived">Archived</option>
-        </select>
+        <label class="filter-control filter-control-search" for="project-search">
+            <span>Search</span>
+            <input id="project-search" type="search" data-project-search placeholder="Name, category, author, or capability">
+        </label>
+        <label class="filter-control" for="project-category">
+            <span>Category</span>
+            <select id="project-category" data-project-category>
+                <option value="">All categories</option>
+                {{ range site.Taxonomies.categories.Alphabetical }}
+                <option value="{{ .Name | lower }}">{{ .Page.Title }}</option>
+                {{ end }}
+            </select>
+        </label>
+        <label class="filter-control" for="project-type">
+            <span>Project type</span>
+            <select id="project-type" data-project-type>
+                <option value="">All types</option>
+                {{ $types := slice "dapps" "applications" "infrastructure" "tooling" "community" }}
+                {{ range $types }}
+                {{ $entry := index $projectTypes . }}
+                {{ if $entry }}<option value="{{ . }}">{{ partial "project-type-label.html" . }}</option>{{ end }}
+                {{ end }}
+            </select>
+        </label>
+        <label class="filter-control" for="project-status">
+            <span>Status</span>
+            <select id="project-status" data-project-status>
+                <option value="">All statuses</option>
+                <option value="production">Production</option>
+                <option value="development">Development</option>
+                <option value="archived">Archived</option>
+            </select>
+        </label>
     </div>
 
-    <ul class="project-list project-cards" data-project-list>
-    {{ range where site.RegularPages "Section" "projects" }}
-        {{ partial "project-card.html" . }}
-    {{ end }}
-    </ul>
-    <p class="no-results" data-no-results hidden>No matching projects.</p>
-</section>
-
-<section class="stats">
-    <div class="stat">
-        <span class="count">{{ len (where site.RegularPages "Section" "projects") }}</span>
-        <span class="label">Projects</span>
-    </div>
-    <div class="stat">
-        <span class="count">{{ len (uniq (where site.RegularPages "Params.category" "!=" "")) }}</span>
-        <span class="label">Categories</span>
-    </div>
-    <div class="stat">
-        <span class="count">5</span>
-        <span class="label">Project Types</span>
-    </div>
-</section>
-
-<section class="categories">
-    <div class="section-heading">
-        <p class="eyebrow">Explore</p>
-        <h2>Browse by Category</h2>
-    </div>
-    <ul class="browse-grid">
-        {{ range site.Taxonomies.categories.Alphabetical }}
-        <li>
-            <a href="{{ .Page.RelPermalink }}">
-                <span>{{ .Page.Title }}</span>
-                <span class="count">{{ .Count }}</span>
-            </a>
-        </li>
+    <div class="project-grid" data-project-list>
+        {{ range $projects }}
+            {{ partial "project-card.html" (dict "project" .) }}
         {{ end }}
-    </ul>
+    </div>
+    <p class="no-results" data-no-results hidden>No matching projects. Try a broader search or reset a filter.</p>
 </section>
 
-<section class="project-types">
-    <div class="section-heading">
-        <p class="eyebrow">Explore</p>
-        <h2>Browse by Project Type</h2>
+<section class="split-callout" aria-labelledby="next-title">
+    <div>
+        <p class="eyebrow">For the next contribution</p>
+        <h2 id="next-title">See what’s missing. Then build it.</h2>
+        <p>Ideas maps coverage gaps across categories and project types so builders can find a useful starting point.</p>
     </div>
-    <ul class="browse-grid">
-        {{ $taxonomy := index site.Taxonomies "project-types" }}
-        {{ $types := slice "dapps" "applications" "infrastructure" "tooling" "community" }}
-        {{ range $types }}
-        {{ $entry := index $taxonomy . }}
-        <li>
-            <a href="{{ printf "/project-types/%s/" . | relURL }}">
-                <span>{{ partial "project-type-label.html" . }}</span>
-                <span class="count">{{ with $entry }}{{ .Count }}{{ else }}0{{ end }}</span>
-            </a>
-        </li>
-        {{ end }}
-    </ul>
+    <a class="button button-primary" href="{{ relURL "/ideas/" }}">Explore build ideas <span aria-hidden="true">↗</span></a>
 </section>
 
 <script>
@@ -129,16 +140,8 @@
         return;
     }
 
-    const normalize = (value) => value
-        .toString()
-        .normalize("NFKD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-
-    const queryTokens = () => normalize(search.value)
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
+    const normalize = (value) => value.toString().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const queryTokens = () => normalize(search.value).trim().split(/\s+/).filter(Boolean);
 
     const update = () => {
         const tokens = queryTokens();
