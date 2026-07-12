@@ -13,30 +13,31 @@ import (
 )
 
 type Project struct {
-	ID              string   `yaml:"id"`
-	Name            string   `yaml:"name"`
-	ProjectType     string   `yaml:"project_type"`
-	Status          string   `yaml:"status"`
-	Description     string   `yaml:"description"`
-	Category        string   `yaml:"category"`
-	Tags            []string `yaml:"tags"`
-	Author          string   `yaml:"author"`
-	License         string   `yaml:"license"`
-	Created         string   `yaml:"created"`
-	Updated         string   `yaml:"updated"`
-	URL             string   `yaml:"url"`
-	GitHub          string   `yaml:"github"`
-	Docs            string   `yaml:"docs"`
-	Discord         string   `yaml:"discord"`
-	Twitter         string   `yaml:"twitter"`
-	OpenSource      bool     `yaml:"open_source"`
-	Audited         bool     `yaml:"audited"`
-	Audits          []Audit  `yaml:"audits"`
-	Clients         []Client `yaml:"clients"`
-	Logo            string   `yaml:"logo"`
-	Logos           []Logo   `yaml:"logos"`
-	Features        []string `yaml:"features"`
-	LongDescription string   `yaml:"long_description"`
+	ID              string       `yaml:"id"`
+	Name            string       `yaml:"name"`
+	ProjectType     string       `yaml:"project_type"`
+	Status          string       `yaml:"status"`
+	Description     string       `yaml:"description"`
+	Category        string       `yaml:"category"`
+	Tags            []string     `yaml:"tags"`
+	Author          string       `yaml:"author"`
+	License         string       `yaml:"license"`
+	Created         string       `yaml:"created"`
+	Updated         string       `yaml:"updated"`
+	URL             string       `yaml:"url"`
+	GitHub          string       `yaml:"github"`
+	Docs            string       `yaml:"docs"`
+	Discord         string       `yaml:"discord"`
+	Twitter         string       `yaml:"twitter"`
+	OpenSource      bool         `yaml:"open_source"`
+	Audited         bool         `yaml:"audited"`
+	Audits          []Audit      `yaml:"audits"`
+	Clients         []Client     `yaml:"clients"`
+	Logo            string       `yaml:"logo"`
+	Logos           []Logo       `yaml:"logos"`
+	Screenshots     []Screenshot `yaml:"screenshots"`
+	Features        []string     `yaml:"features"`
+	LongDescription string       `yaml:"long_description"`
 	// Type-specific blocks
 	Dapp           *DappBlock           `yaml:"dapp,omitempty"`
 	Application    *ApplicationBlock    `yaml:"application,omitempty"`
@@ -48,6 +49,11 @@ type Project struct {
 type Logo struct {
 	Path        string `yaml:"path"`
 	Description string `yaml:"description"`
+}
+
+type Screenshot struct {
+	Path    string `yaml:"path"`
+	Caption string `yaml:"caption"`
 }
 
 type Audit struct {
@@ -109,10 +115,20 @@ func main() {
 	// Generate JSON index
 	generateJSONIndex(projects)
 
-	// Copy local project logos into Hugo's published static tree.
-	if err := copyLogoAssets(); err != nil {
-		fmt.Fprintf(os.Stderr, "Error copying logo assets: %v\n", err)
-		os.Exit(1)
+	// Copy local project media into Hugo's published static tree.
+	assetTrees := []struct {
+		name        string
+		source      string
+		destination string
+	}{
+		{"logo", filepath.Join("images", "logos"), filepath.Join("website", "static", "images", "logos")},
+		{"screenshot", filepath.Join("images", "screenshots"), filepath.Join("website", "static", "images", "screenshots")},
+	}
+	for _, assetTree := range assetTrees {
+		if err := copyAssetTree(assetTree.source, assetTree.destination); err != nil {
+			fmt.Fprintf(os.Stderr, "Error copying %s assets: %v\n", assetTree.name, err)
+			os.Exit(1)
+		}
 	}
 
 	fmt.Printf("Generated %d project pages\n", len(projects))
@@ -153,11 +169,14 @@ func processDir(dir string, projects *[]Project) {
 	}
 }
 
-func copyLogoAssets() error {
-	sourceDir := filepath.Join("images", "logos")
-	destinationDir := filepath.Join("website", "static", "images", "logos")
-
+func copyAssetTree(sourceDir, destinationDir string) error {
 	if err := os.RemoveAll(destinationDir); err != nil {
+		return err
+	}
+	if _, err := os.Stat(sourceDir); err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
 		return err
 	}
 
@@ -258,6 +277,9 @@ func generateProjectPage(p Project) {
 		"logos":       p.Logos,
 		"features":    p.Features,
 	}
+	if len(p.Screenshots) > 0 {
+		params["screenshots"] = p.Screenshots
+	}
 
 	if client, ok := defaultClient(p); ok {
 		params["default_client"] = client
@@ -291,17 +313,23 @@ func generateProjectPage(p Project) {
 		params["language"] = p.Community.Language
 	}
 
-	frontMatter, err := yaml.Marshal(params)
+	content, err := projectPageContent(params, p.LongDescription)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error generating front matter for %s: %v\n", p.ID, err)
 		return
 	}
 
-	content := fmt.Sprintf("---\n%s---\n\n%s\n", frontMatter, escapeMarkdown(p.LongDescription))
-
-	if err := os.WriteFile(outputPath, []byte(content), 0644); err != nil {
+	if err := os.WriteFile(outputPath, content, 0644); err != nil {
 		fmt.Fprintf(os.Stderr, "Error writing %s: %v\n", outputPath, err)
 	}
+}
+
+func projectPageContent(params map[string]interface{}, longDescription string) ([]byte, error) {
+	frontMatter, err := yaml.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(fmt.Sprintf("---\n%s---\n\n%s\n", frontMatter, escapeMarkdown(longDescription))), nil
 }
 
 func projectOutputPath(p Project) string {

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "QRL Ecosystem Project",
-  "version": 1,
+  "version": 2,
   "description": "Schema for QRL ecosystem project submissions",
   "type": "object",
   "required": ["id", "name", "project_type", "status", "description", "category", "tags", "author", "license", "created", "updated"],
@@ -101,6 +101,31 @@
             "description": "Description of this logo variant (e.g., 'Light mode icon', 'Full logo')"
           }
         }
+      }
+    },
+    "screenshots": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "description": "Ordered local screenshots displayed on the project page; the first screenshot is the default",
+      "items": {
+        "type": "object",
+        "required": ["path", "caption"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*/[^/]+\\.(png|jpe?g|webp)$",
+            "description": "Local path relative to images/screenshots/ (e.g., 'my-project/main-dashboard.webp')"
+          },
+          "caption": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[^\\r\\n]+$",
+            "description": "Short plain-text description of the screenshot"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "long_description": {

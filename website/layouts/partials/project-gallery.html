@@ -1,0 +1,56 @@
+{{- with .Params.screenshots -}}
+{{- $screenshots := . -}}
+{{- $count := len $screenshots -}}
+{{- $first := index $screenshots 0 -}}
+<section class="project-gallery" data-project-gallery aria-label="Project screenshots">
+    <div class="project-gallery-stage" data-gallery-swipe aria-roledescription="carousel" aria-label="Screenshot carousel">
+        {{ range $index, $screenshot := $screenshots }}
+        <figure class="project-gallery-slide" data-gallery-slide data-caption="{{ $screenshot.caption }}" data-index="{{ $index }}"{{ if ne $index 0 }} hidden{{ end }}>
+            <a class="project-gallery-open" href="{{ printf "/images/screenshots/%s" $screenshot.path | relURL }}" data-gallery-open aria-label="Open screenshot {{ add $index 1 }} of {{ $count }} full screen">
+                <img src="{{ printf "/images/screenshots/%s" $screenshot.path | relURL }}" alt="{{ $screenshot.caption }}"{{ if eq $index 0 }} loading="eager" fetchpriority="high"{{ else }} loading="lazy"{{ end }}>
+                <span class="project-gallery-expand" aria-hidden="true">↗</span>
+            </a>
+        </figure>
+        {{ end }}
+
+        {{ if gt $count 1 }}
+        <button class="project-gallery-arrow project-gallery-arrow-previous" type="button" data-gallery-direction="-1" aria-label="Previous screenshot"><span aria-hidden="true">←</span></button>
+        <button class="project-gallery-arrow project-gallery-arrow-next" type="button" data-gallery-direction="1" aria-label="Next screenshot"><span aria-hidden="true">→</span></button>
+        {{ end }}
+
+        <div class="project-gallery-meta" aria-live="polite" aria-atomic="true">
+            <p data-gallery-caption>{{ $first.caption }}</p>
+            <span class="project-gallery-count"><span data-gallery-position>1</span> / {{ $count }}</span>
+        </div>
+    </div>
+
+    {{ if gt $count 1 }}
+    <ol class="project-gallery-thumbnails" aria-label="Screenshot thumbnails">
+        {{ range $index, $screenshot := $screenshots }}
+        <li>
+            <button type="button" data-gallery-thumbnail data-gallery-index="{{ $index }}" aria-label="Show screenshot {{ add $index 1 }}: {{ $screenshot.caption }}"{{ if eq $index 0 }} aria-current="true"{{ end }}>
+                <img src="{{ printf "/images/screenshots/%s" $screenshot.path | relURL }}" alt="" loading="lazy">
+            </button>
+        </li>
+        {{ end }}
+    </ol>
+    {{ end }}
+
+    <dialog class="project-gallery-dialog" data-gallery-dialog aria-label="Screenshot viewer">
+        <div class="project-gallery-dialog-shell">
+            <button class="project-gallery-dialog-close" type="button" data-gallery-close aria-label="Close full-screen screenshot"><span aria-hidden="true">×</span></button>
+            <div class="project-gallery-dialog-stage" data-gallery-dialog-swipe>
+                <img src="{{ printf "/images/screenshots/%s" $first.path | relURL }}" alt="{{ $first.caption }}" data-gallery-dialog-image>
+                {{ if gt $count 1 }}
+                <button class="project-gallery-arrow project-gallery-dialog-previous" type="button" data-gallery-direction="-1" aria-label="Previous screenshot"><span aria-hidden="true">←</span></button>
+                <button class="project-gallery-arrow project-gallery-dialog-next" type="button" data-gallery-direction="1" aria-label="Next screenshot"><span aria-hidden="true">→</span></button>
+                {{ end }}
+                <div class="project-gallery-dialog-meta" aria-live="polite" aria-atomic="true">
+                    <p data-gallery-dialog-caption>{{ $first.caption }}</p>
+                    <span class="project-gallery-count"><span data-gallery-dialog-position>1</span> / {{ $count }}</span>
+                </div>
+            </div>
+        </div>
+    </dialog>
+</section>
+{{- end -}}
