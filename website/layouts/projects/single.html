@@ -9,7 +9,7 @@
 {{- $logoURL := "" -}}
 {{- with .Params.logos }}{{ with index . 0 }}{{ with .path }}{{ $logoURL = printf "/images/logos/%s" . }}{{ end }}{{ end }}{{ end -}}
 
-<article class="project-page">
+<article class="project-page{{ with .Params.screenshots }} project-page-has-gallery{{ end }}">
     <a class="back-link" href="{{ relURL "/projects/" }}"><span aria-hidden="true">←</span> All projects</a>
 
     <header class="project-hero">
@@ -46,6 +46,8 @@
             </dl>
         </aside>
     </header>
+
+    {{ partial "project-gallery.html" . }}
 
     <div class="project-content-grid">
         <div class="project-main-content">
@@ -107,4 +109,5 @@
         </aside>
     </div>
 </article>
+{{ with resources.Get "js/project-gallery.js" }}<script src="{{ .RelPermalink }}" defer></script>{{ end }}
 {{ end }}

@@ -70,6 +70,14 @@
 - {{ . }}
 {{ end -}}
 {{- end }}
+{{- with .Params.screenshots }}
+
+## Screenshots
+
+{{ range . -}}
+- [{{ .caption }}]({{ printf "/images/screenshots/%s" .path | absURL }})
+{{ end -}}
+{{- end }}
 {{- with .Params.clients }}
 
 ## Clients
