@@ -32,6 +32,9 @@ features:
     - Two-party order book for coordination only; clients re-verify every step on-chain
     - QRL leg connects via the MyQRLWallet relay or the QRL browser extension, ETH leg via EIP-6963 wallets
 gallery:
+    - type: youtube
+      id: rIwqXEEpaaM
+      caption: Full testnet demo of a cross-chain atomic ETH to QRL swap.
     - type: image
       path: quantaswap/screenshot1.png
       caption: QuantaSwap main dashboard showing active swaps and order book.
@@ -61,7 +64,7 @@ tags:
 title: QuantaSwap
 token: none
 twitter: https://x.com/DigitalGuards
-updated: "2026-07-11"
+updated: "2026-07-14"
 url: /projects/quantaswap/
 ---
 

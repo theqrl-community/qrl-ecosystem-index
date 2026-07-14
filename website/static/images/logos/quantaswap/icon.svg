@@ -1,5 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 32 32">
-  <circle cx="16" cy="16" r="14" fill="#151c29" stroke="#2b3b55"/>
-  <path d="M9 13a7 7 0 0 1 12-3l2 2m0-5v5h-5" stroke="#f97316" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M23 19a7 7 0 0 1-12 3l-2-2m0 5v-5h5" stroke="#52c1f5" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <circle cx="60" cy="60" r="56" fill="#070c16"/>
+  <g transform="translate(0,5)">
+    <path d="M60 28 A 26 26 0 0 0 44 74.5 C 43.5 79.5 41 83.5 36 83.5 L 35 83.5" stroke="#4aafff" stroke-width="12" fill="none" stroke-linecap="butt" stroke-linejoin="round"/>
+    <polygon points="35.5,76 35.5,91 21,83.5" fill="#4aafff"/>
+    <path d="M60 28 A 26 26 0 0 1 76 74.5 C 76.5 79.5 79 83.5 84 83.5 L 85 83.5" stroke="#f97316" stroke-width="12" fill="none" stroke-linecap="butt" stroke-linejoin="round"/>
+    <polygon points="84.5,76 84.5,91 99,83.5" fill="#f97316"/>
+  </g>
 </svg>
