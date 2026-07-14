@@ -1,22 +1,38 @@
-{{- with .Params.screenshots -}}
-{{- $screenshots := . -}}
-{{- $count := len $screenshots -}}
-{{- $first := index $screenshots 0 -}}
-<section class="project-gallery" data-project-gallery aria-label="Project screenshots">
-    <div class="project-gallery-stage" data-gallery-swipe aria-roledescription="carousel" aria-label="Screenshot carousel">
-        {{ range $index, $screenshot := $screenshots }}
-        <figure class="project-gallery-slide" data-gallery-slide data-caption="{{ $screenshot.caption }}" data-index="{{ $index }}"{{ if ne $index 0 }} hidden{{ end }}>
-            <a class="project-gallery-open" href="{{ printf "/images/screenshots/%s" $screenshot.path | relURL }}" data-gallery-open aria-label="Open screenshot {{ add $index 1 }} of {{ $count }} full screen">
-                <img src="{{ printf "/images/screenshots/%s" $screenshot.path | relURL }}" alt="{{ $screenshot.caption }}"{{ if eq $index 0 }} loading="eager" fetchpriority="high"{{ else }} loading="lazy"{{ end }}>
-                <span class="project-gallery-expand" aria-hidden="true">↗</span>
-            </a>
-        </figure>
-        {{ end }}
+{{- with .Params.gallery -}}
+{{- $gallery := . -}}
+{{- $count := len $gallery -}}
+{{- $first := index $gallery 0 -}}
+{{- $images := where $gallery "type" "image" -}}
+{{- $imageCount := len $images -}}
+{{- $videos := where $gallery "type" "youtube" -}}
+{{- $videoCount := len $videos -}}
+<section class="project-gallery" data-project-gallery aria-label="Project media">
+    <div class="project-gallery-frame">
+        <div class="project-gallery-stage" data-gallery-swipe aria-roledescription="carousel" aria-label="Media carousel">
+            {{ range $index, $item := $gallery }}
+            {{- $isVideo := eq $item.type "youtube" -}}
+            <figure class="project-gallery-slide{{ if $isVideo }} project-gallery-slide-video{{ end }}" data-gallery-slide data-gallery-media-type="{{ $item.type }}" data-caption="{{ $item.caption }}" data-index="{{ $index }}"{{ if $isVideo }} data-youtube-id="{{ $item.id }}"{{ end }}{{ if ne $index 0 }} hidden{{ end }}>
+                {{ if $isVideo }}
+                <a class="project-gallery-video-poster" href="https://www.youtube.com/watch?v={{ $item.id }}" target="_blank" rel="noopener" data-gallery-video-open aria-label="Play video {{ add $index 1 }} of {{ $count }}: {{ $item.caption }}">
+                    <img src="https://i.ytimg.com/vi/{{ $item.id }}/hqdefault.jpg" alt="" data-gallery-youtube-thumbnail{{ if eq $index 0 }} loading="eager" fetchpriority="high"{{ else }} loading="lazy"{{ end }}>
+                    <span class="project-gallery-video-play" aria-hidden="true"><span>▶</span></span>
+                </a>
+                <div class="project-gallery-video-player" data-gallery-video-player hidden></div>
+                <button class="project-gallery-expand project-gallery-video-expand" type="button" data-gallery-video-dialog-open aria-label="Open video {{ add $index 1 }} of {{ $count }} full screen"><span aria-hidden="true">↗</span></button>
+                {{ else }}
+                <a class="project-gallery-open" href="{{ printf "/images/screenshots/%s" $item.path | relURL }}" data-gallery-image-open aria-label="Open image {{ add $index 1 }} of {{ $count }} full screen">
+                    <img src="{{ printf "/images/screenshots/%s" $item.path | relURL }}" alt="{{ $item.caption }}" data-gallery-image{{ if eq $index 0 }} loading="eager" fetchpriority="high"{{ else }} loading="lazy"{{ end }}>
+                    <span class="project-gallery-expand" aria-hidden="true">↗</span>
+                </a>
+                {{ end }}
+            </figure>
+            {{ end }}
 
-        {{ if gt $count 1 }}
-        <button class="project-gallery-arrow project-gallery-arrow-previous" type="button" data-gallery-direction="-1" aria-label="Previous screenshot"><span aria-hidden="true">←</span></button>
-        <button class="project-gallery-arrow project-gallery-arrow-next" type="button" data-gallery-direction="1" aria-label="Next screenshot"><span aria-hidden="true">→</span></button>
-        {{ end }}
+            {{ if gt $count 1 }}
+            <button class="project-gallery-arrow project-gallery-arrow-previous" type="button" data-gallery-direction="-1" aria-label="Previous media item"><span aria-hidden="true">←</span></button>
+            <button class="project-gallery-arrow project-gallery-arrow-next" type="button" data-gallery-direction="1" aria-label="Next media item"><span aria-hidden="true">→</span></button>
+            {{ end }}
+        </div>
 
         <div class="project-gallery-meta" aria-live="polite" aria-atomic="true">
             <p data-gallery-caption>{{ $first.caption }}</p>
@@ -25,25 +41,49 @@
     </div>
 
     {{ if gt $count 1 }}
-    <ol class="project-gallery-thumbnails" aria-label="Screenshot thumbnails">
-        {{ range $index, $screenshot := $screenshots }}
+    <ol class="project-gallery-thumbnails" aria-label="Media thumbnails">
+        {{ range $index, $item := $gallery }}
+        {{- $isVideo := eq $item.type "youtube" -}}
+        {{- $kind := cond $isVideo "video" "image" -}}
         <li>
-            <button type="button" data-gallery-thumbnail data-gallery-index="{{ $index }}" aria-label="Show screenshot {{ add $index 1 }}: {{ $screenshot.caption }}"{{ if eq $index 0 }} aria-current="true"{{ end }}>
-                <img src="{{ printf "/images/screenshots/%s" $screenshot.path | relURL }}" alt="" loading="lazy">
+            <button type="button" data-gallery-thumbnail data-gallery-index="{{ $index }}" aria-label="Show {{ $kind }} {{ add $index 1 }}: {{ $item.caption }}"{{ if eq $index 0 }} aria-current="true"{{ end }}>
+                {{ if $isVideo }}
+                <span class="project-gallery-thumbnail-video">
+                    <img src="https://i.ytimg.com/vi/{{ $item.id }}/hqdefault.jpg" alt="" loading="lazy" data-gallery-youtube-thumbnail>
+                    <span aria-hidden="true">▶</span>
+                </span>
+                {{ else }}
+                <img src="{{ printf "/images/screenshots/%s" $item.path | relURL }}" alt="" loading="lazy">
+                {{ end }}
             </button>
         </li>
         {{ end }}
     </ol>
     {{ end }}
 
-    <dialog class="project-gallery-dialog" data-gallery-dialog aria-label="Screenshot viewer">
+    <dialog class="project-gallery-dialog" data-gallery-dialog aria-label="Media viewer">
         <div class="project-gallery-dialog-shell">
-            <button class="project-gallery-dialog-close" type="button" data-gallery-close aria-label="Close full-screen screenshot"><span aria-hidden="true">×</span></button>
+            <button class="project-gallery-dialog-close" type="button" data-gallery-close aria-label="Close full-screen media"><span aria-hidden="true">×</span></button>
             <div class="project-gallery-dialog-stage" data-gallery-dialog-swipe>
-                <img src="{{ printf "/images/screenshots/%s" $first.path | relURL }}" alt="{{ $first.caption }}" data-gallery-dialog-image>
+                {{ if gt $imageCount 0 }}
+                {{- $firstImage := index $images 0 -}}
+                <img src="{{ printf "/images/screenshots/%s" $firstImage.path | relURL }}" alt="{{ $firstImage.caption }}" data-gallery-dialog-image>
+                {{ else }}
+                <img alt="" data-gallery-dialog-image hidden>
+                {{ end }}
+                {{ if gt $videoCount 0 }}
+                {{- $firstVideo := index $videos 0 -}}
+                <div class="project-gallery-dialog-video" data-gallery-dialog-video data-youtube-id="{{ $firstVideo.id }}" hidden>
+                    <a class="project-gallery-video-poster" href="https://www.youtube.com/watch?v={{ $firstVideo.id }}" target="_blank" rel="noopener" data-gallery-dialog-video-open aria-label="Play video: {{ $firstVideo.caption }}">
+                        <img src="https://i.ytimg.com/vi/{{ $firstVideo.id }}/hqdefault.jpg" alt="" data-gallery-youtube-thumbnail>
+                        <span class="project-gallery-video-play" aria-hidden="true"><span>▶</span></span>
+                    </a>
+                    <div class="project-gallery-video-player" data-gallery-dialog-video-player hidden></div>
+                </div>
+                {{ end }}
                 {{ if gt $count 1 }}
-                <button class="project-gallery-arrow project-gallery-dialog-previous" type="button" data-gallery-direction="-1" aria-label="Previous screenshot"><span aria-hidden="true">←</span></button>
-                <button class="project-gallery-arrow project-gallery-dialog-next" type="button" data-gallery-direction="1" aria-label="Next screenshot"><span aria-hidden="true">→</span></button>
+                <button class="project-gallery-arrow project-gallery-dialog-previous" type="button" data-gallery-dialog-direction="-1" aria-label="Previous media item"><span aria-hidden="true">←</span></button>
+                <button class="project-gallery-arrow project-gallery-dialog-next" type="button" data-gallery-dialog-direction="1" aria-label="Next media item"><span aria-hidden="true">→</span></button>
                 {{ end }}
                 <div class="project-gallery-dialog-meta" aria-live="polite" aria-atomic="true">
                     <p data-gallery-dialog-caption>{{ $first.caption }}</p>

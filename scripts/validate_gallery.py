@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Validate project screenshot metadata and local asset files."""
+"""Validate project gallery metadata and local image assets."""
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -10,37 +11,39 @@ from typing import Any
 import yaml
 
 
-MAX_SCREENSHOTS = 10
+MAX_GALLERY_ITEMS = 10
 MAX_SCREENSHOT_BYTES = 2 * 1024 * 1024
 MAX_CAPTION_LENGTH = 160
 SUPPORTED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
+YOUTUBE_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{11}$")
 
 
-def validate_screenshots(
+def validate_gallery(
     yaml_path: Path, data: dict[str, Any], repository_root: Path
 ) -> list[str]:
-    screenshots = data.get("screenshots")
-    if screenshots is None:
+    gallery = data.get("gallery")
+    if gallery is None:
         return []
 
     errors: list[str] = []
-    if not isinstance(screenshots, list):
-        return [f"{yaml_path}: screenshots must be a list"]
-    if not 1 <= len(screenshots) <= MAX_SCREENSHOTS:
+    if not isinstance(gallery, list):
+        return [f"{yaml_path}: gallery must be a list"]
+    if not 1 <= len(gallery) <= MAX_GALLERY_ITEMS:
         errors.append(
-            f"{yaml_path}: screenshots must contain between 1 and {MAX_SCREENSHOTS} entries"
+            f"{yaml_path}: gallery must contain between 1 and {MAX_GALLERY_ITEMS} entries"
         )
 
     project_id = data.get("id")
     seen_paths: set[str] = set()
+    seen_youtube_ids: set[str] = set()
 
-    for index, screenshot in enumerate(screenshots):
-        label = f"screenshots[{index}]"
-        if not isinstance(screenshot, dict):
+    for index, item in enumerate(gallery):
+        label = f"gallery[{index}]"
+        if not isinstance(item, dict):
             errors.append(f"{yaml_path}: {label} must be an object")
             continue
 
-        caption = screenshot.get("caption")
+        caption = item.get("caption")
         if not isinstance(caption, str) or not caption.strip():
             errors.append(f"{yaml_path}: {label}.caption is required")
         elif len(caption) > MAX_CAPTION_LENGTH:
@@ -50,7 +53,40 @@ def validate_screenshots(
         elif "\n" in caption or "\r" in caption:
             errors.append(f"{yaml_path}: {label}.caption must be a single line")
 
-        screenshot_path = screenshot.get("path")
+        item_type = item.get("type")
+        if item_type == "youtube":
+            unexpected = set(item) - {"type", "id", "caption"}
+            if unexpected:
+                errors.append(
+                    f"{yaml_path}: {label} has unsupported field(s): {', '.join(sorted(unexpected))}"
+                )
+
+            video_id = item.get("id")
+            if not isinstance(video_id, str) or not video_id:
+                errors.append(f"{yaml_path}: {label}.id is required")
+            elif not YOUTUBE_ID_PATTERN.fullmatch(video_id):
+                errors.append(
+                    f"{yaml_path}: {label}.id must be an 11-character YouTube video ID, not a URL: {video_id}"
+                )
+            elif video_id in seen_youtube_ids:
+                errors.append(f"{yaml_path}: {label}.id is duplicated: {video_id}")
+            else:
+                seen_youtube_ids.add(video_id)
+            continue
+
+        if item_type != "image":
+            errors.append(
+                f"{yaml_path}: {label}.type must be either 'image' or 'youtube'"
+            )
+            continue
+
+        unexpected = set(item) - {"type", "path", "caption"}
+        if unexpected:
+            errors.append(
+                f"{yaml_path}: {label} has unsupported field(s): {', '.join(sorted(unexpected))}"
+            )
+
+        screenshot_path = item.get("path")
         if not isinstance(screenshot_path, str) or not screenshot_path:
             errors.append(f"{yaml_path}: {label}.path is required")
             continue
@@ -118,14 +154,14 @@ def main() -> int:
     for yaml_file in project_yaml_files(repository_root):
         with yaml_file.open() as file:
             data = yaml.safe_load(file) or {}
-        errors.extend(validate_screenshots(yaml_file, data, repository_root))
+        errors.extend(validate_gallery(yaml_file, data, repository_root))
 
     if errors:
-        print("SCREENSHOT VALIDATION ERRORS:")
+        print("GALLERY VALIDATION ERRORS:")
         print("\n".join(f"  - {error}" for error in errors))
         return 1
 
-    print("All project screenshots are valid.")
+    print("All project galleries are valid.")
     return 0
 
 

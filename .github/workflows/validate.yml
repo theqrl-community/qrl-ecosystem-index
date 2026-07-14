@@ -7,8 +7,8 @@ on:
       - 'images/logos/**'
       - 'images/screenshots/**'
       - 'schema/project.schema.json'
-      - 'scripts/validate_screenshots.py'
-      - 'scripts/validate_screenshots_test.py'
+      - 'scripts/validate_gallery.py'
+      - 'scripts/validate_gallery_test.py'
 
 permissions: {}
 
@@ -175,8 +175,8 @@ jobs:
               print("No duplicate IDs found.")
           EOF
 
-      - name: Validate screenshot assets
-        run: python3 scripts/validate_screenshots.py
+      - name: Validate gallery media
+        run: python3 scripts/validate_gallery.py
 
-      - name: Test screenshot validation
-        run: python3 -m unittest discover -s scripts -p 'validate_screenshots_test.py'
+      - name: Test gallery validation
+        run: python3 -m unittest discover -s scripts -p 'validate_gallery_test.py'

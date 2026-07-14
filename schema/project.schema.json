@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "QRL Ecosystem Project",
-  "version": 2,
+  "version": 3,
   "description": "Schema for QRL ecosystem project submissions",
   "type": "object",
   "required": ["id", "name", "project_type", "status", "description", "category", "tags", "author", "license", "created", "updated"],
@@ -103,29 +103,60 @@
         }
       }
     },
-    "screenshots": {
+    "gallery": {
       "type": "array",
       "minItems": 1,
       "maxItems": 10,
-      "description": "Ordered local screenshots displayed on the project page; the first screenshot is the default",
+      "description": "Ordered image and YouTube media displayed on the project page; the first item is the default",
       "items": {
-        "type": "object",
-        "required": ["path", "caption"],
-        "properties": {
-          "path": {
-            "type": "string",
-            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*/[^/]+\\.(png|jpe?g|webp)$",
-            "description": "Local path relative to images/screenshots/ (e.g., 'my-project/main-dashboard.webp')"
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["type", "path", "caption"],
+            "properties": {
+              "type": {
+                "const": "image",
+                "description": "Local image gallery item"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*/[^/]+\\.(png|jpe?g|webp)$",
+                "description": "Local path relative to images/screenshots/ (e.g., 'my-project/main-dashboard.webp')"
+              },
+              "caption": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "pattern": "^[^\\r\\n]+$",
+                "description": "Short plain-text description of the image"
+              }
+            },
+            "additionalProperties": false
           },
-          "caption": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 160,
-            "pattern": "^[^\\r\\n]+$",
-            "description": "Short plain-text description of the screenshot"
+          {
+            "type": "object",
+            "required": ["type", "id", "caption"],
+            "properties": {
+              "type": {
+                "const": "youtube",
+                "description": "YouTube video gallery item"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{11}$",
+                "description": "YouTube video ID only, not a full URL"
+              },
+              "caption": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "pattern": "^[^\\r\\n]+$",
+                "description": "Short plain-text description of the video"
+              }
+            },
+            "additionalProperties": false
           }
-        },
-        "additionalProperties": false
+        ]
       }
     },
     "long_description": {

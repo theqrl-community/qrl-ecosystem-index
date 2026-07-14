@@ -24,6 +24,7 @@ term = ["html", "rss", "markdown"]
 
 [params]
 description = "A community-contributed index of projects building on QRL 2.0"
+openGraphDefaultImage = "/images/og/default.png"
 
 [taxonomies]
 category = "categories"

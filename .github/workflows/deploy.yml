@@ -161,8 +161,8 @@ jobs:
           print("All project data is valid.")
           EOF
 
-      - name: Validate screenshot assets
-        run: python3 scripts/validate_screenshots.py
+      - name: Validate gallery media
+        run: python3 scripts/validate_gallery.py
 
       - name: Generate project content
         run: go run scripts/generate.go
