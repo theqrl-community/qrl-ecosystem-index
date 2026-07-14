@@ -9,8 +9,8 @@
 - [ ] My project is related to the QRL ecosystem
 - [ ] If including logos, I have added them to `images/logos/<project-id>/`
 - [ ] If including logos, they use local paths (no external URLs)
-- [ ] If including screenshots, I have added them to `images/screenshots/<project-id>/`
-- [ ] If including screenshots, they use local paths, supported formats, captions, and are no larger than 2 MB each
+- [ ] If including gallery images, I have added them to `images/screenshots/<project-id>/`
+- [ ] Gallery items use supported types, local image paths or YouTube video IDs, captions, and images no larger than 2 MB each
 
 ## Notes for Reviewers
 

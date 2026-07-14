@@ -46,7 +46,7 @@ Quick steps:
 
 ## Local Development
 
-Install the Go dependencies once, then generate the Hugo project pages, JSON index, and local media assets before starting the development server:
+Install the Go dependencies once, then generate the Hugo project pages, JSON index, local media assets, and 1200×630 social preview cards before starting the development server:
 
 ```sh
 go mod download
@@ -54,7 +54,7 @@ go run scripts/generate.go
 hugo server --source website --bind 127.0.0.1 --port 1313
 ```
 
-Open [http://127.0.0.1:1313](http://127.0.0.1:1313) to preview the site. Run `go run scripts/generate.go` again whenever project YAML, logos, or screenshots change; Hugo will handle template, content, and style changes while the server is running.
+Open [http://127.0.0.1:1313](http://127.0.0.1:1313) to preview the site. Run `go run scripts/generate.go` again whenever project YAML, logos, or gallery images change; the generator rebuilds each project's Open Graph card and Hugo handles template, content, and style changes while the server is running.
 
 To run a production-style build locally:
 

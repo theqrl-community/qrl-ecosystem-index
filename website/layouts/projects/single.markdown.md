@@ -70,12 +70,16 @@
 - {{ . }}
 {{ end -}}
 {{- end }}
-{{- with .Params.screenshots }}
+{{- with .Params.gallery }}
 
-## Screenshots
+## Gallery
 
 {{ range . -}}
+{{ if eq .type "youtube" -}}
+- [{{ .caption }}](https://www.youtube.com/watch?v={{ .id }}) — YouTube video
+{{ else -}}
 - [{{ .caption }}]({{ printf "/images/screenshots/%s" .path | absURL }})
+{{ end -}}
 {{ end -}}
 {{- end }}
 {{- with .Params.clients }}

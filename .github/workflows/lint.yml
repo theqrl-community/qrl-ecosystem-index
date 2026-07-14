@@ -6,7 +6,7 @@ on:
       - 'projects/**/*.yaml'
       - 'images/logos/**'
       - 'images/screenshots/**'
-      - 'scripts/validate_screenshots.py'
+      - 'scripts/validate_gallery.py'
 
 permissions: {}
 
@@ -133,5 +133,5 @@ jobs:
               print("All YAML files pass linting!")
           EOF
 
-      - name: Validate screenshot assets
-        run: python3 scripts/validate_screenshots.py
+      - name: Validate gallery media
+        run: python3 scripts/validate_gallery.py

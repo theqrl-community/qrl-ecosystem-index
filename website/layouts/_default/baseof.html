@@ -9,6 +9,7 @@
     {{ with .OutputFormats.Get "html" }}
     <link rel="canonical" href="{{ .Permalink }}">
     {{ end }}
+    {{ partial "social-meta.html" . }}
     {{ with resources.Get "brand/favicon.ico" }}
     <link rel="icon" href="{{ .RelPermalink }}" sizes="any">
     {{ end }}

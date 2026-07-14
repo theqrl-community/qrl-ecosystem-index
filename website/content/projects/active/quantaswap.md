@@ -31,6 +31,16 @@ features:
     - Ownerless, non-upgradeable contracts with no pause switch; one artifact deploys to both chains
     - Two-party order book for coordination only; clients re-verify every step on-chain
     - QRL leg connects via the MyQRLWallet relay or the QRL browser extension, ETH leg via EIP-6963 wallets
+gallery:
+    - type: image
+      path: quantaswap/screenshot1.png
+      caption: QuantaSwap main dashboard showing active swaps and order book.
+    - type: image
+      path: quantaswap/screenshot2.png
+      caption: Play both sides of an atomic swap from one browser and watch the HTLC handshake happen live on both chains.
+    - type: image
+      path: quantaswap/screenshot3.png
+      caption: Plain language guide on how QuantaSwap works and how to use it.
 github: https://github.com/DigitalGuards/QuantaSwap
 license: GPL-3.0
 logos:
@@ -42,13 +52,6 @@ project-types:
     - dapps
 project_type: dapp
 project_url: https://quantaswap.io/
-screenshots:
-    - path: quantaswap/screenshot1.png
-      caption: QuantaSwap main dashboard showing active swaps and order book.
-    - path: quantaswap/screenshot2.png
-      caption: Play both sides of an atomic swap from one browser and watch the HTLC handshake happen live on both chains.
-    - path: quantaswap/screenshot3.png
-      caption: Plain language guide on how QuantaSwap works and how to use it.
 status: development
 tags:
     - atomic-swaps

@@ -3,41 +3,57 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"image"
+	"image/color"
+	"image/draw"
+	_ "image/jpeg"
+	"image/png"
 	"io/fs"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+	"unicode"
 
+	"github.com/srwiley/oksvg"
+	"github.com/srwiley/rasterx"
+	xdraw "golang.org/x/image/draw"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/gofont/gobold"
+	"golang.org/x/image/font/gofont/goregular"
+	"golang.org/x/image/font/opentype"
+	"golang.org/x/image/math/fixed"
+	_ "golang.org/x/image/webp"
 	"gopkg.in/yaml.v3"
 )
 
 type Project struct {
-	ID              string       `yaml:"id"`
-	Name            string       `yaml:"name"`
-	ProjectType     string       `yaml:"project_type"`
-	Status          string       `yaml:"status"`
-	Description     string       `yaml:"description"`
-	Category        string       `yaml:"category"`
-	Tags            []string     `yaml:"tags"`
-	Author          string       `yaml:"author"`
-	License         string       `yaml:"license"`
-	Created         string       `yaml:"created"`
-	Updated         string       `yaml:"updated"`
-	URL             string       `yaml:"url"`
-	GitHub          string       `yaml:"github"`
-	Docs            string       `yaml:"docs"`
-	Discord         string       `yaml:"discord"`
-	Twitter         string       `yaml:"twitter"`
-	OpenSource      bool         `yaml:"open_source"`
-	Audited         bool         `yaml:"audited"`
-	Audits          []Audit      `yaml:"audits"`
-	Clients         []Client     `yaml:"clients"`
-	Logo            string       `yaml:"logo"`
-	Logos           []Logo       `yaml:"logos"`
-	Screenshots     []Screenshot `yaml:"screenshots"`
-	Features        []string     `yaml:"features"`
-	LongDescription string       `yaml:"long_description"`
+	ID              string        `yaml:"id"`
+	Name            string        `yaml:"name"`
+	ProjectType     string        `yaml:"project_type"`
+	Status          string        `yaml:"status"`
+	Description     string        `yaml:"description"`
+	Category        string        `yaml:"category"`
+	Tags            []string      `yaml:"tags"`
+	Author          string        `yaml:"author"`
+	License         string        `yaml:"license"`
+	Created         string        `yaml:"created"`
+	Updated         string        `yaml:"updated"`
+	URL             string        `yaml:"url"`
+	GitHub          string        `yaml:"github"`
+	Docs            string        `yaml:"docs"`
+	Discord         string        `yaml:"discord"`
+	Twitter         string        `yaml:"twitter"`
+	OpenSource      bool          `yaml:"open_source"`
+	Audited         bool          `yaml:"audited"`
+	Audits          []Audit       `yaml:"audits"`
+	Clients         []Client      `yaml:"clients"`
+	Logo            string        `yaml:"logo"`
+	Logos           []Logo        `yaml:"logos"`
+	Gallery         []GalleryItem `yaml:"gallery"`
+	Features        []string      `yaml:"features"`
+	LongDescription string        `yaml:"long_description"`
 	// Type-specific blocks
 	Dapp           *DappBlock           `yaml:"dapp,omitempty"`
 	Application    *ApplicationBlock    `yaml:"application,omitempty"`
@@ -51,8 +67,10 @@ type Logo struct {
 	Description string `yaml:"description"`
 }
 
-type Screenshot struct {
-	Path    string `yaml:"path"`
+type GalleryItem struct {
+	Type    string `yaml:"type"`
+	Path    string `yaml:"path,omitempty"`
+	ID      string `yaml:"id,omitempty"`
 	Caption string `yaml:"caption"`
 }
 
@@ -110,6 +128,10 @@ func main() {
 	// Generate individual project pages
 	for _, p := range projects {
 		generateProjectPage(p)
+	}
+	if err := generateSocialCards(projects, "images", filepath.Join("website", "static", "images", "og")); err != nil {
+		fmt.Fprintf(os.Stderr, "Error generating social preview cards: %v\n", err)
+		os.Exit(1)
 	}
 
 	// Generate JSON index
@@ -277,8 +299,8 @@ func generateProjectPage(p Project) {
 		"logos":       p.Logos,
 		"features":    p.Features,
 	}
-	if len(p.Screenshots) > 0 {
-		params["screenshots"] = p.Screenshots
+	if len(p.Gallery) > 0 {
+		params["gallery"] = p.Gallery
 	}
 
 	if client, ok := defaultClient(p); ok {
@@ -387,7 +409,7 @@ func generateJSONIndex(projects []Project) {
 		"projects":  index,
 	}, "", "  ")
 
-	if err := os.WriteFile("website/static/index.json", data, 0644); err != nil {
+	if err := os.WriteFile("website/static/index.json", append(data, '\n'), 0644); err != nil {
 		fmt.Fprintf(os.Stderr, "Error writing JSON index: %v\n", err)
 	}
 }
@@ -443,4 +465,431 @@ func projectTypeSlug(projectType string) string {
 	default:
 		return projectType
 	}
+}
+
+const (
+	socialCardWidth  = 1200
+	socialCardHeight = 630
+)
+
+var (
+	cardPaper       = color.RGBA{R: 244, G: 242, B: 235, A: 255}
+	cardInk         = color.RGBA{R: 20, G: 38, B: 49, A: 255}
+	cardMuted       = color.RGBA{R: 76, G: 92, B: 101, A: 255}
+	cardLine        = color.RGBA{R: 205, G: 210, B: 207, A: 255}
+	cardAccent      = color.RGBA{R: 42, G: 142, B: 154, A: 255}
+	cardAccentLight = color.RGBA{R: 215, G: 235, B: 234, A: 255}
+	cardWhite       = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+)
+
+type socialCardFonts struct {
+	label   font.Face
+	title   font.Face
+	titleSm font.Face
+	body    font.Face
+	initial font.Face
+}
+
+func generateSocialCards(projects []Project, assetRoot, outputRoot string) error {
+	if err := os.RemoveAll(outputRoot); err != nil {
+		return err
+	}
+	projectOutputRoot := filepath.Join(outputRoot, "projects")
+	if err := os.MkdirAll(projectOutputRoot, 0755); err != nil {
+		return err
+	}
+
+	fonts, err := newSocialCardFonts()
+	if err != nil {
+		return err
+	}
+	if err := writeSocialCard(filepath.Join(outputRoot, "default.png"), renderDefaultSocialCard(fonts)); err != nil {
+		return err
+	}
+
+	for _, project := range projects {
+		card, err := renderProjectSocialCard(project, assetRoot, fonts)
+		if err != nil {
+			return fmt.Errorf("%s: %w", project.ID, err)
+		}
+		if err := writeSocialCard(filepath.Join(projectOutputRoot, project.ID+".png"), card); err != nil {
+			return fmt.Errorf("%s: %w", project.ID, err)
+		}
+	}
+	return nil
+}
+
+func newSocialCardFonts() (socialCardFonts, error) {
+	regular, err := opentype.Parse(goregular.TTF)
+	if err != nil {
+		return socialCardFonts{}, err
+	}
+	bold, err := opentype.Parse(gobold.TTF)
+	if err != nil {
+		return socialCardFonts{}, err
+	}
+	makeFace := func(parsed *opentype.Font, size float64) (font.Face, error) {
+		return opentype.NewFace(parsed, &opentype.FaceOptions{Size: size, DPI: 72, Hinting: font.HintingFull})
+	}
+
+	label, err := makeFace(bold, 18)
+	if err != nil {
+		return socialCardFonts{}, err
+	}
+	title, err := makeFace(bold, 66)
+	if err != nil {
+		return socialCardFonts{}, err
+	}
+	titleSm, err := makeFace(bold, 54)
+	if err != nil {
+		return socialCardFonts{}, err
+	}
+	body, err := makeFace(regular, 25)
+	if err != nil {
+		return socialCardFonts{}, err
+	}
+	initial, err := makeFace(bold, 108)
+	if err != nil {
+		return socialCardFonts{}, err
+	}
+	return socialCardFonts{
+		label:   label,
+		title:   title,
+		titleSm: titleSm,
+		body:    body,
+		initial: initial,
+	}, nil
+}
+
+func renderDefaultSocialCard(fonts socialCardFonts) image.Image {
+	card := image.NewRGBA(image.Rect(0, 0, socialCardWidth, socialCardHeight))
+	draw.Draw(card, card.Bounds(), &image.Uniform{C: cardPaper}, image.Point{}, draw.Src)
+	drawCardBackground(card)
+	drawLabel(card, fonts.label, "QRL / COMMUNITY INDEX", 72, 64, cardAccent)
+	drawWrappedText(card, fonts.title, "QRL Ecosystem\nIndex", 72, 190, 600, 2, 76, cardInk)
+	drawWrappedText(card, fonts.body, "A community-maintained view of projects, tools, services, and resources connected to QRL 2.0.", 72, 410, 580, 3, 36, cardMuted)
+	drawCardMotif(card, "QI", fonts, 770, 90, 350, 410)
+	drawFooter(card, fonts)
+	return card
+}
+
+func renderProjectSocialCard(project Project, assetRoot string, fonts socialCardFonts) (image.Image, error) {
+	card := image.NewRGBA(image.Rect(0, 0, socialCardWidth, socialCardHeight))
+	draw.Draw(card, card.Bounds(), &image.Uniform{C: cardPaper}, image.Point{}, draw.Src)
+	drawCardBackground(card)
+
+	markRect := image.Rect(72, 74, 158, 160)
+	drawRoundedRect(card, markRect, 18, cardWhite)
+	drawRoundedBorder(card, markRect, 18, cardLine, 2)
+	logoDrawn := false
+	if len(project.Logos) > 0 && project.Logos[0].Path != "" {
+		logoPath := filepath.Join(assetRoot, "logos", filepath.FromSlash(project.Logos[0].Path))
+		logo, err := loadProjectLogo(logoPath, 66, 66)
+		if err != nil {
+			return nil, fmt.Errorf("load logo: %w", err)
+		}
+		drawImageContain(card, logo, image.Rect(82, 84, 148, 150))
+		logoDrawn = true
+	}
+	if !logoDrawn {
+		initials := projectInitials(project.Name)
+		drawCenteredText(card, fonts.label, initials, markRect, cardInk)
+	}
+
+	drawLabel(card, fonts.label, "QRL / ECOSYSTEM INDEX", 176, 105, cardAccent)
+	drawLabel(card, fonts.label, strings.ToUpper(projectTypeLabel(project.ProjectType)), 176, 143, cardMuted)
+
+	titleFace := fonts.title
+	if len([]rune(project.Name)) > 18 {
+		titleFace = fonts.titleSm
+	}
+	titleLines := wrapText(titleFace, project.Name, 570)
+	if len(titleLines) > 2 {
+		titleFace = fonts.titleSm
+	}
+	drawWrappedText(card, titleFace, project.Name, 72, 238, 570, 3, 68, cardInk)
+	drawWrappedText(card, fonts.body, strings.TrimSpace(project.Description), 72, 410, 570, 3, 35, cardMuted)
+
+	if galleryImage, ok := firstGalleryImage(project.Gallery); ok {
+		screenshotPath := filepath.Join(assetRoot, "screenshots", filepath.FromSlash(galleryImage.Path))
+		screenshot, err := loadRasterImage(screenshotPath)
+		if err != nil {
+			return nil, fmt.Errorf("load first screenshot: %w", err)
+		}
+		drawScreenshotPanel(card, screenshot)
+	} else {
+		drawCardMotif(card, projectInitials(project.Name), fonts, 728, 58, 402, 476)
+	}
+
+	drawFooter(card, fonts)
+	return card, nil
+}
+
+func firstGalleryImage(gallery []GalleryItem) (GalleryItem, bool) {
+	for _, item := range gallery {
+		if item.Type == "image" && item.Path != "" {
+			return item, true
+		}
+	}
+	return GalleryItem{}, false
+}
+
+func drawCardBackground(card *image.RGBA) {
+	draw.Draw(card, image.Rect(0, 0, 14, socialCardHeight), &image.Uniform{C: cardAccent}, image.Point{}, draw.Src)
+}
+
+func drawScreenshotPanel(card *image.RGBA, screenshot image.Image) {
+	contentWidth, contentHeight := fitImageDimensions(screenshot.Bounds(), 420, 450)
+	frameWidth := contentWidth + 36
+	frameHeight := contentHeight + 36
+	available := image.Rect(684, 38, 1140, 524)
+	left := available.Min.X + (available.Dx()-frameWidth)/2
+	top := available.Min.Y + (available.Dy()-frameHeight)/2
+	panelRect := image.Rect(left, top, left+frameWidth, top+frameHeight)
+	shadowRect := panelRect.Add(image.Pt(11, 11))
+	drawRoundedRect(card, shadowRect, 24, color.RGBA{R: 20, G: 38, B: 49, A: 35})
+	drawRoundedRect(card, panelRect, 24, cardWhite)
+	drawRoundedBorder(card, panelRect, 24, cardLine, 2)
+
+	imageRect := panelRect.Inset(18)
+	fitted := resizeImage(screenshot, imageRect.Dx(), imageRect.Dy())
+	mask := roundedMask(imageRect.Dx(), imageRect.Dy(), 14)
+	draw.DrawMask(card, imageRect, fitted, image.Point{}, mask, image.Point{}, draw.Over)
+}
+
+func drawCardMotif(card *image.RGBA, initials string, fonts socialCardFonts, x, y, width, height int) {
+	rect := image.Rect(x, y, x+width, y+height)
+	drawRoundedRect(card, rect, 28, cardInk)
+	circleCenter := image.Pt(rect.Min.X+width/2, rect.Min.Y+height/2)
+	drawCircle(card, circleCenter, minInt(width, height)/3, cardAccent)
+	drawCircle(card, circleCenter, minInt(width, height)/3-12, cardAccentLight)
+	drawCenteredText(card, fonts.initial, initials, image.Rect(circleCenter.X-130, circleCenter.Y-100, circleCenter.X+130, circleCenter.Y+100), cardInk)
+}
+
+func drawFooter(card *image.RGBA, fonts socialCardFonts) {
+	draw.Draw(card, image.Rect(72, 579, 1128, 581), &image.Uniform{C: cardLine}, image.Point{}, draw.Src)
+	drawLabel(card, fonts.label, "QRLECOSYSTEM.COM", 72, 610, cardMuted)
+}
+
+func loadProjectLogo(path string, width, height int) (image.Image, error) {
+	if strings.EqualFold(filepath.Ext(path), ".svg") {
+		file, err := os.Open(path)
+		if err != nil {
+			return nil, err
+		}
+		defer file.Close()
+		icon, err := oksvg.ReadIconStream(file)
+		if err != nil {
+			return nil, err
+		}
+		icon.SetTarget(0, 0, float64(width), float64(height))
+		canvas := image.NewRGBA(image.Rect(0, 0, width, height))
+		scanner := rasterx.NewScannerGV(width, height, canvas, canvas.Bounds())
+		dasher := rasterx.NewDasher(width, height, scanner)
+		icon.Draw(dasher, 1)
+		return canvas, nil
+	}
+	return loadRasterImage(path)
+}
+
+func loadRasterImage(path string) (image.Image, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	decoded, _, err := image.Decode(file)
+	if err != nil {
+		return nil, err
+	}
+	return decoded, nil
+}
+
+func drawImageContain(destination *image.RGBA, source image.Image, bounds image.Rectangle) {
+	sourceBounds := source.Bounds()
+	if sourceBounds.Dx() == 0 || sourceBounds.Dy() == 0 {
+		return
+	}
+	scale := math.Min(float64(bounds.Dx())/float64(sourceBounds.Dx()), float64(bounds.Dy())/float64(sourceBounds.Dy()))
+	width := maxInt(1, int(math.Round(float64(sourceBounds.Dx())*scale)))
+	height := maxInt(1, int(math.Round(float64(sourceBounds.Dy())*scale)))
+	x := bounds.Min.X + (bounds.Dx()-width)/2
+	y := bounds.Min.Y + (bounds.Dy()-height)/2
+	xdraw.CatmullRom.Scale(destination, image.Rect(x, y, x+width, y+height), source, sourceBounds, draw.Over, nil)
+}
+
+func fitImageDimensions(source image.Rectangle, maxWidth, maxHeight int) (int, int) {
+	if source.Dx() == 0 || source.Dy() == 0 {
+		return maxWidth, maxHeight
+	}
+	scale := math.Min(float64(maxWidth)/float64(source.Dx()), float64(maxHeight)/float64(source.Dy()))
+	return maxInt(1, int(math.Round(float64(source.Dx())*scale))), maxInt(1, int(math.Round(float64(source.Dy())*scale)))
+}
+
+func resizeImage(source image.Image, width, height int) image.Image {
+	sourceBounds := source.Bounds()
+	destination := image.NewRGBA(image.Rect(0, 0, width, height))
+	if sourceBounds.Dx() == 0 || sourceBounds.Dy() == 0 {
+		return destination
+	}
+	xdraw.CatmullRom.Scale(destination, destination.Bounds(), source, sourceBounds, draw.Src, nil)
+	return destination
+}
+
+func writeSocialCard(path string, card image.Image) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return err
+	}
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	encoder := png.Encoder{CompressionLevel: png.BestCompression}
+	return encoder.Encode(file, card)
+}
+
+func drawLabel(destination draw.Image, face font.Face, text string, x, baseline int, ink color.Color) {
+	drawer := font.Drawer{Dst: destination, Src: &image.Uniform{C: ink}, Face: face, Dot: fixedPoint(x, baseline)}
+	drawer.DrawString(text)
+}
+
+func drawWrappedText(destination draw.Image, face font.Face, text string, x, baseline, maxWidth, maxLines, lineHeight int, ink color.Color) {
+	lines := wrapText(face, text, maxWidth)
+	if len(lines) > maxLines {
+		lines = lines[:maxLines]
+		lines[maxLines-1] = ellipsize(face, lines[maxLines-1], maxWidth)
+	}
+	for index, line := range lines {
+		drawLabel(destination, face, line, x, baseline+index*lineHeight, ink)
+	}
+}
+
+func wrapText(face font.Face, text string, maxWidth int) []string {
+	var lines []string
+	for _, paragraph := range strings.Split(text, "\n") {
+		words := strings.Fields(paragraph)
+		if len(words) == 0 {
+			lines = append(lines, "")
+			continue
+		}
+		current := words[0]
+		for _, word := range words[1:] {
+			candidate := current + " " + word
+			if measureText(face, candidate) <= maxWidth {
+				current = candidate
+				continue
+			}
+			lines = append(lines, current)
+			current = word
+		}
+		lines = append(lines, current)
+	}
+	return lines
+}
+
+func ellipsize(face font.Face, text string, maxWidth int) string {
+	text = strings.TrimSpace(text)
+	for measureText(face, text+"…") > maxWidth && len(text) > 0 {
+		runes := []rune(text)
+		text = strings.TrimSpace(string(runes[:len(runes)-1]))
+	}
+	return text + "…"
+}
+
+func measureText(face font.Face, text string) int {
+	drawer := font.Drawer{Face: face}
+	return drawer.MeasureString(text).Ceil()
+}
+
+func drawCenteredText(destination draw.Image, face font.Face, text string, bounds image.Rectangle, ink color.Color) {
+	metrics := face.Metrics()
+	width := measureText(face, text)
+	height := (metrics.Ascent + metrics.Descent).Ceil()
+	x := bounds.Min.X + (bounds.Dx()-width)/2
+	baseline := bounds.Min.Y + (bounds.Dy()-height)/2 + metrics.Ascent.Ceil()
+	drawLabel(destination, face, text, x, baseline, ink)
+}
+
+func projectInitials(name string) string {
+	words := strings.FieldsFunc(name, func(r rune) bool { return !unicode.IsLetter(r) && !unicode.IsNumber(r) })
+	if len(words) >= 2 {
+		return strings.ToUpper(string([]rune(words[0])[:1]) + string([]rune(words[1])[:1]))
+	}
+	clean := []rune(strings.TrimSpace(name))
+	if len(clean) == 0 {
+		return "QI"
+	}
+	if len(clean) == 1 {
+		return strings.ToUpper(string(clean))
+	}
+	return strings.ToUpper(string(clean[:2]))
+}
+
+func projectTypeLabel(projectType string) string {
+	switch projectType {
+	case "dapp":
+		return "DApp"
+	case "application":
+		return "Application"
+	case "infrastructure":
+		return "Infrastructure"
+	case "tooling":
+		return "Tooling"
+	case "community":
+		return "Community"
+	default:
+		return projectType
+	}
+}
+
+func drawRoundedRect(destination draw.Image, rect image.Rectangle, radius int, fill color.Color) {
+	mask := roundedMask(rect.Dx(), rect.Dy(), radius)
+	draw.DrawMask(destination, rect, &image.Uniform{C: fill}, image.Point{}, mask, image.Point{}, draw.Over)
+}
+
+func drawRoundedBorder(destination draw.Image, rect image.Rectangle, radius int, border color.Color, thickness int) {
+	drawRoundedRect(destination, rect, radius, border)
+	inner := rect.Inset(thickness)
+	drawRoundedRect(destination, inner, maxInt(0, radius-thickness), cardWhite)
+}
+
+func roundedMask(width, height, radius int) *image.Alpha {
+	mask := image.NewAlpha(image.Rect(0, 0, width, height))
+	radius = minInt(radius, minInt(width/2, height/2))
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			dx := maxInt(radius-x, maxInt(0, x-(width-radius-1)))
+			dy := maxInt(radius-y, maxInt(0, y-(height-radius-1)))
+			if dx == 0 || dy == 0 || dx*dx+dy*dy <= radius*radius {
+				mask.SetAlpha(x, y, color.Alpha{A: 255})
+			}
+		}
+	}
+	return mask
+}
+
+func drawCircle(destination draw.Image, center image.Point, radius int, fill color.Color) {
+	for y := -radius; y <= radius; y++ {
+		halfWidth := int(math.Sqrt(float64(radius*radius - y*y)))
+		draw.Draw(destination, image.Rect(center.X-halfWidth, center.Y+y, center.X+halfWidth+1, center.Y+y+1), &image.Uniform{C: fill}, image.Point{}, draw.Over)
+	}
+}
+
+func fixedPoint(x, y int) fixed.Point26_6 {
+	return fixed.P(x, y)
+}
+
+func minInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func maxInt(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }

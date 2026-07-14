@@ -53,13 +53,15 @@ audited: false
 #  - path: your-project/logo-full.svg
 #    description: Full-width logo variant
 
-# Screenshots (local PNG, JPEG, or WebP files only; 2 MB maximum each)
-# Place files in images/screenshots/<project-id>/ and list the best image first.
-#screenshots:
-#  - path: your-project/main-dashboard.webp
+# Gallery (ordered local images and YouTube videos; 1-10 items total)
+# Place image files in images/screenshots/<project-id>/; use only the 11-character ID for YouTube videos.
+#gallery:
+#  - type: image
+#    path: your-project/main-dashboard.webp
 #    caption: Main dashboard showing current network activity
-#  - path: your-project/transaction-details.png
-#    caption: Transaction details and confirmation status
+#  - type: youtube
+#    id: M7lc1UVf-VE
+#    caption: Project demonstration
 
 features:
   - Feature 1
