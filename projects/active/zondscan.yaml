@@ -13,13 +13,15 @@ tags:
 author: DigitalGuards
 license: MIT
 created: 2026-06-09
-updated: 2026-06-09
+updated: 2026-07-14
 
 url: https://zondscan.com/
 github: https://github.com/DigitalGuards/zondscan
 
 open_source: true
 audited: false
+
+logo: zondscan/icon.png
 
 features:
   - Real-time QRL Zond blockchain data exploration
