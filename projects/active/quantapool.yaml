@@ -13,7 +13,7 @@ tags:
 author: DigitalGuards
 license: GPL-3.0
 created: 2026-06-10
-updated: 2026-06-10
+updated: 2026-07-14
 
 url: https://quantapool.io/
 github: https://github.com/DigitalGuards/QuantaPool
@@ -21,6 +21,8 @@ docs: https://quantapool.io/how-it-works
 
 open_source: true
 audited: false
+
+logo: quantapool/icon.svg
 
 clients:
   - platform: web
