@@ -12,7 +12,7 @@ tags:
 author: DigitalGuards
 license: none
 created: 2026-06-09
-updated: 2026-07-11
+updated: 2026-07-14
 
 url: https://myqrlwallet.com/
 github: https://github.com/DigitalGuards/myqrlwallet-frontend/
@@ -20,6 +20,8 @@ twitter: https://x.com/DigitalGuards
 
 open_source: true
 audited: false
+
+logo: myqrlwallet/icon.png
 
 clients:
   - platform: web
