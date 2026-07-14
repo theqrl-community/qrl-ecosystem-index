@@ -16,7 +16,7 @@ tags:
 author: DigitalGuards
 license: GPL-3.0
 created: 2026-07-11
-updated: 2026-07-11
+updated: 2026-07-14
 
 url: https://quantaswap.io/
 github: https://github.com/DigitalGuards/QuantaSwap
@@ -27,6 +27,9 @@ audited: false
 
 logo: quantaswap/icon.svg
 gallery:
+  - type: youtube
+    id: rIwqXEEpaaM
+    caption: Full testnet demo of a cross-chain atomic ETH to QRL swap.
   - type: image
     path: quantaswap/screenshot1.png
     caption: QuantaSwap main dashboard showing active swaps and order book.
