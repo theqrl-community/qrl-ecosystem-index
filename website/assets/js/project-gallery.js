@@ -1,4 +1,73 @@
 (() => {
+    const youtubeThumbnailVariants = ["maxresdefault", "hqdefault"];
+    const youtubeThumbnailStates = new WeakMap();
+
+    const youtubeThumbnailURL = (videoID, variant) => `https://i.ytimg.com/vi/${videoID}/${variant}.jpg`;
+
+    const isHighResolutionThumbnail = (image) => image.naturalWidth >= 640 && image.naturalHeight >= 360;
+
+    const markThumbnailMissing = (image) => {
+        image.hidden = true;
+        image.closest(".project-gallery-video-poster, .project-gallery-thumbnail-video")?.classList.add("project-gallery-video-thumbnail-missing");
+    };
+
+    const markThumbnailAvailable = (image) => {
+        image.hidden = false;
+        image.closest(".project-gallery-video-poster, .project-gallery-thumbnail-video")?.classList.remove("project-gallery-video-thumbnail-missing");
+    };
+
+    const loadYouTubeThumbnail = (image, videoID) => {
+        if (!videoID) {
+            markThumbnailMissing(image);
+            return;
+        }
+
+        const previousState = youtubeThumbnailStates.get(image);
+        const state = {
+            request: (previousState?.request || 0) + 1,
+            variantIndex: 0,
+        };
+        youtubeThumbnailStates.set(image, state);
+        image.dataset.galleryYoutubeThumbnailVideoId = videoID;
+
+        const isCurrentRequest = () => youtubeThumbnailStates.get(image) === state;
+        const tryNextVariant = () => {
+            if (!isCurrentRequest()) {
+                return;
+            }
+
+            const variant = youtubeThumbnailVariants[state.variantIndex];
+            if (!variant) {
+                markThumbnailMissing(image);
+                return;
+            }
+
+            image.hidden = false;
+            image.onload = () => {
+                if (!isCurrentRequest()) {
+                    return;
+                }
+                if (variant === "maxresdefault" && !isHighResolutionThumbnail(image)) {
+                    state.variantIndex += 1;
+                    tryNextVariant();
+                    return;
+                }
+                image.dataset.galleryYoutubeThumbnailVariant = variant;
+                markThumbnailAvailable(image);
+            };
+            image.onerror = () => {
+                if (!isCurrentRequest()) {
+                    return;
+                }
+                state.variantIndex += 1;
+                tryNextVariant();
+            };
+            image.src = youtubeThumbnailURL(videoID, variant);
+        };
+
+        tryNextVariant();
+    };
+
     const galleries = Array.from(document.querySelectorAll("[data-project-gallery]"));
 
     galleries.forEach((gallery) => {
@@ -93,9 +162,9 @@
                         dialogVideoPoster.setAttribute("aria-label", `Play video: ${activeCaption}`);
                     }
                     if (dialogVideoThumbnail && videoID) {
-                        dialogVideoThumbnail.hidden = false;
-                        dialogVideoThumbnail.closest(".project-gallery-video-poster")?.classList.remove("project-gallery-video-thumbnail-missing");
-                        dialogVideoThumbnail.src = `https://i.ytimg.com/vi/${videoID}/hqdefault.jpg`;
+                        if (dialogVideoThumbnail.dataset.galleryYoutubeThumbnailVideoId !== videoID) {
+                            loadYouTubeThumbnail(dialogVideoThumbnail, videoID);
+                        }
                     }
                 }
             }
@@ -239,19 +308,7 @@
         }
 
         gallery.querySelectorAll("[data-gallery-youtube-thumbnail]").forEach((image) => {
-            const markMissing = () => {
-                image.hidden = true;
-                image.closest(".project-gallery-video-poster, .project-gallery-thumbnail-video")?.classList.add("project-gallery-video-thumbnail-missing");
-            };
-            const markAvailable = () => {
-                image.hidden = false;
-                image.closest(".project-gallery-video-poster, .project-gallery-thumbnail-video")?.classList.remove("project-gallery-video-thumbnail-missing");
-            };
-            image.addEventListener("error", markMissing);
-            image.addEventListener("load", markAvailable);
-            if (image.complete && image.naturalWidth === 0) {
-                markMissing();
-            }
+            loadYouTubeThumbnail(image, image.dataset.galleryYoutubeId);
         });
 
         if (dialog && closeButton) {

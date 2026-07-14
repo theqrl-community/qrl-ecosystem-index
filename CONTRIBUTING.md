@@ -158,7 +158,7 @@ For a YouTube URL such as `https://www.youtube.com/watch?v=M7lc1UVf-VE`, submit 
 - **Captions**: required, concise, plain text, and no more than 160 characters
 - **PR assets**: include every referenced local image in the same PR as the YAML change
 
-Use current screenshots with populated, readable content. Avoid sensitive information, entire desktop backgrounds, promotional text overlays, or stale interfaces. Desktop captures around or below 2000x1400 pixels are recommended so interface details remain legible when scaled; other aspect ratios, including portrait mobile screenshots, are welcome. YouTube thumbnails are fetched from YouTube when the page loads; video playback uses YouTube's privacy-enhanced embed domain only after activation.
+Use current screenshots with populated, readable content. Avoid sensitive information, entire desktop backgrounds, promotional text overlays, or stale interfaces. Desktop captures around or below 2000x1400 pixels are recommended so interface details remain legible when scaled; other aspect ratios, including portrait mobile screenshots, are welcome. YouTube thumbnails are fetched from YouTube when the page loads, preferring the `maxres` thumbnail when available and falling back automatically to `hqdefault`; video playback uses YouTube's privacy-enhanced embed domain only after activation.
 
 ## Review Criteria
 

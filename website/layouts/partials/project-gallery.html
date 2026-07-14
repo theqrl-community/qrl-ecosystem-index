@@ -14,7 +14,7 @@
             <figure class="project-gallery-slide{{ if $isVideo }} project-gallery-slide-video{{ end }}" data-gallery-slide data-gallery-media-type="{{ $item.type }}" data-caption="{{ $item.caption }}" data-index="{{ $index }}"{{ if $isVideo }} data-youtube-id="{{ $item.id }}"{{ end }}{{ if ne $index 0 }} hidden{{ end }}>
                 {{ if $isVideo }}
                 <a class="project-gallery-video-poster" href="https://www.youtube.com/watch?v={{ $item.id }}" target="_blank" rel="noopener" data-gallery-video-open aria-label="Play video {{ add $index 1 }} of {{ $count }}: {{ $item.caption }}">
-                    <img src="https://i.ytimg.com/vi/{{ $item.id }}/hqdefault.jpg" alt="" data-gallery-youtube-thumbnail{{ if eq $index 0 }} loading="eager" fetchpriority="high"{{ else }} loading="lazy"{{ end }}>
+                    <img src="https://i.ytimg.com/vi/{{ $item.id }}/maxresdefault.jpg" alt="" data-gallery-youtube-thumbnail data-gallery-youtube-id="{{ $item.id }}"{{ if eq $index 0 }} loading="eager" fetchpriority="high"{{ else }} loading="lazy"{{ end }}>
                     <span class="project-gallery-video-play" aria-hidden="true"><span>▶</span></span>
                 </a>
                 <div class="project-gallery-video-player" data-gallery-video-player hidden></div>
@@ -49,7 +49,7 @@
             <button type="button" data-gallery-thumbnail data-gallery-index="{{ $index }}" aria-label="Show {{ $kind }} {{ add $index 1 }}: {{ $item.caption }}"{{ if eq $index 0 }} aria-current="true"{{ end }}>
                 {{ if $isVideo }}
                 <span class="project-gallery-thumbnail-video">
-                    <img src="https://i.ytimg.com/vi/{{ $item.id }}/hqdefault.jpg" alt="" loading="lazy" data-gallery-youtube-thumbnail>
+                    <img src="https://i.ytimg.com/vi/{{ $item.id }}/maxresdefault.jpg" alt="" loading="lazy" data-gallery-youtube-thumbnail data-gallery-youtube-id="{{ $item.id }}">
                     <span aria-hidden="true">▶</span>
                 </span>
                 {{ else }}
@@ -75,7 +75,7 @@
                 {{- $firstVideo := index $videos 0 -}}
                 <div class="project-gallery-dialog-video" data-gallery-dialog-video data-youtube-id="{{ $firstVideo.id }}" hidden>
                     <a class="project-gallery-video-poster" href="https://www.youtube.com/watch?v={{ $firstVideo.id }}" target="_blank" rel="noopener" data-gallery-dialog-video-open aria-label="Play video: {{ $firstVideo.caption }}">
-                        <img src="https://i.ytimg.com/vi/{{ $firstVideo.id }}/hqdefault.jpg" alt="" data-gallery-youtube-thumbnail>
+                        <img src="https://i.ytimg.com/vi/{{ $firstVideo.id }}/maxresdefault.jpg" alt="" data-gallery-youtube-thumbnail data-gallery-youtube-id="{{ $firstVideo.id }}">
                         <span class="project-gallery-video-play" aria-hidden="true"><span>▶</span></span>
                     </a>
                     <div class="project-gallery-video-player" data-gallery-dialog-video-player hidden></div>
