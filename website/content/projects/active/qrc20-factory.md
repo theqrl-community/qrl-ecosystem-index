@@ -48,6 +48,8 @@ project_type: tooling
 publisher:
     name: DigitalGuards
     url: https://github.com/DigitalGuards/QRC20-Factory
+publishers:
+    - DigitalGuards
 qrl_environments: []
 qrl_generations:
     - "2.0"

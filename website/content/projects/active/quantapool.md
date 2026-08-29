@@ -82,6 +82,8 @@ project_type: protocol
 publisher:
     name: DigitalGuards
     url: https://github.com/DigitalGuards/QuantaPool
+publishers:
+    - DigitalGuards
 qrl_environments:
     - testnet
 qrl_generations:

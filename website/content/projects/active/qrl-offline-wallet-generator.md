@@ -64,6 +64,8 @@ project_type: application
 publisher:
     name: The QRL
     url: https://github.com/theQRL/offline-wallet-generator
+publishers:
+    - The QRL
 qrl_environments:
     - mainnet
 qrl_generations:

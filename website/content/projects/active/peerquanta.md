@@ -64,6 +64,8 @@ project_type: application
 publisher:
     name: PeerQuanta
     url: https://peerquanta.com/
+publishers:
+    - PeerQuanta
 qrl_environments:
     - testnet
 qrl_generations:

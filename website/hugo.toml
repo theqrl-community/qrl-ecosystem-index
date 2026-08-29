@@ -30,6 +30,7 @@ openGraphDefaultImage = "/images/og/default.png"
 category = "categories"
 capability = "capabilities"
 maintainer = "maintainers"
+publisher = "publishers"
 project_type = "project-types"
 
 [markup.goldmark.renderer]

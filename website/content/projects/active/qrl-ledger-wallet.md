@@ -59,6 +59,8 @@ project_type: application
 publisher:
     name: The QRL
     url: https://github.com/theQRL/ledger-qrl-app
+publishers:
+    - The QRL
 qrl_environments:
     - mainnet
 qrl_generations:

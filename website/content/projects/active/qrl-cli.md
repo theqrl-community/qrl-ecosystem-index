@@ -50,6 +50,8 @@ project_type: tooling
 publisher:
     name: The QRL Foundation
     url: https://github.com/theQRL/qrl-cli
+publishers:
+    - The QRL Foundation
 qrl_environments: []
 qrl_generations:
     - 1.x

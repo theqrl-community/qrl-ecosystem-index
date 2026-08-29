@@ -49,6 +49,8 @@ project_type: tooling
 publisher:
     name: DigitalGuards
     url: https://github.com/DigitalGuards/myqrlwallet-connect
+publishers:
+    - DigitalGuards
 qrl_environments: []
 qrl_generations:
     - "2.0"

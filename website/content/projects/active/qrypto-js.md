@@ -46,6 +46,8 @@ project_type: tooling
 publisher:
     name: The QRL
     url: https://github.com/theQRL/qrypto.js
+publishers:
+    - The QRL
 qrl_environments: []
 qrl_generations:
     - "2.0"

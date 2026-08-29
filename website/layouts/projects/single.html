@@ -13,6 +13,8 @@
 {{- if not $initials }}{{ $initials = "QI" }}{{ end -}}
 {{- $logoURL := "" -}}
 {{- with .Params.logos }}{{ with index . 0 }}{{ with .path }}{{ $logoURL = printf "/images/logos/%s" . }}{{ end }}{{ end }}{{ end -}}
+{{- $publisherPage := false -}}
+{{- with .GetTerms "publishers" }}{{ with index . 0 }}{{ $publisherPage = . }}{{ end }}{{ end -}}
 
 <article class="project-page{{ with .Params.gallery }} project-page-has-gallery{{ end }}">
     <a class="back-link" href="{{ relURL "/projects/" }}" data-project-back-link><span aria-hidden="true">←</span> All projects</a>
@@ -45,7 +47,7 @@
         <aside class="project-quick-facts">
             <p class="eyebrow">Listing facts</p>
             <dl class="facts-list">
-                <dt>Publisher</dt><dd>{{ with .Params.publisher }}{{ with .url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $.Params.publisher.name }}</a>{{ else }}{{ .name }}{{ end }}{{ end }}</dd>
+                <dt>Publisher</dt><dd>{{ with .Params.publisher }}{{ with $publisherPage }}<a href="{{ .RelPermalink }}">{{ $.Params.publisher.name }}</a>{{ else }}{{ .name }}{{ end }}{{ end }}</dd>
                 <dt>QRL relationship</dt><dd>{{ .Params.qrl_relationship | humanize | title }}</dd>
                 <dt>QRL generations</dt><dd>{{ range $index, $generation := .Params.qrl_generations }}{{ if $index }}, {{ end }}QRL {{ $generation }}{{ end }}</dd>
                 <dt>Source</dt><dd>{{ .Params.source_availability | humanize | title }}</dd>

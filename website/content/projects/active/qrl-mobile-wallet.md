@@ -59,6 +59,8 @@ project_type: application
 publisher:
     name: Volt Development
     url: https://qrl-wallet.com/
+publishers:
+    - Volt Development
 qrl_environments:
     - mainnet
 qrl_generations:

@@ -54,6 +54,8 @@ project_type: application
 publisher:
     name: The QRL
     url: https://github.com/theQRL/zeus
+publishers:
+    - The QRL
 qrl_environments:
     - mainnet
     - testnet

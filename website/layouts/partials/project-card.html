@@ -21,6 +21,10 @@
 {{- $galleryImages := where ($project.Params.gallery | default slice) "type" "image" -}}
 {{- $previewImage := false -}}
 {{- if gt (len $galleryImages) 0 }}{{ $previewImage = index $galleryImages 0 }}{{ end -}}
+{{- $publisherPage := false -}}
+{{- with $project.GetTerms "publishers" -}}
+    {{- with index . 0 }}{{ $publisherPage = . }}{{ end -}}
+{{- end -}}
 <article class="project-card"
     data-project
     data-sort-title="{{ $project.Title }}"
@@ -61,7 +65,7 @@
         </div>
     </div>
     <div class="project-card-footer">
-        {{ with $project.Params.publisher }}{{ with .url }}<a class="project-card-author" href="{{ . }}" target="_blank" rel="noopener">By {{ $project.Params.publisher.name }} <span aria-hidden="true">↗</span></a>{{ else }}<span class="project-card-author">By {{ .name }}</span>{{ end }}{{ end }}
+        {{ with $project.Params.publisher }}{{ with $publisherPage }}<a class="project-card-author" href="{{ .RelPermalink }}">By {{ $project.Params.publisher.name }}</a>{{ else }}<span class="project-card-author">By {{ .name }}</span>{{ end }}{{ end }}
         {{ with $visitURL }}
         <a class="card-action" href="{{ . }}" target="_blank" rel="noopener">Visit project <span aria-hidden="true">↗</span></a>
         {{ else }}

@@ -46,6 +46,8 @@ project_type: tooling
 publisher:
     name: The QRL Community
     url: https://github.com/theqrl-community/qrl-helpers
+publishers:
+    - The QRL Community
 qrl_environments: []
 qrl_generations:
     - "2.0"

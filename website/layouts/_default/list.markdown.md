@@ -10,6 +10,8 @@
     {{- $capabilityMeta := partial "capability-meta.html" .Data.Term -}}
     {{- $heading = $capabilityMeta.label -}}
     {{- $description = $capabilityMeta.description -}}
+{{- else if and .Data.Term (eq .Data.Plural "publishers") -}}
+    {{- $description = printf "Projects published by %s." $heading -}}
 {{- end -}}# {{ $heading }}
 
 {{- with $description }}

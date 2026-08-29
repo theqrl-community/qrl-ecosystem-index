@@ -55,6 +55,8 @@ project_type: resource
 publisher:
     name: QRL Hub
     url: https://qrlhub.com/
+publishers:
+    - QRL Hub
 qrl_environments: []
 qrl_generations:
     - 1.x

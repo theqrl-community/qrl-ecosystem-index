@@ -56,6 +56,8 @@ project_type: infrastructure
 publisher:
     name: HeroMiners
     url: https://qrl.herominers.com/
+publishers:
+    - HeroMiners
 qrl_environments:
     - mainnet
 qrl_generations:

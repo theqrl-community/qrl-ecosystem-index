@@ -60,6 +60,8 @@ project_type: application
 publisher:
     name: The QRL
     url: https://github.com/theQRL/block-explorer
+publishers:
+    - The QRL
 qrl_environments:
     - mainnet
 qrl_generations:

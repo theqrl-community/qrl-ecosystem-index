@@ -3,7 +3,7 @@
 {{ $isCategoryIndex := and (eq .Data.Plural "categories") (not .Data.Term) }}
 {{ $isCapabilityIndex := and (eq .Data.Plural "capabilities") (not .Data.Term) }}
 {{ $isTaxonomyIndex := and .Data.Terms (not .Data.Term) }}
-{{ $isTermPage := and .Data.Term (in (slice "capabilities" "categories" "maintainers" "project-types") .Data.Plural) }}
+{{ $isTermPage := and .Data.Term (in (slice "capabilities" "categories" "maintainers" "project-types" "publishers") .Data.Plural) }}
 {{ $showsProjectCards := or (eq .Section "projects") $isTermPage }}
 {{ $heading := .Title }}
 {{ $description := "" }}
@@ -19,6 +19,8 @@
     {{ $meta := partial "capability-meta.html" .Data.Term }}
     {{ $heading = $meta.label }}
     {{ $description = $meta.description }}
+{{ else if and .Data.Term (eq .Data.Plural "publishers") }}
+    {{ $description = printf "Projects published by %s." $heading }}
 {{ end }}
 
 <section class="page-hero page-hero-compact">

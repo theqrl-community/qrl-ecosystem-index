@@ -48,6 +48,8 @@ project_type: infrastructure
 publisher:
     name: The QRL
     url: https://github.com/theQRL/QRL
+publishers:
+    - The QRL
 qrl_environments:
     - mainnet
     - testnet

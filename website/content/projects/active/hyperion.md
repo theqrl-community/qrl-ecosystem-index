@@ -51,6 +51,8 @@ project_type: tooling
 publisher:
     name: The QRL
     url: https://github.com/theQRL/hyperion
+publishers:
+    - The QRL
 qrl_environments: []
 qrl_generations:
     - "2.0"

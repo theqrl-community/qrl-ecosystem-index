@@ -47,6 +47,8 @@ project_type: tooling
 publisher:
     name: The QRL Contributors
     url: https://github.com/theQRL/web3.js
+publishers:
+    - The QRL Contributors
 qrl_environments: []
 qrl_generations:
     - "2.0"

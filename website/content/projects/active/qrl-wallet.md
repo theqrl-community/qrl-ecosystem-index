@@ -67,6 +67,8 @@ project_type: application
 publisher:
     name: The QRL
     url: https://github.com/theQRL/qrl-wallet
+publishers:
+    - The QRL
 qrl_environments:
     - mainnet
     - testnet

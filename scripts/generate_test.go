@@ -166,7 +166,7 @@ func TestProjectPageContentOmitsEmptyBody(t *testing.T) {
 	}
 }
 
-func TestGenerateProjectPageAddsExactMaintainerTaxonomy(t *testing.T) {
+func TestGenerateProjectPageAddsExactAttributionTaxonomies(t *testing.T) {
 	workingDirectory, err := os.Getwd()
 	if err != nil {
 		t.Fatalf("get working directory: %v", err)
@@ -219,6 +219,7 @@ func TestGenerateProjectPageAddsExactMaintainerTaxonomy(t *testing.T) {
 		Platforms       []string         `yaml:"platforms"`
 		DisplayStatus   string           `yaml:"display_status"`
 		Publisher       Publisher        `yaml:"publisher"`
+		Publishers      []string         `yaml:"publishers"`
 		Maintainers     []string         `yaml:"maintainers"`
 		SecurityReviews []SecurityReview `yaml:"security_reviews"`
 	}
@@ -227,6 +228,9 @@ func TestGenerateProjectPageAddsExactMaintainerTaxonomy(t *testing.T) {
 	}
 	if metadata.Publisher.Name != "The QRL" {
 		t.Fatalf("generated publisher = %q, want %q", metadata.Publisher.Name, "The QRL")
+	}
+	if !reflect.DeepEqual(metadata.Publishers, []string{"The QRL"}) {
+		t.Fatalf("generated publisher taxonomy = %#v, want [The QRL]", metadata.Publishers)
 	}
 	if len(metadata.Maintainers) != 1 || metadata.Maintainers[0] != "The QRL" {
 		t.Fatalf("generated maintainers = %#v, want [The QRL]", metadata.Maintainers)

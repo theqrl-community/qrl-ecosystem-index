@@ -54,6 +54,8 @@ project_type: application
 publisher:
     name: Quantum Future Limited and Volt Development
     url: https://qrl-zond.com/create-token
+publishers:
+    - Quantum Future Limited and Volt Development
 qrl_environments:
     - testnet
 qrl_generations:

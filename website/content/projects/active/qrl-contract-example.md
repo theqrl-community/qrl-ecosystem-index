@@ -47,6 +47,8 @@ project_type: tooling
 publisher:
     name: The QRL
     url: https://github.com/theQRL/qrl-contract-example
+publishers:
+    - The QRL
 qrl_environments: []
 qrl_generations:
     - "2.0"

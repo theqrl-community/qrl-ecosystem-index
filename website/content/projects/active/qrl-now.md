@@ -58,6 +58,8 @@ project_type: application
 publisher:
     name: Matasx
     url: https://github.com/Matasx
+publishers:
+    - Matasx
 qrl_environments: []
 qrl_generations:
     - 1.x

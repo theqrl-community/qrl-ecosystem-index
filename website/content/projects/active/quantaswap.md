@@ -80,6 +80,8 @@ project_type: protocol
 publisher:
     name: DigitalGuards
     url: https://github.com/DigitalGuards/QuantaSwap
+publishers:
+    - DigitalGuards
 qrl_environments:
     - testnet
 qrl_generations:

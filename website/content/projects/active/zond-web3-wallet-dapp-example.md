@@ -48,6 +48,8 @@ project_type: tooling
 publisher:
     name: The QRL
     url: https://github.com/theQRL/zond-web3-wallet-dapp-example
+publishers:
+    - The QRL
 qrl_environments: []
 qrl_generations:
     - "2.0"

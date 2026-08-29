@@ -61,6 +61,8 @@ project_type: application
 publisher:
     name: DigitalGuards
     url: https://github.com/DigitalGuards/zondscan
+publishers:
+    - DigitalGuards
 qrl_environments:
     - testnet
 qrl_generations:

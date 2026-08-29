@@ -58,6 +58,8 @@ project_type: infrastructure
 publisher:
     name: MiningOcean
     url: https://qrl.miningocean.org/
+publishers:
+    - MiningOcean
 qrl_environments:
     - mainnet
 qrl_generations:

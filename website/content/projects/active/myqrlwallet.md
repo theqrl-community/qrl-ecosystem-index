@@ -81,6 +81,8 @@ project_type: application
 publisher:
     name: DigitalGuards
     url: https://github.com/DigitalGuards/myqrlwallet-frontend/
+publishers:
+    - DigitalGuards
 qrl_environments:
     - testnet
 qrl_generations:

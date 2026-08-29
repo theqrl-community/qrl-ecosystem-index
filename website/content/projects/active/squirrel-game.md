@@ -61,6 +61,8 @@ project_type: protocol
 publisher:
     name: PhuocNG0308
     url: https://github.com/PhuocNG0308/squirrel-game
+publishers:
+    - PhuocNG0308
 qrl_environments:
     - testnet
 qrl_generations:

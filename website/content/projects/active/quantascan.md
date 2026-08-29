@@ -74,6 +74,8 @@ project_type: application
 publisher:
     name: 12remember
     url: https://quantascan.io
+publishers:
+    - 12remember
 qrl_environments:
     - mainnet
     - testnet

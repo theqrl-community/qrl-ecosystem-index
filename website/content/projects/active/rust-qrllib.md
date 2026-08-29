@@ -48,6 +48,8 @@ project_type: tooling
 publisher:
     name: The QRL
     url: https://github.com/theQRL/rust-qrllib
+publishers:
+    - The QRL
 qrl_environments: []
 qrl_generations:
     - 1.x

@@ -19,7 +19,7 @@
 {{- end }}
 - QRL relationship: {{ .Params.qrl_relationship | humanize }}
 - QRL support: {{ range $index, $support := .Params.qrl_support }}{{ if $index }}; {{ end }}QRL {{ $support.generation }}{{ with $support.environments }} ({{ delimit . ", " }}){{ end }}{{ end }}
-- Publisher: {{ with .Params.publisher.url }}[{{ $.Params.publisher.name }}]({{ . }}){{ else }}{{ .Params.publisher.name }}{{ end }}
+- Publisher: {{ with .GetTerms "publishers" }}{{ range first 1 . }}[{{ $.Params.publisher.name }}]({{ with .OutputFormats.Get "markdown" }}{{ .Permalink }}{{ else }}{{ .Permalink }}{{ end }}){{ end }}{{ else }}{{ .Params.publisher.name }}{{ end }}
 - Source availability: {{ .Params.source_availability | humanize }}
 - Listed: {{ .Params.listed_at }}
 - Data updated: {{ .Params.data_updated_at }}

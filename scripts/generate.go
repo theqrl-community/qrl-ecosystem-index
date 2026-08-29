@@ -538,6 +538,7 @@ func generateProjectPage(p Project) {
 		"qrl_generations":      qrlGenerations(p),
 		"qrl_environments":     qrlEnvironments(p),
 		"publisher":            p.Publisher,
+		"publishers":           []string{p.Publisher.Name},
 		"maintainer_records":   p.Maintainers,
 		"maintainers":          maintainerNames,
 		"source_availability":  p.SourceAvailability,
