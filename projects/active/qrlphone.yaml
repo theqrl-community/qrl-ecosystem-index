@@ -1,0 +1,53 @@
+id: qrlphone
+name: QRLphone
+project_type: application
+primary_category: security-custody-account-management
+secondary_categories:
+  - identity-naming-privacy
+capabilities:
+  - wallet
+  - hardware-wallet
+  - key-management
+platforms:
+  - mobile
+keywords:
+  - hsm
+  - ml-dsa
+  - mobile
+  - custody
+maturity: prototype
+availability: limited
+maintenance: active
+qrl_relationship: native
+qrl_support:
+  - generation: '2.0'
+    environments:
+      - local-private
+description: >
+  Post-quantum mobile phone and hardware-wallet platform with a QRL-first
+  wallet, 64-byte Q-addresses, and an HSM crypto-service interface. Source
+  is not published; development uses a private 64-byte localnet.
+publisher:
+  name: pq-cybarg
+  url: https://pq-cybarg.github.io/
+maintainers:
+  - name: pq-cybarg
+    contact: https://github.com/pq-cybarg
+source_availability: unavailable
+repositories: []
+links:
+  - type: website
+    url: https://pq-cybarg.github.io/
+    primary: true
+listed_at: '2026-09-02'
+data_updated_at: '2026-09-02'
+last_verified_at: '2026-09-02'
+features:
+  - QRL 2.0 wallet path with ML-DSA-87 and 64-byte Q-addresses
+  - Crypto Service Interface plus software HSM emulator
+  - FIDO2 authenticator and custody work in the same tree
+  - No public firmware image or contract address
+long_description: |
+  QRLphone is unpublished prototype software. Listings do not include
+  20-byte testnet addresses because the active development net is a
+  modified QRL 2.0 localnet with 64-byte addresses.
