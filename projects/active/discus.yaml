@@ -1,0 +1,60 @@
+id: discus
+name: Discus
+project_type: application
+primary_category: social-creator-content
+secondary_categories:
+  - identity-naming-privacy
+  - governance-coordination
+capabilities:
+  - wallet-connector
+  - key-management
+platforms:
+  - web
+  - desktop
+  - mobile
+keywords:
+  - matrix
+  - chat
+  - hyperion
+  - governance
+  - ml-dsa
+maturity: prototype
+availability: limited
+maintenance: active
+qrl_relationship: native
+qrl_support:
+  - generation: '2.0'
+    environments:
+      - local-private
+description: >
+  A post-quantum Matrix-based Discord alternative with wallet login, Hyperion
+  registry work, and 64-byte QRL 2.0 addresses on a private localnet. Source
+  is not published; there is no public contract address.
+publisher:
+  name: pq-cybarg
+  url: https://pq-cybarg.github.io/
+maintainers:
+  - name: pq-cybarg
+    contact: https://github.com/pq-cybarg
+source_availability: unavailable
+repositories: []
+links:
+  - type: website
+    url: https://pq-cybarg.github.io/
+    primary: true
+listed_at: '2026-09-02'
+data_updated_at: '2026-09-02'
+last_verified_at: '2026-09-02'
+features:
+  - Matrix-shaped servers, channels, threads, and bridges
+  - Wallet challenge login into a patched Synapse homeserver
+  - QRL 2.0 Hyperion registry using 64-byte Q-addresses on local-private net
+  - ML-KEM-1024 and ML-DSA-87 on Discus-owned crypto paths
+relationships:
+  - type: uses-protocol
+    project_id: valence
+long_description: |
+  Discus is unpublished prototype software. Chain integration targets a
+  modified QRL 2.0 localnet with 64-byte addresses. No public testnet or
+  mainnet contract identifiers are listed. Storage can use the Valence
+  erasure-coded network.

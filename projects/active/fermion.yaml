@@ -1,0 +1,58 @@
+id: fermion
+name: Fermion
+project_type: application
+primary_category: social-creator-content
+secondary_categories:
+  - identity-naming-privacy
+  - security-custody-account-management
+capabilities:
+  - key-management
+  - wallet-connector
+platforms:
+  - web
+  - desktop
+  - mobile
+keywords:
+  - element
+  - matrix
+  - chat
+  - ml-dsa
+maturity: prototype
+availability: limited
+maintenance: active
+qrl_relationship: integrated
+qrl_support:
+  - generation: '2.0'
+    environments:
+      - local-private
+description: >
+  Hard fork of Element Web, Desktop, and Android as the Quantrix client
+  family. QRL 2.0 account login is planned. Source is not published and
+  there is no public hosted app.
+publisher:
+  name: pq-cybarg
+  url: https://pq-cybarg.github.io/
+maintainers:
+  - name: pq-cybarg
+    contact: https://github.com/pq-cybarg
+source_availability: unavailable
+repositories: []
+links:
+  - type: website
+    url: https://pq-cybarg.github.io/
+    primary: true
+listed_at: '2026-09-02'
+data_updated_at: '2026-09-02'
+last_verified_at: '2026-09-02'
+features:
+  - Element Web, Desktop, and Android hard forks
+  - Native secure core for desktop key custody
+  - Talks to a Quantrix homeserver rather than classical Matrix E2EE
+  - Planned QRL 2.0 login; not a public feature yet
+relationships:
+  - type: frontend-for
+    project_id: quantrix
+long_description: |
+  Fermion is unpublished prototype client software. It is listed separately
+  from Quantrix so the homeserver and the user-facing clients can be
+  classified independently.

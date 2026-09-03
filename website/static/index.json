@@ -1,6 +1,6 @@
 {
-  "count": 42,
-  "generated_at": "2026-08-25T17:50:19Z",
+  "count": 49,
+  "generated_at": "2026-09-03T02:33:48Z",
   "projects": [
     {
       "id": "acornswap",
@@ -62,6 +62,202 @@
         {
           "type": "website",
           "url": "https://github.com/PhuocNG0308/acorn-swap",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": "arql",
+      "name": "ARQL",
+      "project_type": "protocol",
+      "primary_category": "interoperability-messaging-data",
+      "secondary_categories": [
+        "finance",
+        "assets-tokenization"
+      ],
+      "capabilities": [
+        "payments",
+        "faucet"
+      ],
+      "platforms": [],
+      "keywords": [
+        "usdc",
+        "qrc20",
+        "bridge",
+        "hyperion",
+        "cctp"
+      ],
+      "maturity": "beta",
+      "availability": "live",
+      "maintenance": "active",
+      "display_status": "Beta · Testnet",
+      "qrl_relationship": "native",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": [
+            "testnet"
+          ],
+          "evidence": [
+            "https://github.com/pq-cybarg/arql",
+            "https://zondscan.com/address/Qadf94bb6e061a9f3b1d54826241eba701d43fb86"
+          ]
+        }
+      ],
+      "deployments": [
+        {
+          "id": "qrl-2-testnet-v2",
+          "network": "qrl-2-testnet-v2",
+          "operational_state": "live",
+          "identifiers": [
+            {
+              "type": "token",
+              "value": "Qadf94bb6e061a9f3b1d54826241eba701d43fb86",
+              "role": "qrc20-usdc"
+            },
+            {
+              "type": "contract",
+              "value": "Q89b8cdf9bddba27ac48938bd82d99f33796bcc05",
+              "role": "minter"
+            },
+            {
+              "type": "contract",
+              "value": "Q360b826e5290ae8ebb0b58318c12085cb37d9dd8",
+              "role": "sealed-bridge"
+            }
+          ],
+          "evidence": [
+            "https://github.com/pq-cybarg/arql/blob/main/deployments/qrl-testnet.json",
+            "https://zondscan.com/address/Qadf94bb6e061a9f3b1d54826241eba701d43fb86"
+          ],
+          "source_verification": "unverified"
+        }
+      ],
+      "description": "A CCTP-shaped lock-and-mint path that locks native Circle USDC on Arc Testnet and mints a 6-decimal QRC-20 USD Coin on QRL 2.0, with Hyperion contracts, an Iris-style attester API, and a public settlement desk.",
+      "primary_url": "https://pq-cybarg.github.io/arql/",
+      "source_availability": "full",
+      "repositories": [
+        {
+          "id": "main",
+          "role": "contracts",
+          "url": "https://github.com/pq-cybarg/arql",
+          "license": "NOASSERTION"
+        }
+      ],
+      "links": [
+        {
+          "type": "website",
+          "url": "https://github.com/pq-cybarg/arql"
+        },
+        {
+          "type": "application",
+          "url": "https://pq-cybarg.github.io/arql/",
+          "platform": "web",
+          "primary": true
+        },
+        {
+          "type": "documentation",
+          "url": "https://github.com/pq-cybarg/arql/blob/main/docs/architecture.md"
+        }
+      ]
+    },
+    {
+      "id": "discus",
+      "name": "Discus",
+      "project_type": "application",
+      "primary_category": "social-creator-content",
+      "secondary_categories": [
+        "identity-naming-privacy",
+        "governance-coordination"
+      ],
+      "capabilities": [
+        "wallet-connector",
+        "key-management"
+      ],
+      "platforms": [
+        "web",
+        "desktop",
+        "mobile"
+      ],
+      "keywords": [
+        "matrix",
+        "chat",
+        "hyperion",
+        "governance",
+        "ml-dsa"
+      ],
+      "maturity": "prototype",
+      "availability": "limited",
+      "maintenance": "active",
+      "display_status": "Limited",
+      "qrl_relationship": "native",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": [
+            "local-private"
+          ]
+        }
+      ],
+      "deployments": [],
+      "description": "A post-quantum Matrix-based Discord alternative with wallet login, Hyperion registry work, and 64-byte QRL 2.0 addresses on a private localnet. Source is not published; there is no public contract address.",
+      "primary_url": "https://pq-cybarg.github.io/",
+      "source_availability": "unavailable",
+      "repositories": [],
+      "links": [
+        {
+          "type": "website",
+          "url": "https://pq-cybarg.github.io/",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": "fermion",
+      "name": "Fermion",
+      "project_type": "application",
+      "primary_category": "social-creator-content",
+      "secondary_categories": [
+        "identity-naming-privacy",
+        "security-custody-account-management"
+      ],
+      "capabilities": [
+        "key-management",
+        "wallet-connector"
+      ],
+      "platforms": [
+        "web",
+        "desktop",
+        "mobile"
+      ],
+      "keywords": [
+        "element",
+        "matrix",
+        "chat",
+        "ml-dsa"
+      ],
+      "maturity": "prototype",
+      "availability": "limited",
+      "maintenance": "active",
+      "display_status": "Limited",
+      "qrl_relationship": "integrated",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": [
+            "local-private"
+          ]
+        }
+      ],
+      "deployments": [],
+      "description": "Hard fork of Element Web, Desktop, and Android as the Quantrix client family. QRL 2.0 account login is planned. Source is not published and there is no public hosted app.",
+      "primary_url": "https://pq-cybarg.github.io/",
+      "source_availability": "unavailable",
+      "repositories": [],
+      "links": [
+        {
+          "type": "website",
+          "url": "https://pq-cybarg.github.io/",
           "primary": true
         }
       ]
@@ -1755,6 +1951,54 @@
       ]
     },
     {
+      "id": "qrlphone",
+      "name": "QRLphone",
+      "project_type": "application",
+      "primary_category": "security-custody-account-management",
+      "secondary_categories": [
+        "identity-naming-privacy"
+      ],
+      "capabilities": [
+        "wallet",
+        "hardware-wallet",
+        "key-management"
+      ],
+      "platforms": [
+        "mobile"
+      ],
+      "keywords": [
+        "hsm",
+        "ml-dsa",
+        "mobile",
+        "custody"
+      ],
+      "maturity": "prototype",
+      "availability": "limited",
+      "maintenance": "active",
+      "display_status": "Limited",
+      "qrl_relationship": "native",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": [
+            "local-private"
+          ]
+        }
+      ],
+      "deployments": [],
+      "description": "Post-quantum mobile phone and hardware-wallet platform with a QRL-first wallet, 64-byte Q-addresses, and an HSM crypto-service interface. Source is not published; development uses a private 64-byte localnet.",
+      "primary_url": "https://pq-cybarg.github.io/",
+      "source_availability": "unavailable",
+      "repositories": [],
+      "links": [
+        {
+          "type": "website",
+          "url": "https://pq-cybarg.github.io/",
+          "primary": true
+        }
+      ]
+    },
+    {
       "id": "qrlwallet-connect",
       "name": "QRL Wallet Connect",
       "project_type": "tooling",
@@ -2127,6 +2371,51 @@
       "logo": "/images/logos/quantaswap/icon.svg"
     },
     {
+      "id": "quantrix",
+      "name": "Quantrix",
+      "project_type": "infrastructure",
+      "primary_category": "identity-naming-privacy",
+      "secondary_categories": [
+        "social-creator-content"
+      ],
+      "capabilities": [
+        "key-management"
+      ],
+      "platforms": [],
+      "keywords": [
+        "matrix",
+        "synapse",
+        "ml-kem",
+        "ml-dsa",
+        "messaging"
+      ],
+      "maturity": "prototype",
+      "availability": "limited",
+      "maintenance": "active",
+      "display_status": "Limited",
+      "qrl_relationship": "integrated",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": [
+            "local-private"
+          ]
+        }
+      ],
+      "deployments": [],
+      "description": "Post-quantum Matrix-shaped homeserver stack (Synapse hard fork plus PQ-Olm and PQ-Megolm) using ML-KEM-1024 and ML-DSA-87. QRL 2.0 login is planned. Source is not published.",
+      "primary_url": "https://pq-cybarg.github.io/",
+      "source_availability": "unavailable",
+      "repositories": [],
+      "links": [
+        {
+          "type": "website",
+          "url": "https://pq-cybarg.github.io/",
+          "primary": true
+        }
+      ]
+    },
+    {
       "id": "rust-qrllib",
       "name": "Rust QRLLIB",
       "project_type": "tooling",
@@ -2242,6 +2531,118 @@
         {
           "type": "website",
           "url": "https://github.com/PhuocNG0308/squirrel-game",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": "talkrypt",
+      "name": "talkrypt",
+      "project_type": "application",
+      "primary_category": "interoperability-messaging-data",
+      "secondary_categories": [
+        "social-creator-content",
+        "identity-naming-privacy"
+      ],
+      "capabilities": [
+        "cli",
+        "key-management"
+      ],
+      "platforms": [
+        "desktop",
+        "mobile"
+      ],
+      "keywords": [
+        "p2p",
+        "chat",
+        "tor",
+        "side-channel",
+        "ml-dsa"
+      ],
+      "maturity": "prototype",
+      "availability": "live",
+      "maintenance": "active",
+      "display_status": "Prototype",
+      "qrl_relationship": "integrated",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": []
+        }
+      ],
+      "deployments": [],
+      "description": "Post-quantum P2P chat for side-channel and resilient communications across more than one network type. Public CLI, TUI, and Android builds use ML-KEM-1024 and ML-DSA-87. QRL 2.0 account login is planned and is not in the published tree yet.",
+      "primary_url": "https://pq-cybarg.github.io/talkrypt/",
+      "source_availability": "full",
+      "repositories": [
+        {
+          "id": "main",
+          "role": "client",
+          "url": "https://github.com/pq-cybarg/talkrypt",
+          "license": "Apache-2.0"
+        }
+      ],
+      "links": [
+        {
+          "type": "website",
+          "url": "https://github.com/pq-cybarg/talkrypt"
+        },
+        {
+          "type": "application",
+          "url": "https://pq-cybarg.github.io/talkrypt/",
+          "platform": "web",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": "valence",
+      "name": "Valence",
+      "project_type": "protocol",
+      "primary_category": "utility-storage-compute",
+      "secondary_categories": [],
+      "capabilities": [
+        "notarization"
+      ],
+      "platforms": [],
+      "keywords": [
+        "erasure-coding",
+        "reed-solomon",
+        "p2p",
+        "storage",
+        "sliver"
+      ],
+      "maturity": "prototype",
+      "availability": "limited",
+      "maintenance": "active",
+      "display_status": "Limited",
+      "qrl_relationship": "native",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": [
+            "local-private"
+          ]
+        }
+      ],
+      "deployments": [
+        {
+          "id": "qrl-2-local-private",
+          "network": "qrl-2-local-private",
+          "operational_state": "limited",
+          "identifiers": [],
+          "evidence": [],
+          "source_verification": "unverified"
+        }
+      ],
+      "description": "Erasure-coded decentralized storage network using a custom multi-dimensional Reed-Solomon design (ND-encoding): slivers, per-dimension repair, and Merkle commitments. Prototype on a private 64-byte QRL 2.0 localnet; no public contract address.",
+      "primary_url": "https://pq-cybarg.github.io/",
+      "source_availability": "unavailable",
+      "repositories": [],
+      "links": [
+        {
+          "type": "website",
+          "url": "https://pq-cybarg.github.io/",
           "primary": true
         }
       ]

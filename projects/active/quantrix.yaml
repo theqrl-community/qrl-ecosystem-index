@@ -1,0 +1,50 @@
+id: quantrix
+name: Quantrix
+project_type: infrastructure
+primary_category: identity-naming-privacy
+secondary_categories:
+  - social-creator-content
+capabilities:
+  - key-management
+platforms: []
+keywords:
+  - matrix
+  - synapse
+  - ml-kem
+  - ml-dsa
+  - messaging
+maturity: prototype
+availability: limited
+maintenance: active
+qrl_relationship: integrated
+qrl_support:
+  - generation: '2.0'
+    environments:
+      - local-private
+description: >
+  Post-quantum Matrix-shaped homeserver stack (Synapse hard fork plus PQ-Olm
+  and PQ-Megolm) using ML-KEM-1024 and ML-DSA-87. QRL 2.0 login is planned.
+  Source is not published.
+publisher:
+  name: pq-cybarg
+  url: https://pq-cybarg.github.io/
+maintainers:
+  - name: pq-cybarg
+    contact: https://github.com/pq-cybarg
+source_availability: unavailable
+repositories: []
+links:
+  - type: website
+    url: https://pq-cybarg.github.io/
+    primary: true
+listed_at: '2026-09-02'
+data_updated_at: '2026-09-02'
+last_verified_at: '2026-09-02'
+features:
+  - Hard-forked Synapse with a post-quantum crypto allow-list
+  - PQ-Olm and PQ-Megolm messaging
+  - ML-KEM-1024, ML-DSA-87, AES-256-GCM
+  - Planned QRL 2.0 account login on a 64-byte local-private net
+long_description: |
+  Quantrix is unpublished lab software. Fermion is the client family for
+  this homeserver. QRL login is intended and is not a public feature yet.
