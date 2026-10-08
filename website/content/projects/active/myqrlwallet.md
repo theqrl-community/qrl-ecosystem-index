@@ -10,7 +10,7 @@ categories:
     - security-custody-account-management
     - payments-commerce
     - assets-tokenization
-data_updated_at: "2026-08-25"
+data_updated_at: "2026-10-05"
 description: 'A family of wallet applications for QRL 2.0: web wallet, Android app, desktop wallet, and browser extension, with post-quantum dApp connectivity over the QRL Connect relay protocol.'
 display_status: Beta · Testnet
 features:
@@ -20,14 +20,17 @@ features:
     - dApp connectivity via the QRL Connect relay protocol (ML-KEM-768 + AES-256-GCM, ML-DSA-87 signing)
 gallery:
     - type: image
-      path: myqrlwallet/wallet-suite.jpg
-      caption: MyQRLWallet landing page introducing the post-quantum wallet suite for web, desktop, mobile, and browser extensions.
+      path: myqrlwallet/landing.jpg
+      caption: MyQRLWallet landing page with the wallet suite for web, desktop, Android, and browser.
     - type: image
       path: myqrlwallet/platforms.jpg
-      caption: Platform overview highlighting the web wallet, browser extension, and hardened desktop application.
+      caption: Platform overview listing the web wallet, desktop app, mobile app, and browser extension.
     - type: image
-      path: myqrlwallet/product-tour.jpg
-      caption: Product tour showing the desktop and mobile wallet dashboard with balances, transfers, and token management.
+      path: myqrlwallet/self-custody.jpg
+      caption: Self-custody, ML-DSA-87 signing, and encrypted dApp connections explained on the landing page.
+    - type: image
+      path: myqrlwallet/ecosystem.jpg
+      caption: Ecosystem section linking the wallet to QuantaSwap and QuantaPool.
 id: myqrlwallet
 keywords:
     - wallet
@@ -47,9 +50,9 @@ links:
     - type: application
       url: https://github.com/DigitalGuards/myqrlwallet-desktop/releases
       platform: desktop
-    - type: application
-      url: https://github.com/DigitalGuards/myqrlwallet-extension
-      label: GitHub
+    - type: app-store
+      url: https://chromewebstore.google.com/detail/myqrlwallet/cafpjgccpmfjefdfeldlhgmgbmpibdgg
+      label: Chrome Web Store
       platform: browser extension
     - type: social
       url: https://x.com/DigitalGuards

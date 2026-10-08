@@ -38,8 +38,12 @@ links:
     primary: true
   - type: documentation
     url: https://github.com/DigitalGuards/myqrlwallet-connect/blob/main/docs/JSON-RPC-REFERENCE.md
+  - type: application
+    url: https://zondscan.com/dapp-example/
+    label: Live demo dApp
+    platform: web
 listed_at: '2026-06-11'
-data_updated_at: '2026-06-11'
+data_updated_at: '2026-10-05'
 features:
   - ML-KEM-768 key encapsulation with AES-256-GCM encrypted transport over a Socket.IO relay
   - QR code pairing on desktop and deep-link pairing on mobile
@@ -57,3 +61,13 @@ long_description: |
   it coexists with browser extension wallets in dApp wallet pickers. Sessions
   persist across page reloads and app relaunches with automatic reconnection.
   A live integration example is hosted at zondscan.com/dapp-example.
+logos:
+  - path: qrlwallet-connect/icon.png
+    description: MyQRLWallet logo
+gallery:
+  - type: image
+    path: qrlwallet-connect/pairing-qr.jpg
+    caption: Pairing a dApp with the wallet by scanning the QR code, or opening the web or desktop wallet directly.
+  - type: image
+    path: qrlwallet-connect/dapp-example.jpg
+    caption: The live demo dApp on zondscan.com with EIP-6963 wallet discovery and a send-transaction form.

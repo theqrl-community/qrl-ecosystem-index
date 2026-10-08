@@ -10,7 +10,7 @@ capabilities:
 categories:
     - interoperability-messaging-data
     - finance
-data_updated_at: "2026-07-14"
+data_updated_at: "2026-10-05"
 deployments:
     - id: qrl-2-testnet-v2
       network: qrl-2-testnet-v2
@@ -33,14 +33,14 @@ gallery:
       id: rIwqXEEpaaM
       caption: Full testnet demo of a cross-chain atomic ETH to QRL swap.
     - type: image
-      path: quantaswap/screenshot1.png
-      caption: QuantaSwap main dashboard showing active swaps and order book.
+      path: quantaswap/swap.jpg
+      caption: Swap page with the order form and the live QRL/ETH order book.
     - type: image
-      path: quantaswap/screenshot2.png
-      caption: Play both sides of an atomic swap from one browser and watch the HTLC handshake happen live on both chains.
+      path: quantaswap/sandbox.jpg
+      caption: Sandbox that plays both sides of an atomic swap in one browser and shows the HTLC handshake on both chains.
     - type: image
-      path: quantaswap/screenshot3.png
-      caption: Plain language guide on how QuantaSwap works and how to use it.
+      path: quantaswap/how-it-works.jpg
+      caption: Plain-language guide to how the hashed timelock swap works.
 id: quantaswap
 keywords:
     - atomic-swaps

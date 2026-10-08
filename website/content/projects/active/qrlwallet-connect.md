@@ -9,7 +9,7 @@ capabilities:
 categories:
     - developer-experience
     - security-custody-account-management
-data_updated_at: "2026-06-11"
+data_updated_at: "2026-10-05"
 description: A TypeScript SDK (@qrlwallet/connect) for connecting dApps to MyQRLWallet over a post-quantum encrypted relay, with QR code and deep-link pairing, an EIP-1193 style provider, and persistent sessions.
 display_status: Beta
 features:
@@ -18,6 +18,13 @@ features:
     - EIP-1193 style provider with EIP-6963 announcement, coexisting with browser extension wallets in dApp wallet pickers
     - Session persistence with automatic reconnect and connection liveness probing
     - Post-quantum ML-DSA-87 message and typed-data signing requests (qrl_signMessage, qrl_signTypedData)
+gallery:
+    - type: image
+      path: qrlwallet-connect/pairing-qr.jpg
+      caption: Pairing a dApp with the wallet by scanning the QR code, or opening the web or desktop wallet directly.
+    - type: image
+      path: qrlwallet-connect/dapp-example.jpg
+      caption: The live demo dApp on zondscan.com with EIP-6963 wallet discovery and a send-transaction form.
 id: qrlwallet-connect
 keywords:
     - sdk
@@ -29,7 +36,14 @@ links:
       primary: true
     - type: documentation
       url: https://github.com/DigitalGuards/myqrlwallet-connect/blob/main/docs/JSON-RPC-REFERENCE.md
+    - type: application
+      url: https://zondscan.com/dapp-example/
+      label: Live demo dApp
+      platform: web
 listed_at: "2026-06-11"
+logos:
+    - path: qrlwallet-connect/icon.png
+      description: MyQRLWallet logo
 maintainer_records:
     - name: DigitalGuards
       contact: https://github.com/DigitalGuards/myqrlwallet-connect

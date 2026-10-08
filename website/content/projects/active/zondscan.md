@@ -9,7 +9,7 @@ capabilities:
     - faucet
 categories:
     - network-operations
-data_updated_at: "2026-08-25"
+data_updated_at: "2026-10-05"
 description: A QRL Zond network explorer for browsing blocks, transactions, smart contracts, validators, addresses, and chain activity.
 display_status: Beta · Testnet
 features:
@@ -21,13 +21,16 @@ features:
 gallery:
     - type: image
       path: zondscan/network-overview.jpg
-      caption: Live Zond network overview with chain statistics, recent blocks, and transactions.
+      caption: Home page with chain statistics, search, latest blocks, and latest transactions on the QRL 2.0 testnet.
     - type: image
-      path: zondscan/latest-blocks.jpg
-      caption: Latest synced Zond blocks with hashes, transaction counts, timestamps, and gas usage.
+      path: zondscan/transactions.jpg
+      caption: Transaction list with type, sender, recipient, block, and amount in Quanta.
     - type: image
       path: zondscan/validators.jpg
-      caption: Validator dashboard with epoch progress, staking totals, status distribution, and network trends.
+      caption: Validator dashboard with epoch progress, staking totals, status distribution, and stake over time.
+    - type: image
+      path: zondscan/learn.jpg
+      caption: Learn section with plain-English guides to QRL 2.0, units, staking, and the explorer.
 id: zondscan
 keywords:
     - explorer

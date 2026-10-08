@@ -1,0 +1,85 @@
+id: myqrlwallet-desktop
+name: MyQRLWallet Desktop
+project_type: application
+primary_category: security-custody-account-management
+secondary_categories:
+  - assets-tokenization
+capabilities:
+  - wallet
+  - wallet-connector
+platforms:
+  - desktop
+keywords:
+  - wallet
+  - electron
+  - windows
+  - linux
+  - ml-dsa-87
+maturity: beta
+availability: live
+maintenance: active
+qrl_relationship: native
+qrl_support:
+  - generation: '2.0'
+    environments:
+      - testnet
+description: |
+  Hardened Electron desktop wallet for QRL 2.0 on Windows and Linux. Keys live only in an isolated signer process, with a native unlock window, lock, and wipe, and dApp connectivity over QRL Connect.
+publisher:
+  name: DigitalGuards
+  url: https://myqrlwallet.com/
+maintainers:
+  - name: DigitalGuards
+    contact: https://github.com/DigitalGuards/myqrlwallet-desktop
+source_availability: full
+repositories:
+  - id: main
+    role: client
+    url: https://github.com/DigitalGuards/myqrlwallet-desktop
+    license: MIT
+links:
+  - type: application
+    url: https://github.com/DigitalGuards/myqrlwallet-desktop/releases/latest
+    label: Download (GitHub releases)
+    platform: desktop
+    primary: true
+  - type: website
+    url: https://myqrlwallet.com/
+  - type: security
+    url: https://github.com/DigitalGuards/myqrlwallet-desktop/blob/main/THREAT_MODEL.md
+    label: Threat model
+  - type: social
+    platform: x
+    url: https://x.com/DigitalGuards
+relationships:
+  - type: part-of
+    project_id: myqrlwallet
+listed_at: '2026-10-05'
+data_updated_at: '2026-10-05'
+last_release_at: '2026-09-28'
+features:
+  - Four-process Electron design where an isolated signer utility process is the only holder of key material
+  - Native unlock window, Lock, and a trusted-confirm Remove wallet that wipes the device
+  - Same wallet UI as the web wallet, built from the open-source frontend at release time
+  - dApp connectivity through the QRL Connect relay protocol (ML-KEM-768 + AES-256-GCM, ML-DSA-87 signing)
+  - Windows and Linux builds published on GitHub releases (binaries are unsigned)
+logos:
+  - path: myqrlwallet-desktop/icon.png
+    description: MyQRLWallet logo
+gallery:
+  - type: image
+    path: myqrlwallet-desktop/onboarding.jpg
+    caption: Desktop wallet on first launch, before an account is created or imported.
+long_description: |
+  MyQRLWallet Desktop packages the MyQRLWallet web wallet as a hardened
+  Electron application. The renderer never holds a seed: an isolated signer
+  utility process is the sole key holder, the main process brokers requests,
+  and the renderer runs with context isolation under a strict CSP. A native
+  unlock window gates access, Lock clears the signer, and Remove wallet wipes
+  local state after a trusted confirmation. The threat model and invariants
+  are documented in the repository.
+
+  The application talks to the QRL 2.0 testnet through the same RPC proxy as
+  the web wallet and connects to dApps over the QRL Connect relay protocol.
+  Releases for Windows and Linux are published on GitHub; the binaries are not
+  code-signed, so operating systems show an unknown-publisher warning.

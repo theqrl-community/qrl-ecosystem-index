@@ -1,6 +1,6 @@
 {
-  "count": 49,
-  "generated_at": "2026-09-03T02:33:48Z",
+  "count": 51,
+  "generated_at": "2026-10-05T08:28:44Z",
   "projects": [
     {
       "id": "acornswap",
@@ -526,6 +526,150 @@
       ]
     },
     {
+      "id": "myqrlwallet-desktop",
+      "name": "MyQRLWallet Desktop",
+      "project_type": "application",
+      "primary_category": "security-custody-account-management",
+      "secondary_categories": [
+        "assets-tokenization"
+      ],
+      "capabilities": [
+        "wallet",
+        "wallet-connector"
+      ],
+      "platforms": [
+        "desktop"
+      ],
+      "keywords": [
+        "wallet",
+        "electron",
+        "windows",
+        "linux",
+        "ml-dsa-87"
+      ],
+      "maturity": "beta",
+      "availability": "live",
+      "maintenance": "active",
+      "display_status": "Beta · Testnet",
+      "qrl_relationship": "native",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": [
+            "testnet"
+          ]
+        }
+      ],
+      "deployments": [],
+      "description": "Hardened Electron desktop wallet for QRL 2.0 on Windows and Linux. Keys live only in an isolated signer process, with a native unlock window, lock, and wipe, and dApp connectivity over QRL Connect.",
+      "primary_url": "https://github.com/DigitalGuards/myqrlwallet-desktop/releases/latest",
+      "source_availability": "full",
+      "repositories": [
+        {
+          "id": "main",
+          "role": "client",
+          "url": "https://github.com/DigitalGuards/myqrlwallet-desktop",
+          "license": "MIT"
+        }
+      ],
+      "links": [
+        {
+          "type": "application",
+          "url": "https://github.com/DigitalGuards/myqrlwallet-desktop/releases/latest",
+          "label": "Download (GitHub releases)",
+          "platform": "desktop",
+          "primary": true
+        },
+        {
+          "type": "website",
+          "url": "https://myqrlwallet.com/"
+        },
+        {
+          "type": "security",
+          "url": "https://github.com/DigitalGuards/myqrlwallet-desktop/blob/main/THREAT_MODEL.md",
+          "label": "Threat model"
+        },
+        {
+          "type": "social",
+          "url": "https://x.com/DigitalGuards",
+          "platform": "x"
+        }
+      ],
+      "logo": "/images/logos/myqrlwallet-desktop/icon.png"
+    },
+    {
+      "id": "myqrlwallet-extension",
+      "name": "MyQRLWallet Extension",
+      "project_type": "application",
+      "primary_category": "security-custody-account-management",
+      "secondary_categories": [
+        "assets-tokenization"
+      ],
+      "capabilities": [
+        "wallet",
+        "wallet-connector"
+      ],
+      "platforms": [
+        "browser-extension"
+      ],
+      "keywords": [
+        "wallet",
+        "chrome-extension",
+        "eip-6963",
+        "ml-dsa-87"
+      ],
+      "maturity": "beta",
+      "availability": "live",
+      "maintenance": "active",
+      "display_status": "Beta · Testnet",
+      "qrl_relationship": "native",
+      "qrl_support": [
+        {
+          "generation": "2.0",
+          "environments": [
+            "testnet"
+          ]
+        }
+      ],
+      "deployments": [],
+      "description": "Chrome extension wallet for QRL 2.0. Self-custody accounts signed with ML-DSA-87, Quanta and QRC-20 transfers, NFTs, an address book, and dApp connections through EIP-6963.",
+      "primary_url": "https://chromewebstore.google.com/detail/myqrlwallet/cafpjgccpmfjefdfeldlhgmgbmpibdgg",
+      "source_availability": "full",
+      "repositories": [
+        {
+          "id": "main",
+          "role": "client",
+          "url": "https://github.com/DigitalGuards/myqrlwallet-extension",
+          "license": "MIT"
+        }
+      ],
+      "links": [
+        {
+          "type": "app-store",
+          "url": "https://chromewebstore.google.com/detail/myqrlwallet/cafpjgccpmfjefdfeldlhgmgbmpibdgg",
+          "label": "Chrome Web Store",
+          "platform": "chrome",
+          "primary": true
+        },
+        {
+          "type": "application",
+          "url": "https://github.com/DigitalGuards/myqrlwallet-extension/releases/latest",
+          "label": "Release zip (GitHub)",
+          "platform": "browser extension"
+        },
+        {
+          "type": "website",
+          "url": "https://myqrlwallet.com/"
+        },
+        {
+          "type": "social",
+          "url": "https://x.com/DigitalGuards",
+          "platform": "x"
+        }
+      ],
+      "logo": "/images/logos/myqrlwallet-extension/icon.png"
+    },
+    {
       "id": "myqrlwallet",
       "name": "MyQRLWallet",
       "project_type": "application",
@@ -610,9 +754,9 @@
           "platform": "desktop"
         },
         {
-          "type": "application",
-          "url": "https://github.com/DigitalGuards/myqrlwallet-extension",
-          "label": "GitHub",
+          "type": "app-store",
+          "url": "https://chromewebstore.google.com/detail/myqrlwallet/cafpjgccpmfjefdfeldlhgmgbmpibdgg",
+          "label": "Chrome Web Store",
           "platform": "browser extension"
         },
         {
@@ -2047,8 +2191,15 @@
         {
           "type": "documentation",
           "url": "https://github.com/DigitalGuards/myqrlwallet-connect/blob/main/docs/JSON-RPC-REFERENCE.md"
+        },
+        {
+          "type": "application",
+          "url": "https://zondscan.com/dapp-example/",
+          "label": "Live demo dApp",
+          "platform": "web"
         }
-      ]
+      ],
+      "logo": "/images/logos/qrlwallet-connect/icon.png"
     },
     {
       "id": "qrypto-js",
