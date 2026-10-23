@@ -1,6 +1,6 @@
 {
-  "count": 51,
-  "generated_at": "2026-10-05T08:28:44Z",
+  "count": 52,
+  "generated_at": "2026-10-23T00:59:53Z",
   "projects": [
     {
       "id": "acornswap",
@@ -2565,6 +2565,59 @@
           "primary": true
         }
       ]
+    },
+    {
+      "id": "quantum-bubble-maps",
+      "name": "Quantum Bubble Maps",
+      "project_type": "application",
+      "primary_category": "network-operations",
+      "secondary_categories": [
+        "assets-tokenization"
+      ],
+      "capabilities": [
+        "analytics",
+        "explorer"
+      ],
+      "platforms": [
+        "web"
+      ],
+      "keywords": [
+        "bubble-map",
+        "holders",
+        "wallet-clusters",
+        "fund-tracing",
+        "rich-list"
+      ],
+      "maturity": "beta",
+      "availability": "live",
+      "maintenance": "active",
+      "display_status": "Beta · Mainnet",
+      "qrl_relationship": "native",
+      "qrl_support": [
+        {
+          "generation": "1.x",
+          "environments": [
+            "mainnet"
+          ]
+        }
+      ],
+      "deployments": [],
+      "description": "Bubble map of QRL wallets: every wallet is a bubble sized by balance, linked by transfers and grouped into clusters, so related holders, exchanges and fund flows are visible at a glance.",
+      "primary_url": "https://app.quantumark.fi/bubblemaps/",
+      "source_availability": "unavailable",
+      "repositories": [],
+      "links": [
+        {
+          "type": "website",
+          "url": "https://app.quantumark.fi/bubblemaps/",
+          "primary": true
+        },
+        {
+          "type": "support",
+          "url": "https://github.com/PhuocNG0308/quantum-bubble-maps/issues"
+        }
+      ],
+      "logo": "/images/logos/quantum-bubble-maps/icon.png"
     },
     {
       "id": "rust-qrllib",
